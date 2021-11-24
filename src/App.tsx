@@ -1,11 +1,18 @@
 import React from 'react'
-import {Route, Routes} from 'react-router'
+import {Route, Routes} from 'react-router-dom'
 import styled from 'styled-components'
-import './App.css'
-import Sidebar from './components/Sidebar/Sidebar'
+import Navbar from './components/Navbar'
+import Sidebar from './components/Sidebar'
 import Dashboard from './views/Dashboard'
 import MyTasks from './views/MyTasks'
+import {GlobalStyle} from './styles/GlobalStyle'
+import ActionBar from './components/ActionBar'
 
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+`
 const Content = styled.div`
   position: absolute;
   width: calc(100% - 296px);
@@ -14,15 +21,18 @@ const Content = styled.div`
 
 function App() {
   return (
-    <div className="App">
+    <AppContainer>
+      <GlobalStyle />
       <Sidebar />
       <Content>
+        <Navbar />
+        <ActionBar />
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/my-tasks" element={<MyTasks />} />
         </Routes>
       </Content>
-    </div>
+    </AppContainer>
   )
 }
 

@@ -7,14 +7,13 @@ import {
   createHttpLink,
   InMemoryCache,
   ApolloProvider,
-  useQuery,
   gql,
 } from '@apollo/client'
 import {setContext} from '@apollo/client/link/context'
 
-import './index.css'
 import './fonts/SF PRO DISPLAY/fonts.css'
 import App from './App'
+import {AuthProvider} from './context/Authcontext'
 const httpLink = createHttpLink({
   uri: 'https://syn-api-prod.herokuapp.com/graphql',
 })
@@ -35,25 +34,6 @@ const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 })
-
-client
-  .query({
-    query: gql`
-      query getTasks {
-        tasks(input: {}) {
-          id
-          name
-          owner {
-            id
-            fullName
-          }
-        }
-      }
-    `,
-  })
-  .then(result => {
-    console.log(result)
-  })
 
 ReactDOM.render(
   <ApolloProvider client={client}>
