@@ -1,8 +1,24 @@
 import React from 'react'
 import styled, {css} from 'styled-components'
 import {BiMenu, BiGridAlt} from 'react-icons/bi'
+import {RiFunctionLine} from 'react-icons/ri'
 import {NavLink, useMatch} from 'react-router-dom'
-import logo from '../../assets/images/WhiteravnLogo.svg'
+import logo from '../assets/images/WhiteravnLogo.svg'
+
+//Interfaces
+interface SidebarLinkProps {
+  match: any
+}
+
+interface SidebarComponentProps {
+  sidebarItem: {
+    name: string
+    path: string
+    icon: unknown
+  }
+}
+
+//Styled Components
 
 const Container = styled.div`
   height: calc(100% - 64px);
@@ -52,20 +68,11 @@ const SidebarItemName = styled.span`
   margin-left: 19px;
 `
 
-interface SidebarLinkCProps {
-  sidebarItem: {
-    name: string
-    path: string
-    icon: unknown
-  }
-}
-
-const SidebarLinkComponent = ({sidebarItem}: SidebarLinkCProps) => {
-  const match = useMatch(sidebarItem.path)
-  const SidebarLink = styled(NavLink)`
-    text-decoration: none;
-    display: flex;
-    ${match &&
+const SidebarLink = styled(NavLink)<SidebarLinkProps>`
+  text-decoration: none;
+  display: flex;
+  ${props =>
+    props.match &&
     css`
       &:after {
         width: 4px;
@@ -76,12 +83,17 @@ const SidebarLinkComponent = ({sidebarItem}: SidebarLinkCProps) => {
         margin-left: auto;
       }
     `}
-    background: ${match
+  background: ${props =>
+    props.match
       ? 'linear-gradient(90deg, rgba(186, 37, 37, 0) 0%, rgba(210, 77, 77, 0.1) 100%)'
       : 'transparent'};
-  `
+`
+
+const SidebarLinkComponent = ({sidebarItem}: SidebarComponentProps) => {
+  const match = useMatch(sidebarItem.path)
+
   return (
-    <SidebarLink to={sidebarItem.path}>
+    <SidebarLink to={sidebarItem.path} match={match}>
       <SidebarItem>
         {sidebarItem.icon}
         <SidebarItemName>{sidebarItem.name}</SidebarItemName>
@@ -95,7 +107,9 @@ const Sidebar = () => {
     {
       id: 1,
       icon: (
-        <BiGridAlt style={{height: '24px', width: '24px', color: '#94979A'}} />
+        <RiFunctionLine
+          style={{height: '24px', width: '24px', color: '#94979A'}}
+        />
       ),
       name: 'DASHBOARD',
       path: '/',
