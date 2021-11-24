@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, {css} from 'styled-components'
 import {BiMenu, BiGridAlt} from 'react-icons/bi'
 import {NavLink, useMatch} from 'react-router-dom'
 import logo from '../../assets/images/WhiteravnLogo.svg'
@@ -41,7 +41,7 @@ const SidebarItem = styled.li`
   margin: 8px 0px;
 `
 
-const SidebarItemName = styled.text`
+const SidebarItemName = styled.span`
   font-size: 16px;
   line-height: 24px;
   font-style: normal;
@@ -62,21 +62,31 @@ interface SidebarLinkCProps {
 
 const SidebarLinkComponent = ({sidebarItem}: SidebarLinkCProps) => {
   const match = useMatch(sidebarItem.path)
-
+  const SidebarLink = styled(NavLink)`
+    text-decoration: none;
+    display: flex;
+    ${match &&
+    css`
+      &:after {
+        width: 4px;
+        height: 72px;
+        border-radius: 0 7px 7px 0;
+        background-color: #da584b;
+        content: '';
+        margin-left: auto;
+      }
+    `}
+    background: ${match
+      ? 'linear-gradient(90deg, rgba(186, 37, 37, 0) 0%, rgba(210, 77, 77, 0.1) 100%)'
+      : 'transparent'};
+  `
   return (
-    <NavLink
-      to={sidebarItem.path}
-      style={{
-        background: match
-          ? 'linear-gradient(90deg, rgba(186, 37, 37, 0) 0%, rgba(210, 77, 77, 0.1) 100%)'
-          : 'transparent',
-      }}
-    >
+    <SidebarLink to={sidebarItem.path}>
       <SidebarItem>
         {sidebarItem.icon}
         <SidebarItemName>{sidebarItem.name}</SidebarItemName>
       </SidebarItem>
-    </NavLink>
+    </SidebarLink>
   )
 }
 
@@ -104,7 +114,10 @@ const Sidebar = () => {
       <Logo src={logo} />
       <SidebarMenu>
         {sidebarItems.map(sidebarItem => (
-          <SidebarLinkComponent sidebarItem={sidebarItem} />
+          <SidebarLinkComponent
+            key={sidebarItem.id}
+            sidebarItem={sidebarItem}
+          />
         ))}
       </SidebarMenu>
     </Container>
