@@ -10,18 +10,20 @@ const LabelContainer = styled.div<LabelContainerProps>`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 115px;
   height: 32px;
   background: ${props => props.background};
   border-radius: 4px;
-
   color: ${props => props.color};
+  padding-left: 4px;
+  padding-right: 4px;
 `
 const LabelText = styled.label`
   font-style: normal;
   font-weight: 600;
   font-size: 15px;
+  letter-spacing: 0.75px;
   line-height: 24px;
+  margin-right: 4px;
 `
 interface LabelProps {
   background: string

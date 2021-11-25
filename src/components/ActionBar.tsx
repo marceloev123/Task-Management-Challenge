@@ -2,6 +2,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import {Link, useMatch, useLocation} from 'react-router-dom'
+import * as Dialog from '@radix-ui/react-dialog'
 import {RiAddLine, RiFunctionLine, RiMenuLine} from 'react-icons/ri'
 
 const ActionbarContainer = styled.div`
@@ -22,7 +23,7 @@ const SwitchContainer = styled.div`
   border: none;
   cursor: pointer;
 `
-const CreateButton = styled.button`
+const Button = styled.button`
   height: 40px;
   width: 40px;
   background-color: #da584b;
@@ -35,13 +36,88 @@ const CreateButton = styled.button`
   justify-content: center;
 `
 
+//Dialog
+const DialogContent = styled(Dialog.Content)`
+  width: 431px;
+  height: 184px;
+  padding: 16px;
+  background-color: #393d41;
+  border-radius: 8px;
+  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px hsl(206 22% 7% / 20%) 0px
+    10px 20px -15px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  padding: 25;
+`
+const StyledOverlay = styled(Dialog.Overlay)`
+  background: rgba(0, 0, 0, 0.15);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+`
+
+const TaskNameInput = styled.input`
+  background: transparent;
+  height: 32px;
+  color: #94979a;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: 0.75px;
+  border: none;
+  :focus {
+    outline: none;
+  }
+`
+// const TagsContainer = styled.div`
+//   display: flex;
+//   width: 100%;
+// `
+const ModalButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+  height: 24px;
+  gap: 16px;
+`
+const CancelButton = styled.button`
+  border: none;
+  background: transparent;
+  width: 62px;
+  height: 40px;
+  color: white;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.75px;
+  cursor: pointer;
+`
+const CreateButton = styled.button`
+  border: none;
+  background: #da584b;
+  width: 62px;
+  height: 40px;
+  color: white;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.75px;
+  cursor: pointer;
+  border-radius: 8px;
+`
+
 const ActionBar = () => {
   const location = useLocation()
   const match = useMatch(location.pathname)
-
-  function openModal() {
-    console.log('modal opened')
-  }
 
   return (
     <ActionbarContainer>
@@ -72,9 +148,29 @@ const ActionBar = () => {
           />
         </Link>
       </SwitchContainer>
-      <CreateButton onClick={openModal}>
-        <RiAddLine style={{height: '24px', width: '24px'}} />
-      </CreateButton>
+
+      <Dialog.Root>
+        <Dialog.Trigger asChild>
+          <Button>
+            <RiAddLine style={{height: '24px', width: '24px'}} />
+          </Button>
+        </Dialog.Trigger>
+        <StyledOverlay />
+        <DialogContent>
+          <Dialog.Title>
+            <TaskNameInput placeholder="Task Tittle" />
+          </Dialog.Title>
+          <Dialog.Description />
+          <ModalButtonsContainer>
+            <Dialog.Close asChild>
+              <CancelButton>Cancel</CancelButton>
+            </Dialog.Close>
+            <Dialog.Close asChild>
+              <CreateButton>Create</CreateButton>
+            </Dialog.Close>
+          </ModalButtonsContainer>
+        </DialogContent>
+      </Dialog.Root>
     </ActionbarContainer>
   )
 }
