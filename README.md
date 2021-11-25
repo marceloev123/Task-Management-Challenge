@@ -71,3 +71,10 @@ https://user-images.githubusercontent.com/64241651/143503107-c7284568-c1d2-4f7f-
 https://user-images.githubusercontent.com/64241651/143503109-7e883a83-411d-46e7-8d98-ce453e091b97.mp4
 
 All the views are implemented using routes and React router dom version 6
+
+## My Tasks view
+
+A little advance of the table 😞
+
+![MyTasks](https://user-images.githubusercontent.com/64241651/143507588-6c42c046-3f2a-4542-8db8-b9f3ec8c03f8.jpg)
+
