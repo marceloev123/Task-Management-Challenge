@@ -4,7 +4,7 @@ import {RiFunctionLine, RiMenuLine, RiUser3Line} from 'react-icons/ri'
 import {NavLink, useMatch} from 'react-router-dom'
 import logo from '../assets/images/WhiteravnLogo.svg'
 
-//Interfaces
+// Interfaces
 interface SidebarLinkProps {
   match: any
 }
@@ -17,7 +17,7 @@ interface SidebarComponentProps {
   }
 }
 
-//Styled Components
+// Components
 
 const Container = styled.div`
   height: calc(100% - 64px);
@@ -68,6 +68,8 @@ const SidebarItemName = styled.span`
   margin-left: 19px;
 `
 
+// Active Routing Link
+
 const SidebarLink = styled(NavLink)<SidebarLinkProps>`
   text-decoration: none;
   display: flex;
@@ -103,6 +105,7 @@ const SidebarLinkComponent = ({sidebarItem}: SidebarComponentProps) => {
 }
 
 const Sidebar = () => {
+  // Routes
   const sidebarItems = [
     {
       id: 1,

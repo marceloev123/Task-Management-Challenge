@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import styled, {css} from 'styled-components'
 import {gql, useQuery} from '@apollo/client'
@@ -8,6 +7,7 @@ interface AvatarProps {
   image: string | null
 }
 
+// Function to transform Dates in DD Month, YYYY format (It's possible to abstract to a utils file)
 const formatData = (date: string) => {
   const monthNames = [
     'January',
@@ -24,8 +24,6 @@ const formatData = (date: string) => {
     'December',
   ]
   const dateObject = new Date(date)
-  console.log(date)
-  console.log(dateObject)
   const day = dateObject.getDate()
   const monthIndex = dateObject.getMonth()
   const monthName = monthNames[monthIndex]?.toUpperCase()

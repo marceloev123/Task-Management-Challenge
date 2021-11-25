@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import styled from 'styled-components'
 import {
@@ -11,6 +10,7 @@ import {RiMoreFill} from 'react-icons/ri'
 import Label from './Label'
 import LabelIcon from './LabelIcon'
 
+//This library help us to conver the points words to numbers
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const text2num = require('text2num')
 
@@ -41,6 +41,8 @@ interface TaskProps {
   }
 }
 
+// Function to transform Dates in DD Month, YYYY format
+
 const formatData = (date: string) => {
   const monthNames = [
     'January',
@@ -57,8 +59,6 @@ const formatData = (date: string) => {
     'December',
   ]
   const dateObject = new Date(date)
-  console.log(date)
-  console.log(dateObject)
   const day = dateObject.getDate()
   const monthIndex = dateObject.getMonth()
   const monthName = monthNames[monthIndex]?.toUpperCase()
@@ -67,6 +67,7 @@ const formatData = (date: string) => {
   return `${day} ${monthName}, ${year}`
 }
 
+// Assign Background by Tag
 const assignBackground = (tag: string) => {
   switch (tag) {
     case 'IOS':
@@ -90,6 +91,7 @@ const assignBackground = (tag: string) => {
   }
 }
 
+//Assgin Label Color by Tag
 const assignLabelColor = (tag: string) => {
   switch (tag) {
     case 'IOS':

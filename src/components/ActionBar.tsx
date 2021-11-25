@@ -1,10 +1,11 @@
-/* eslint-disable no-console */
 import React from 'react'
 import styled from 'styled-components'
 import {Link, useMatch, useLocation} from 'react-router-dom'
 import * as Dialog from '@radix-ui/react-dialog'
+// import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import {RiAddLine, RiFunctionLine, RiMenuLine} from 'react-icons/ri'
 
+//Principal Container
 const ActionbarContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -23,6 +24,7 @@ const SwitchContainer = styled.div`
   border: none;
   cursor: pointer;
 `
+//Principal Creation Button
 const Button = styled.button`
   height: 40px;
   width: 40px;
@@ -75,10 +77,12 @@ const TaskNameInput = styled.input`
     outline: none;
   }
 `
-// const TagsContainer = styled.div`
-//   display: flex;
-//   width: 100%;
-// `
+const DataContainer = styled.div`
+  display: flex;
+  display: row;
+  justify-content: space-between;
+  width: 100%;
+`
 const ModalButtonsContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -87,6 +91,9 @@ const ModalButtonsContainer = styled.div`
   height: 24px;
   gap: 16px;
 `
+
+//Modal Buttons
+
 const CancelButton = styled.button`
   border: none;
   background: transparent;
@@ -148,29 +155,30 @@ const ActionBar = () => {
           />
         </Link>
       </SwitchContainer>
-
-      <Dialog.Root>
-        <Dialog.Trigger asChild>
-          <Button>
-            <RiAddLine style={{height: '24px', width: '24px'}} />
-          </Button>
-        </Dialog.Trigger>
-        <StyledOverlay />
-        <DialogContent>
-          <Dialog.Title>
-            <TaskNameInput placeholder="Task Tittle" />
-          </Dialog.Title>
-          <Dialog.Description />
-          <ModalButtonsContainer>
-            <Dialog.Close asChild>
-              <CancelButton>Cancel</CancelButton>
-            </Dialog.Close>
-            <Dialog.Close asChild>
-              <CreateButton>Create</CreateButton>
-            </Dialog.Close>
-          </ModalButtonsContainer>
-        </DialogContent>
-      </Dialog.Root>
+      <form>
+        <Dialog.Root>
+          <Dialog.Trigger asChild>
+            <Button>
+              <RiAddLine style={{height: '24px', width: '24px'}} />
+            </Button>
+          </Dialog.Trigger>
+          <StyledOverlay />
+          <DialogContent>
+            <Dialog.Title>
+              <TaskNameInput placeholder="Task Tittle" />
+            </Dialog.Title>
+            <DataContainer></DataContainer>
+            <ModalButtonsContainer>
+              <Dialog.Close asChild>
+                <CancelButton>Cancel</CancelButton>
+              </Dialog.Close>
+              <Dialog.Close asChild>
+                <CreateButton type="submit">Create</CreateButton>
+              </Dialog.Close>
+            </ModalButtonsContainer>
+          </DialogContent>
+        </Dialog.Root>
+      </form>
     </ActionbarContainer>
   )
 }

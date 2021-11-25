@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import styled from 'styled-components'
 import {gql, useQuery} from '@apollo/client'
@@ -62,7 +61,7 @@ interface TaskProps {
 }
 
 const Dashboard = () => {
-  //Fetch status to build the columns
+  //Fetch the data
   const GET_STATUS = gql`
     query getTasks {
       tasks(input: {}) {
@@ -84,6 +83,7 @@ const Dashboard = () => {
   `
   const {loading, error, data} = useQuery(GET_STATUS)
 
+  // Group tasks by Status
   const tasksByStatus = data?.tasks.reduce(
     (previousTask: {[key: string]: TaskProps[]}, currentTask: TaskProps) => {
       const key = currentTask.status
@@ -95,7 +95,6 @@ const Dashboard = () => {
     },
     {},
   )
-  console.log(tasksByStatus)
   if (loading) return <Spinner />
   if (error) throw new Error(`Error! ${error.message}`)
   return (
@@ -113,7 +112,6 @@ const Dashboard = () => {
               }}
             />
           </ColumHeaderContainer>
-          {console.log(tasksByStatus[key])}
           {tasksByStatus[key].map((task: TaskProps) => (
             <TaskCard task={task} />
           ))}
