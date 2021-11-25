@@ -61,7 +61,7 @@ const formatData = (date: string) => {
   console.log(dateObject)
   const day = dateObject.getDate()
   const monthIndex = dateObject.getMonth()
-  const monthName = monthNames[monthIndex].toUpperCase()
+  const monthName = monthNames[monthIndex]?.toUpperCase()
   const year = dateObject.getFullYear()
 
   return `${day} ${monthName}, ${year}`

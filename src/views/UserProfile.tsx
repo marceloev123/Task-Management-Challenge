@@ -8,6 +8,32 @@ interface AvatarProps {
   image: string | null
 }
 
+const formatData = (date: string) => {
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'Augyst',
+    'September',
+    'October',
+    'November',
+    'December',
+  ]
+  const dateObject = new Date(date)
+  console.log(date)
+  console.log(dateObject)
+  const day = dateObject.getDate()
+  const monthIndex = dateObject.getMonth()
+  const monthName = monthNames[monthIndex]?.toUpperCase()
+  const year = dateObject.getFullYear()
+
+  return `${day} ${monthName}, ${year}`
+}
+
 const baseTextStyles = css`
   font-style: normal;
   font-size: 16px;
@@ -91,7 +117,11 @@ const UserProfile = () => {
           .map((key, index) => (
             <UserPrimaryData key={index}>
               <TextHeader>{key}</TextHeader>
-              <TextContent>{data.profile[key]}</TextContent>
+              <TextContent>
+                {key === 'createdAt' || key === 'updatedAt'
+                  ? formatData(data.profile[key])
+                  : data.profile[key]}
+              </TextContent>
             </UserPrimaryData>
           ))}
       </CardProfile>
