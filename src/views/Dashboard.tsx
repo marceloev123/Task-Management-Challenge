@@ -1,22 +1,22 @@
-import React, {useState, useEffect} from 'react'
+/* eslint-disable no-console */
+import React from 'react'
 import styled from 'styled-components'
 import {gql, useQuery} from '@apollo/client'
 import {RiMoreFill} from 'react-icons/ri'
-
-import DashboardCard from '../components/DashboardCard'
+import Spinner from '../components/Spinner/Spinner'
+import TaskCard from '../components/TaskCard'
 
 const Grid = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-space-between;
   gap: 32px;
+  flex-basis: 100%;
   margin-top: 32px;
 `
 
 const GridColum = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: 0;
   align-items: center;
   gap: 16px;
@@ -39,6 +39,27 @@ const ColumHeaderText = styled.div`
   color: white;
   letter-spacing: 0.75px;
 `
+interface User {
+  id: string
+  avatar: string
+  email: string
+  fullName: string
+  type: string
+  createdAt: string
+  updatedAt: string
+}
+
+interface TaskProps {
+  createdAt: string
+  dueDate: string
+  id: string
+  name: string
+  owner: User
+  pointEstimate: string
+  position: string
+  status: string
+  tags: string[]
+}
 
 const Dashboard = () => {
   //Fetch status to build the columns
@@ -46,74 +67,58 @@ const Dashboard = () => {
     query getTasks {
       tasks(input: {}) {
         id
+        createdAt
+        dueDate
         name
         owner {
           id
+          avatar
           fullName
         }
+        pointEstimate
+        position
+        status
+        tags
       }
     }
   `
   const {loading, error, data} = useQuery(GET_STATUS)
 
+  const tasksByStatus = data?.tasks.reduce(
+    (previousTask: {[key: string]: TaskProps[]}, currentTask: TaskProps) => {
+      const key = currentTask.status
+      if (!previousTask[key]) {
+        previousTask[key] = []
+      }
+      previousTask[key].push(currentTask)
+      return previousTask
+    },
+    {},
+  )
+  console.log(tasksByStatus)
+  if (loading) return <Spinner />
+  if (error) throw new Error(`Error! ${error.message}`)
   return (
     <Grid>
-      <GridColum>
-        <ColumHeaderContainer>
-          <ColumHeaderText>Working (03)</ColumHeaderText>
-          <RiMoreFill
-            style={{
-              color: '#94979A',
-              width: '24px',
-              height: '24px',
-              marginLeft: '11px',
-            }}
-          />
-        </ColumHeaderContainer>
-        <DashboardCard />
-      </GridColum>
-      <GridColum>
-        <ColumHeaderContainer>
-          <ColumHeaderText>Working (03)</ColumHeaderText>
-          <RiMoreFill
-            style={{
-              color: '#94979A',
-              width: '24px',
-              height: '24px',
-              marginLeft: '11px',
-            }}
-          />
-        </ColumHeaderContainer>
-        <DashboardCard />
-      </GridColum>
-      <GridColum>
-        <ColumHeaderContainer>
-          <ColumHeaderText>Working (03)</ColumHeaderText>
-          <RiMoreFill
-            style={{
-              color: '#94979A',
-              width: '24px',
-              height: '24px',
-              marginLeft: '11px',
-            }}
-          />
-        </ColumHeaderContainer>
-        <DashboardCard />
-      </GridColum>
-      <GridColum>
-        <ColumHeaderContainer>
-          <ColumHeaderText>Working (03)</ColumHeaderText>
-          <RiMoreFill
-            style={{
-              color: '#94979A',
-              width: '24px',
-              height: '24px',
-              marginLeft: '11px',
-            }}
-          />
-        </ColumHeaderContainer>
-        <DashboardCard />
-      </GridColum>
+      {Object.keys(tasksByStatus).map((key, idx) => (
+        <GridColum key={idx}>
+          <ColumHeaderContainer>
+            <ColumHeaderText>{key}</ColumHeaderText>
+            <RiMoreFill
+              style={{
+                color: '#94979A',
+                width: '24px',
+                height: '24px',
+                marginLeft: '11px',
+              }}
+            />
+          </ColumHeaderContainer>
+          {console.log(tasksByStatus[key])}
+          {tasksByStatus[key].map((task: TaskProps) => (
+            <TaskCard task={task} />
+          ))}
+        </GridColum>
+      ))}
     </Grid>
   )
 }
