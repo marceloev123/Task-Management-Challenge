@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react'
 import styled from 'styled-components'
 import {
@@ -10,6 +11,108 @@ import {RiMoreFill} from 'react-icons/ri'
 import Label from './Label'
 import LabelIcon from './LabelIcon'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const text2num = require('text2num')
+
+interface AvatarProps {
+  image: string | null
+}
+interface User {
+  id: string
+  avatar: string
+  email: string
+  fullName: string
+  type: string
+  createdAt: string
+  updatedAt: string
+}
+
+interface TaskProps {
+  task: {
+    createdAt: string
+    dueDate: string
+    id: string
+    name: string
+    owner: User
+    pointEstimate: string
+    position: string
+    status: string
+    tags: string[]
+  }
+}
+
+const formatData = (date: string) => {
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'Augyst',
+    'September',
+    'October',
+    'November',
+    'December',
+  ]
+  const dateObject = new Date(date)
+  console.log(date)
+  console.log(dateObject)
+  const day = dateObject.getDate()
+  const monthIndex = dateObject.getMonth()
+  const monthName = monthNames[monthIndex].toUpperCase()
+  const year = dateObject.getFullYear()
+
+  return `${day} ${monthName}, ${year}`
+}
+
+const assignBackground = (tag: string) => {
+  switch (tag) {
+    case 'IOS':
+      return 'rgba(112, 178, 82, 0.1)'
+      break
+    case 'ANDROID':
+      return 'rgba(229, 180, 84, 0.1);'
+      break
+    case 'REACT':
+      return 'rgba(47, 97, 191, 0.1)'
+      break
+    case 'NODE':
+      return 'rgba(148, 151, 154, 0.1)'
+      break
+    case 'RAILS':
+      return 'rgba(218, 88, 75, 0.1)'
+      break
+    default:
+      return 'rgba(148, 151, 154, 0.1)'
+      break
+  }
+}
+
+const assignLabelColor = (tag: string) => {
+  switch (tag) {
+    case 'IOS':
+      return '#70B252'
+      break
+    case 'ANDROID':
+      return '#E5B454;'
+      break
+    case 'REACT':
+      return '#2F61BF'
+      break
+    case 'NODE':
+      return '#FFFFFF'
+      break
+    case 'RAILS':
+      return '#DA584B'
+      break
+    default:
+      return '#FFFFFF'
+      break
+  }
+}
+
 const Card = styled.div`
   display: flex;
   flex-direction: column;
@@ -17,7 +120,7 @@ const Card = styled.div`
   padding: 16px;
   gap: 16px;
   width: 340px;
-  height: 208px;
+  height: 200px;
   background: #2c2f33;
   border-radius: 8px;
 `
@@ -25,8 +128,7 @@ const Card = styled.div`
 const ProjectInfo = styled.div`
   display: flex;
   max-height: 32px;
-  min-width: 316px;
-  flex-basis: 100%;
+  min-width: 100%;
   justify-content: space-between;
   align-items: center;
 `
@@ -86,11 +188,13 @@ const InteractionsContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 `
-const Avatar = styled.div`
+const Avatar = styled.div<AvatarProps>`
   height: 32px;
   width: 32px;
   border-radius: 50%;
-  background-color: white;
+  background: url(${props => props.image});
+  background-repeat: no-repeat;
+  background-size: cover;
 `
 const ForkContainer = styled.div`
   display: flex;
@@ -124,11 +228,11 @@ const CommentAmount = styled.span`
   letter-spacing: 0.75px;
 `
 
-const DashboardCard = () => {
+const TaskCard = ({task}: TaskProps) => {
   return (
     <Card>
       <ProjectInfo>
-        <TaskName>Twitter</TaskName>
+        <TaskName>{task?.name}</TaskName>
         <RiMoreFill
           style={{
             color: '#94979A',
@@ -139,11 +243,11 @@ const DashboardCard = () => {
         />
       </ProjectInfo>
       <TimeInfo>
-        <Points>3 Pts</Points>
+        <Points>{text2num(task?.pointEstimate.toLowerCase())} Pts</Points>
         <LabelIcon
           background="rgba(148, 151, 154, 0.1)"
           color="#FFF"
-          text="TODAY"
+          text={formatData(task?.dueDate)}
           icon={
             <RiAlarmLine
               style={{height: '24px', width: '24px', marginRight: '9.75px'}}
@@ -152,19 +256,16 @@ const DashboardCard = () => {
         />
       </TimeInfo>
       <TagsContainer>
-        <Label
-          background="rgba(112, 178, 82, 0.1);"
-          color="#70B252"
-          text="IOS APP"
-        />
-        <Label
-          background="rgba(229, 180, 84, 0.1);"
-          color="#E5B454"
-          text="ANDROID"
-        />
+        {task?.tags.map((tag: string) => (
+          <Label
+            background={assignBackground(tag)}
+            color={assignLabelColor(tag)}
+            text={tag.toUpperCase()}
+          />
+        ))}
       </TagsContainer>
       <Reactions>
-        <Avatar />
+        <Avatar image={task?.owner?.avatar} />
         <InteractionsContainer>
           <RiAttachment2 style={{height: '16px', width: '16px'}} />
           <ForkContainer>
@@ -185,4 +286,4 @@ const DashboardCard = () => {
   )
 }
 
-export default DashboardCard
+export default TaskCard
