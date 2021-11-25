@@ -33,3 +33,18 @@ The current project stack is composed for the following tools
 * Typescript (for types prevention).
 * Styled Components (for styling).
 * Routing using React router DOM version 6.
+* Apollo Client (for interact with the API)
+
+
+## Principal Dashboard
+
+The current view exposes the principal view of the application with all the tasks classified by their status
+"BACKLOG-TODO-IN PROGRESS-CANCELLED"
+### Screenshot
+![DashboardScreen](https://user-images.githubusercontent.com/64241651/143501791-68dd217d-741a-44b5-b54c-4c7e5724f649.jpg)
+
+### Loading and demonstration
+https://user-images.githubusercontent.com/64241651/143502003-fba6d8a2-79af-474f-96f8-3ec1db24c4ed.mp4
+
+As we can see, the tasks cards contain the relevant information of the task like the name, due date, points, tags, and the avatar of the owner, also the spinner component is rendered while the data is fetching
+
