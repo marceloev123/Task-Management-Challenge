@@ -48,3 +48,16 @@ https://user-images.githubusercontent.com/64241651/143502003-fba6d8a2-79af-474f-
 
 As we can see, the tasks cards contain the relevant information of the task like the name, due date, points, tags, and the avatar of the owner, also the spinner component is rendered while the data is fetching
 
+## User Profile
+This view exposes the user information like his/her fullname, email, type, andh the date where the profile was created in the DD Month, YYYY format
+
+### User Profile
+![UserProfile](https://user-images.githubusercontent.com/64241651/143502936-33452dcb-6227-4a0e-8b94-c3196de1a67c.jpg)
+
+### Loading demonstration
+https://user-images.githubusercontent.com/64241651/143503107-c7284568-c1d2-4f7f-b10d-99115fe94293.mp4
+
+## Routing
+All the views are implemented using routes and React router dom version 6
+https://user-images.githubusercontent.com/64241651/143503109-7e883a83-411d-46e7-8d98-ce453e091b97.mp4
+
