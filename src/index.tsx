@@ -6,13 +6,12 @@ import {
   createHttpLink,
   InMemoryCache,
   ApolloProvider,
-  gql,
 } from '@apollo/client'
 import {setContext} from '@apollo/client/link/context'
 
 import './fonts/SF PRO DISPLAY/fonts.css'
 import App from './App'
-import {AuthProvider} from './context/Authcontext'
+// import {AuthProvider} from './context/Authcontext'
 const httpLink = createHttpLink({
   uri: 'https://syn-api-prod.herokuapp.com/graphql',
 })

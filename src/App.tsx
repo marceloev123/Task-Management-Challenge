@@ -1,12 +1,12 @@
 import React from 'react'
 import {Route, Routes} from 'react-router-dom'
 import styled from 'styled-components'
+import {GlobalStyle} from './styles/GlobalStyle'
+import ActionBar from './components/ActionBar'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import Dashboard from './views/Dashboard'
 import MyTasks from './views/MyTasks'
-import {GlobalStyle} from './styles/GlobalStyle'
-import ActionBar from './components/ActionBar'
 import UserProfile from './views/UserProfile'
 
 const AppContainer = styled.div`
