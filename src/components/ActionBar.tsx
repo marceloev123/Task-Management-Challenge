@@ -2,9 +2,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import {Link, useMatch, useLocation} from 'react-router-dom'
-import {RiFunctionLine} from 'react-icons/ri'
-import {BiMenu} from 'react-icons/bi'
-import {IoMdAdd} from 'react-icons/io'
+import {RiAddLine, RiFunctionLine, RiMenuLine} from 'react-icons/ri'
 
 const ActionbarContainer = styled.div`
   display: flex;
@@ -42,14 +40,14 @@ const ActionBar = () => {
   const match = useMatch(location.pathname)
 
   function openModal() {
-    console.log('hola')
+    console.log('modal opened')
   }
 
   return (
     <ActionbarContainer>
       <SwitchContainer>
         <Link to="/">
-          <BiMenu
+          <RiMenuLine
             style={{
               height: '24px',
               width: '24px',
@@ -75,7 +73,7 @@ const ActionBar = () => {
         </Link>
       </SwitchContainer>
       <CreateButton onClick={openModal}>
-        <IoMdAdd style={{height: '24px', width: '24px'}} />
+        <RiAddLine style={{height: '24px', width: '24px'}} />
       </CreateButton>
     </ActionbarContainer>
   )

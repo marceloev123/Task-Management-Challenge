@@ -1,15 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
-import {RiAlarmLine} from 'react-icons/ri'
-import {FiMoreHorizontal} from 'react-icons/fi'
+import {
+  RiAlarmLine,
+  RiAttachment2,
+  RiNodeTree,
+  RiChat3Line,
+} from 'react-icons/ri'
+import {RiMoreFill} from 'react-icons/ri'
 import Label from './Label'
 import LabelIcon from './LabelIcon'
+
 const Card = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 16px;
-  width: 348px;
+  gap: 16px;
+  width: 340px;
   height: 208px;
   background: #2c2f33;
   border-radius: 8px;
@@ -36,9 +43,8 @@ const TaskName = styled.span`
 `
 const TimeInfo = styled.div`
   display: flex;
-  margin-top: 20px;
   max-height: 32px;
-  min-width: 316px;
+  width: 100%;
   flex-basis: 100%;
   justify-content: space-between;
   align-items: center;
@@ -59,8 +65,63 @@ const TagsContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  margin-top: 16px;
   gap: 8px;
+`
+
+const Reactions = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 316px;
+  height: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  color: white;
+`
+const InteractionsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 106px;
+  height: 24px;
+  justify-content: space-between;
+  align-items: center;
+`
+const Avatar = styled.div`
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  background-color: white;
+`
+const ForkContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  color: white;
+`
+const ForkAmount = styled.span`
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.75px;
+`
+
+const CommentsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  color: white;
+`
+const CommentAmount = styled.span`
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.75px;
 `
 
 const DashboardCard = () => {
@@ -68,7 +129,7 @@ const DashboardCard = () => {
     <Card>
       <ProjectInfo>
         <TaskName>Twitter</TaskName>
-        <FiMoreHorizontal
+        <RiMoreFill
           style={{
             color: '#94979A',
             width: '24px',
@@ -102,6 +163,24 @@ const DashboardCard = () => {
           text="ANDROID"
         />
       </TagsContainer>
+      <Reactions>
+        <Avatar />
+        <InteractionsContainer>
+          <RiAttachment2 style={{height: '16px', width: '16px'}} />
+          <ForkContainer>
+            <ForkAmount>3</ForkAmount>
+            <RiNodeTree
+              style={{height: '16px', width: '16px', marginLeft: '8px'}}
+            />
+          </ForkContainer>
+          <CommentsContainer>
+            <CommentAmount>3</CommentAmount>
+            <RiChat3Line
+              style={{height: '16px', width: '16px', marginLeft: '8px'}}
+            />
+          </CommentsContainer>
+        </InteractionsContainer>
+      </Reactions>
     </Card>
   )
 }

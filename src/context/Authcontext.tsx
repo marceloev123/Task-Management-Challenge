@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, {createContext, useContext, useState, useEffect} from 'react'
 import {gql, useQuery} from '@apollo/client'
 

@@ -10,11 +10,11 @@ const LabelContainer = styled.div<LabelContainerProps>`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 112px;
+  width: 115px;
   height: 32px;
   background: ${props => props.background};
   border-radius: 4px;
-  padding: 4px 16px;
+
   color: ${props => props.color};
 `
 const LabelText = styled.label`

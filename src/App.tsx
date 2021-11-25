@@ -7,6 +7,7 @@ import Dashboard from './views/Dashboard'
 import MyTasks from './views/MyTasks'
 import {GlobalStyle} from './styles/GlobalStyle'
 import ActionBar from './components/ActionBar'
+import UserProfile from './views/UserProfile'
 
 const AppContainer = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/my-tasks" element={<MyTasks />} />
+          <Route path="/profile" element={<UserProfile />} />
         </Routes>
       </Content>
     </AppContainer>

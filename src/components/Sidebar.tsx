@@ -1,7 +1,6 @@
 import React from 'react'
 import styled, {css} from 'styled-components'
-import {BiMenu, BiGridAlt} from 'react-icons/bi'
-import {RiFunctionLine} from 'react-icons/ri'
+import {RiFunctionLine, RiMenuLine, RiUser3Line} from 'react-icons/ri'
 import {NavLink, useMatch} from 'react-router-dom'
 import logo from '../assets/images/WhiteravnLogo.svg'
 
@@ -32,6 +31,7 @@ const Container = styled.div`
   top: 0;
   left: 0;
   z-index: 1;
+  overflow: hidden;
 `
 const Logo = styled.img`
   height: 36px;
@@ -117,10 +117,20 @@ const Sidebar = () => {
     {
       id: 2,
       icon: (
-        <BiMenu style={{height: '24px', width: '24px', color: '#94979A'}} />
+        <RiMenuLine style={{height: '24px', width: '24px', color: '#94979A'}} />
       ),
       name: 'MY TASK',
       path: '/my-tasks',
+    },
+    {
+      id: 3,
+      icon: (
+        <RiUser3Line
+          style={{height: '24px', width: '24px', color: '#94979A'}}
+        />
+      ),
+      name: 'MY PROFILE',
+      path: '/profile',
     },
   ]
   return (
