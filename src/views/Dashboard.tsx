@@ -26,7 +26,7 @@ const ColumHeaderContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 340px;
+  width: 100%;
   height: 32px;
 `
 
