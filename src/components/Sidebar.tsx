@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import styled, {css} from 'styled-components'
 import {RiFunctionLine, RiMenuLine, RiUser3Line} from 'react-icons/ri'
@@ -39,8 +38,8 @@ const Container = styled.div`
   transition: all 0.5s ease 0s;
   -webkit-transition: all 0.5s ease 0s;
 
-  @media (max-width: 1815px) {
-    width: 116px;
+  @media (max-width: 1898px) {
+    width: 104px;
     transition: all 0.5 ease;
     min-height: 100vh;
   }
@@ -68,10 +67,10 @@ const SidebarItem = styled.li<SidebarItem>`
   padding: 0px 0px 0px 16px;
   margin: 8px 0px;
   color: ${props => (props.match ? '#da584b' : ' #94979a')};
-  @media (max-width: 1815px) {
+  @media (max-width: 1898px) {
     justify-content: center;
     align-items: center;
-    margin-left: 28px;
+    margin-left: 24px;
   }
 `
 
@@ -83,7 +82,7 @@ const SidebarItemName = styled.span`
   font-family: 'SF Pro Display Regular';
   letter-spacing: 0.75px;
   margin-left: 19px;
-  @media (max-width: 1815px) {
+  @media (max-width: 1898px) {
     display: none;
   }
 `
