@@ -258,8 +258,9 @@ const TaskCard = ({task}: TaskProps) => {
         />
       </TimeInfo>
       <TagsContainer>
-        {task?.tags.map((tag: string) => (
+        {task?.tags.map((tag: string, idx) => (
           <Label
+            key={idx}
             background={assignBackground(tag)}
             color={assignLabelColor(tag)}
             text={tag.toUpperCase()}

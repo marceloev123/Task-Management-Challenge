@@ -31,6 +31,7 @@ const GET_USER = gql`
     }
   }
 `
+// try to avoid any
 function AuthProvider({children}: any) {
   const [user, setUser] = useState<UserProps>(() =>
     JSON.parse(localStorage.getItem('user') || '{}'),

@@ -1,14 +1,19 @@
+/* eslint-disable no-console */
 import React from 'react'
 import styled, {css} from 'styled-components'
 import {RiFunctionLine, RiMenuLine, RiUser3Line} from 'react-icons/ri'
 import {NavLink, useMatch} from 'react-router-dom'
+
 import logo from '../assets/images/WhiteravnLogo.svg'
 
-// Interfaces
+// trying to avoid any
 interface SidebarLinkProps {
   match: any
 }
 
+interface SidebarItem {
+  match: unknown
+}
 interface SidebarComponentProps {
   sidebarItem: {
     name: string
@@ -48,13 +53,14 @@ const SidebarMenu = styled.ul`
   margin-block-end: 0;
 `
 
-const SidebarItem = styled.li`
+const SidebarItem = styled.li<SidebarItem>`
   height: 56px;
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 0px 0px 0px 16px;
   margin: 8px 0px;
+  color: ${props => (props.match ? '#da584b' : ' #94979a')};
 `
 
 const SidebarItemName = styled.span`
@@ -64,7 +70,6 @@ const SidebarItemName = styled.span`
   font-weight: 600;
   font-family: 'SF Pro Display Regular';
   letter-spacing: 0.75px;
-  color: #94979a;
   margin-left: 19px;
 `
 
@@ -85,6 +90,7 @@ const SidebarLink = styled(NavLink)<SidebarLinkProps>`
         margin-left: auto;
       }
     `}
+
   background: ${props =>
     props.match
       ? 'linear-gradient(90deg, rgba(186, 37, 37, 0) 0%, rgba(210, 77, 77, 0.1) 100%)'
@@ -96,7 +102,7 @@ const SidebarLinkComponent = ({sidebarItem}: SidebarComponentProps) => {
 
   return (
     <SidebarLink to={sidebarItem.path} match={match}>
-      <SidebarItem>
+      <SidebarItem match={match}>
         {sidebarItem.icon}
         <SidebarItemName>{sidebarItem.name}</SidebarItemName>
       </SidebarItem>
@@ -106,12 +112,17 @@ const SidebarLinkComponent = ({sidebarItem}: SidebarComponentProps) => {
 
 const Sidebar = () => {
   // Routes
+
   const sidebarItems = [
     {
       id: 1,
       icon: (
         <RiFunctionLine
-          style={{height: '24px', width: '24px', color: '#94979A'}}
+          style={{
+            height: '24px',
+            width: '24px',
+            backgroundColor: 'transparent',
+          }}
         />
       ),
       name: 'DASHBOARD',
@@ -120,7 +131,13 @@ const Sidebar = () => {
     {
       id: 2,
       icon: (
-        <RiMenuLine style={{height: '24px', width: '24px', color: '#94979A'}} />
+        <RiMenuLine
+          style={{
+            height: '24px',
+            width: '24px',
+            backgroundColor: 'transparent',
+          }}
+        />
       ),
       name: 'MY TASK',
       path: '/my-tasks',
@@ -129,7 +146,11 @@ const Sidebar = () => {
       id: 3,
       icon: (
         <RiUser3Line
-          style={{height: '24px', width: '24px', color: '#94979A'}}
+          style={{
+            height: '24px',
+            width: '24px',
+            backgroundColor: 'transparent',
+          }}
         />
       ),
       name: 'MY PROFILE',

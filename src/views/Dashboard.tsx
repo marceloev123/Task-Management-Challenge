@@ -102,7 +102,9 @@ const Dashboard = () => {
       {Object.keys(tasksByStatus).map((key, idx) => (
         <GridColum key={idx}>
           <ColumHeaderContainer>
-            <ColumHeaderText>{key}</ColumHeaderText>
+            <ColumHeaderText>
+              {key} ({tasksByStatus[key].length})
+            </ColumHeaderText>
             <RiMoreFill
               style={{
                 color: '#94979A',
@@ -113,7 +115,7 @@ const Dashboard = () => {
             />
           </ColumHeaderContainer>
           {tasksByStatus[key].map((task: TaskProps) => (
-            <TaskCard task={task} />
+            <TaskCard key={task.id} task={task} />
           ))}
         </GridColum>
       ))}
