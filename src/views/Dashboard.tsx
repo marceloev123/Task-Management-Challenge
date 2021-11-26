@@ -8,9 +8,11 @@ import TaskCard from '../components/TaskCard'
 const Grid = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 32px;
-  flex-basis: 100%;
+  flex-basis: 1108px;
   margin-top: 32px;
+  margin-right: 36px;
+  justify-content: space-between;
+  gap: 32px;
 `
 
 const GridColum = styled.div`
@@ -18,7 +20,7 @@ const GridColum = styled.div`
   flex-direction: column;
   padding: 0;
   align-items: center;
-  gap: 16px;
+  gap: 24px;
 `
 
 const ColumHeaderContainer = styled.div`
@@ -27,6 +29,7 @@ const ColumHeaderContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  max-width: 340px;
   height: 32px;
 `
 

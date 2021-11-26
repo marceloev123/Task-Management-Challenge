@@ -121,7 +121,7 @@ const Card = styled.div`
   align-items: center;
   padding: 16px;
   gap: 16px;
-  width: 340px;
+  max-width: 340px;
   height: 200px;
   background: #2c2f33;
   border-radius: 8px;
