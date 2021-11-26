@@ -41,9 +41,15 @@ The current project stack is composed for the following tools
 The current view exposes the principal view of the application with all the
 tasks classified by their status "BACKLOG-TODO-IN PROGRESS-CANCELLED"
 
-### Screenshot
+### First Screenshot
 
 ![DashboardScreen](https://user-images.githubusercontent.com/64241651/143501791-68dd217d-741a-44b5-b54c-4c7e5724f649.jpg)
+
+### Second Screenshot
+
+![Dashboard2](https://user-images.githubusercontent.com/64241651/143602732-8c80c675-72fe-491a-bcdf-cd254aa2edeb.png)
+
+Some visual improvements
 
 ### Loading and demonstration
 
