@@ -59,6 +59,11 @@ As we can see, the tasks cards contain the relevant information of the task like
 the name, due date, points, tags, and the avatar of the owner, also the spinner
 component is rendered while the data is fetching
 
+### Responsive demonstration
+
+https://user-images.githubusercontent.com/64241651/143616518-7ef4426f-88db-458c-bb66-4f752c3559cc.mp4
+
+
 ## User Profile
 
 This view exposes the user information like his/her fullname, email, type, andh
