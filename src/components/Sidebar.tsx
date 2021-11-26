@@ -25,18 +25,25 @@ interface SidebarComponentProps {
 // Components
 
 const Container = styled.div`
-  height: calc(100% - 64px);
+  min-height: 100vh;
   width: 232px;
   margin: 32px;
   border-radius: 24px;
   background-color: #2c2f33;
   display: flex;
   flex-direction: column;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   z-index: 1;
-  overflow: hidden;
+  transition: all 0.5s ease 0s;
+  -webkit-transition: all 0.5s ease 0s;
+
+  @media (max-width: 1815px) {
+    width: 116px;
+    transition: all 0.5 ease;
+    min-height: 100vh;
+  }
 `
 const Logo = styled.img`
   height: 36px;
@@ -61,6 +68,11 @@ const SidebarItem = styled.li<SidebarItem>`
   padding: 0px 0px 0px 16px;
   margin: 8px 0px;
   color: ${props => (props.match ? '#da584b' : ' #94979a')};
+  @media (max-width: 1815px) {
+    justify-content: center;
+    align-items: center;
+    margin-left: 28px;
+  }
 `
 
 const SidebarItemName = styled.span`
@@ -71,6 +83,9 @@ const SidebarItemName = styled.span`
   font-family: 'SF Pro Display Regular';
   letter-spacing: 0.75px;
   margin-left: 19px;
+  @media (max-width: 1815px) {
+    display: none;
+  }
 `
 
 // Active Routing Link

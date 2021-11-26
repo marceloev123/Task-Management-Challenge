@@ -13,11 +13,17 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: row;
   flex-grow: 1;
+  height: 100%;
+  width: 100%;
 `
 const Content = styled.div`
   position: absolute;
   width: calc(100% - 296px);
   left: 296px;
+  @media (max-width: 1815px) {
+    width: calc(100% - 180px);
+    left: 180px;
+  }
 `
 
 function App() {
