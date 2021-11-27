@@ -90,6 +90,7 @@ A little advance of the table 😞
 ![MyTasks](https://user-images.githubusercontent.com/64241651/143507588-6c42c046-3f2a-4542-8db8-b9f3ec8c03f8.jpg)
 
 ## Create Tasks Modal
-![2021-11-26 22-20-38](https://user-images.githubusercontent.com/64241651/143666386-8f3fa78a-a4bd-45fd-a683-9463716da650.gif)
+https://user-images.githubusercontent.com/64241651/143666409-bbb78919-e6d2-4897-b110-0802df239787.mp4
+
 
 
