@@ -24,14 +24,14 @@ interface SidebarComponentProps {
 // Components
 
 const Container = styled.div`
-  min-height: 100vh;
+  height: calc(100vh - 64px);
   width: 232px;
   margin: 32px;
   border-radius: 24px;
   background-color: #2c2f33;
   display: flex;
   flex-direction: column;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 1;
@@ -41,7 +41,6 @@ const Container = styled.div`
   @media (max-width: 1898px) {
     width: 104px;
     transition: all 0.5 ease;
-    min-height: 100vh;
   }
 `
 const Logo = styled.img`

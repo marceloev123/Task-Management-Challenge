@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import {BsSearch} from 'react-icons/bs'
 import {RiNotification3Line} from 'react-icons/ri'
 import {IoMdCloseCircleOutline} from 'react-icons/io'
-
+import Avatar from '../components/Avatar'
 const NavContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -46,12 +46,6 @@ const NavInputSearch = styled.input`
     outline: none;
   }
 `
-const Avatar = styled.div`
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-  background: url('https://avatars.dicebear.com/api/initials/mv.svg');
-`
 
 const Navbar = () => {
   const [searchWords, setSearchWords] = useState('')
@@ -93,7 +87,11 @@ const Navbar = () => {
             color: '#94979A',
           }}
         />
-        <Avatar />
+        <Avatar
+          image="https://avatars.dicebear.com/api/initials/mv.svg"
+          height="32px"
+          width="32px"
+        />
       </UserActions>
     </NavContainer>
   )

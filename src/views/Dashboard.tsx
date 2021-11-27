@@ -41,6 +41,7 @@ const ColumHeaderText = styled.div`
   color: white;
   letter-spacing: 0.75px;
 `
+
 interface User {
   id: string
   avatar: string

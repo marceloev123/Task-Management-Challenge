@@ -7,6 +7,12 @@ import {
   RiChat3Line,
 } from 'react-icons/ri'
 import {RiMoreFill} from 'react-icons/ri'
+import {
+  assignBackground,
+  assignLabelColor,
+  formatData,
+} from '../utils/functions'
+import Avatar from '../components/Avatar'
 import Label from './Label'
 import LabelIcon from './LabelIcon'
 
@@ -14,9 +20,6 @@ import LabelIcon from './LabelIcon'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const text2num = require('text2num')
 
-interface AvatarProps {
-  image: string | null
-}
 interface User {
   id: string
   avatar: string
@@ -38,80 +41,6 @@ interface TaskProps {
     position: string
     status: string
     tags: string[]
-  }
-}
-
-// Function to transform Dates in DD Month, YYYY format
-
-const formatData = (date: string) => {
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'Augyst',
-    'September',
-    'October',
-    'November',
-    'December',
-  ]
-  const dateObject = new Date(date)
-  const day = dateObject.getDate()
-  const monthIndex = dateObject.getMonth()
-  const monthName = monthNames[monthIndex]?.toUpperCase()
-  const year = dateObject.getFullYear()
-
-  return `${day} ${monthName}, ${year}`
-}
-
-// Assign Background by Tag
-const assignBackground = (tag: string) => {
-  switch (tag) {
-    case 'IOS':
-      return 'rgba(112, 178, 82, 0.1)'
-      break
-    case 'ANDROID':
-      return 'rgba(229, 180, 84, 0.1);'
-      break
-    case 'REACT':
-      return 'rgba(47, 97, 191, 0.1)'
-      break
-    case 'NODE':
-      return 'rgba(148, 151, 154, 0.1)'
-      break
-    case 'RAILS':
-      return 'rgba(218, 88, 75, 0.1)'
-      break
-    default:
-      return 'rgba(148, 151, 154, 0.1)'
-      break
-  }
-}
-
-//Assgin Label Color by Tag
-const assignLabelColor = (tag: string) => {
-  switch (tag) {
-    case 'IOS':
-      return '#70B252'
-      break
-    case 'ANDROID':
-      return '#E5B454;'
-      break
-    case 'REACT':
-      return '#2F61BF'
-      break
-    case 'NODE':
-      return '#FFFFFF'
-      break
-    case 'RAILS':
-      return '#DA584B'
-      break
-    default:
-      return '#FFFFFF'
-      break
   }
 }
 
@@ -190,14 +119,7 @@ const InteractionsContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 `
-const Avatar = styled.div<AvatarProps>`
-  height: 32px;
-  width: 32px;
-  border-radius: 50%;
-  background: url(${props => props.image});
-  background-repeat: no-repeat;
-  background-size: cover;
-`
+
 const ForkContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -268,7 +190,7 @@ const TaskCard = ({task}: TaskProps) => {
         ))}
       </TagsContainer>
       <Reactions>
-        <Avatar image={task?.owner?.avatar} />
+        <Avatar height="32px" width="32px" image={task?.owner?.avatar} />
         <InteractionsContainer>
           <RiAttachment2 style={{height: '16px', width: '16px'}} />
           <ForkContainer>

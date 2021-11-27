@@ -2,35 +2,8 @@ import React from 'react'
 import styled, {css} from 'styled-components'
 import {gql, useQuery} from '@apollo/client'
 import Spinner from '../components/Spinner/Spinner'
-
-interface AvatarProps {
-  image: string | null
-}
-
-// Function to transform Dates in DD Month, YYYY format (It's possible to abstract to a utils file)
-const formatData = (date: string) => {
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'Augyst',
-    'September',
-    'October',
-    'November',
-    'December',
-  ]
-  const dateObject = new Date(date)
-  const day = dateObject.getDate()
-  const monthIndex = dateObject.getMonth()
-  const monthName = monthNames[monthIndex]?.toUpperCase()
-  const year = dateObject.getFullYear()
-
-  return `${day} ${monthName}, ${year}`
-}
+import Avatar from '../components/Avatar'
+import {formatData} from '../utils/functions'
 
 const baseTextStyles = css`
   font-style: normal;
@@ -47,7 +20,7 @@ const ProfileContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 32px;
-  height: 40rem;
+  height: 32rem;
 `
 
 const CardProfile = styled.div`
@@ -70,14 +43,6 @@ const UserPrimaryData = styled.div`
   align-items: center;
 `
 
-const Avatar = styled.div<AvatarProps>`
-  height: 64px;
-  width: 64px;
-  background: url(${props => props.image});
-  background-repeat: no-repeat;
-  background-size: cover;
-  border-radius: 50%;
-`
 const TextHeader = styled.span`
   ${baseTextStyles};
   text-transform: capitalize;
@@ -108,7 +73,11 @@ const UserProfile = () => {
     <ProfileContainer>
       <CardProfile>
         {!data.profile.avatar && (
-          <Avatar image="https://avatars.dicebear.com/api/initials/mv.svg" />
+          <Avatar
+            width="48px"
+            height="48px"
+            image="https://avatars.dicebear.com/api/initials/mv.svg"
+          />
         )}
         {Object.keys(data.profile)
           .filter(key => key !== '__typename' && key !== 'avatar')
