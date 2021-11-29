@@ -18,7 +18,6 @@ export const assignLabelColor = (tag: string) => {
       break
     default:
       return '#FFFFFF'
-      break
   }
 }
 // Assign Background by Tag
@@ -41,7 +40,6 @@ export const assignBackground = (tag: string) => {
       break
     default:
       return 'rgba(148, 151, 154, 0.1)'
-      break
   }
 }
 
