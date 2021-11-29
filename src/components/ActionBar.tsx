@@ -1,6 +1,7 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import {Link, useMatch} from 'react-router-dom'
+import {gql, useQuery} from '@apollo/client'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
 import {
@@ -11,7 +12,19 @@ import {
   RiUser3Fill,
   RiPriceTag3Fill,
 } from 'react-icons/ri'
+import Avatar from './Avatar'
 
+//Interfaces
+
+interface User {
+  __typename: string
+  id: string
+  avatar: string
+  fullName: string
+}
+interface Trigger {
+  value: null | number | string | undefined | User
+}
 //Principal Container
 const ActionbarContainer = styled.div`
   display: flex;
@@ -54,7 +67,7 @@ const DialogContent = styled(Dialog.Content)`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  width: 431px;
+  width: 500px;
   padding: 16px;
   background-color: #393d41;
   border-radius: 8px;
@@ -125,7 +138,7 @@ const TriggerDropdown = styled(Dropdown.Trigger)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 128px;
+  width: 100%;
   max-height: 32px;
   gap: 8px;
   padding: 0 12px;
@@ -136,14 +149,20 @@ const TriggerDropdown = styled(Dropdown.Trigger)`
   border-style: none;
 `
 
-const TriggerLabel = styled.span`
+const Trigger = styled.input<Trigger>`
   font-weight: 600;
   font-size: 15px;
   line-height: 24px;
   letter-spacing: 0.75px;
+  background-color: transparent;
+  border: none;
   color: #ffffff;
+  width: 100%;
+  &::placeholder {
+    color: #ffffff;
+  }
 `
-const EstimatedPointsItemHeader = styled(Dropdown.Item)`
+const ItemHeader = styled.span`
   display: flex;
   flex-direction: row;
   margin-left: 16px;
@@ -154,17 +173,20 @@ const EstimatedPointsItemHeader = styled(Dropdown.Item)`
   line-height: 32px;
   letter-spacing: 0.75px;
   color: #94979a;
+  cursor: text;
+  &:focus {
+    border: none;
+  }
 `
 const EstimatedPointsItem = styled(Dropdown.Item)`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 8px;
-  margin-left: 16px;
-  margin-right: 16px;
+  padding-left: 16px;
   border-radius: 4px;
   cursor: pointer;
-  ::focus {
+  &:focus {
     background: #94979a;
   }
 `
@@ -173,6 +195,45 @@ const EstimatedPointsItemLabel = styled.span`
   font-weight: normal;
   font-size: 15px;
   line-height: 24px;
+  letter-spacing: 0.75px;
+  color: #ffffff;
+`
+
+//UserDropdown
+const UsersDropdown = styled(Dropdown.Content)`
+  display: flex;
+  margin-top: 12px;
+  margin-left: 56px;
+  width: 240px;
+  flex-direction: column;
+  gap: 24px;
+  border: 1px solid #94979a;
+  padding-bottom: 8px;
+  background: #393d41;
+  box-sizing: border-box;
+  border-radius: 8px;
+  z-index: 1;
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
+    0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+`
+const UserItem = styled(Dropdown.Item)`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  padding: 4px 16px;
+  cursor: pointer;
+  &:focus {
+    background: #94979a;
+  }
+`
+
+const UserItemName = styled.span`
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 24px;
+  align-items: center;
   letter-spacing: 0.75px;
   color: #ffffff;
 `
@@ -209,11 +270,17 @@ const CreateButton = styled.button`
 
 const ActionBar = () => {
   const match = useMatch(location.pathname)
-  // const [estimatedPoints, setEstimatedPoints] = useState(-1)
-  // const [users, setUsers] = useState([])
-  // const [selectedUser, setSelectedUser] = useState({})
-  // const [tags, setTags] = useState([])
+  const [estimatedPoints, setEstimatedPoints] = useState(-1)
+  const [selectedUser, setSelectedUser] = useState<User>({
+    __typename: '',
+    id: '',
+    avatar: '',
+    fullName: '',
+  })
+  const [tags, setTags] = useState([])
+  let filteredUsers: User[] | any[] = []
 
+  // Points Data
   const points = [
     {id: 1, value: 0},
     {id: 2, value: 1},
@@ -221,6 +288,27 @@ const ActionBar = () => {
     {id: 4, value: 4},
     {id: 5, value: 8},
   ]
+
+  // Users Data
+  const GET_USERS = gql`
+    query getUsers {
+      tasks(input: {}) {
+        owner {
+          id
+          avatar
+          fullName
+        }
+      }
+    }
+  `
+  const {loading, error, data} = useQuery(GET_USERS)
+  if (data) {
+    filteredUsers = [
+      ...new Set(data?.tasks.map((task: {owner: User}) => task.owner)),
+    ]
+  }
+  if (error) throw new Error(`Error! ${error.message}`)
+
   return (
     <ActionbarContainer>
       <SwitchContainer>
@@ -268,14 +356,25 @@ const ActionBar = () => {
                   <RiIncreaseDecreaseFill
                     style={{width: '32px', height: '24px', color: 'white'}}
                   />
-                  <TriggerLabel>Estimate</TriggerLabel>
+                  <Trigger
+                    value={estimatedPoints !== -1 ? estimatedPoints : undefined}
+                    disabled
+                    placeholder="Estimate"
+                    onChange={() => setEstimatedPoints(estimatedPoints)}
+                  />
+                  {estimatedPoints !== -1 && (
+                    <EstimatedPointsItemLabel style={{marginLeft: '-80px'}}>
+                      Points
+                    </EstimatedPointsItemLabel>
+                  )}
                 </TriggerDropdown>
                 <EstimatedPointsDropdown>
-                  <EstimatedPointsItemHeader>
-                    Estimate
-                  </EstimatedPointsItemHeader>
+                  <ItemHeader>Estimate</ItemHeader>
                   {points.map(point => (
-                    <EstimatedPointsItem key={point.id}>
+                    <EstimatedPointsItem
+                      key={point.id}
+                      onClick={() => setEstimatedPoints(point.value)}
+                    >
                       <RiIncreaseDecreaseFill
                         style={{width: '32px', height: '26px', color: 'white'}}
                       />
@@ -291,15 +390,36 @@ const ActionBar = () => {
                   <RiUser3Fill
                     style={{width: '32px', height: '32px', color: 'white'}}
                   />
-                  <TriggerLabel>Assignee</TriggerLabel>
+                  <Trigger
+                    value={selectedUser.fullName}
+                    disabled
+                    placeholder="Assignee"
+                    onChange={() => setSelectedUser(selectedUser)}
+                  />
                 </TriggerDropdown>
+                <UsersDropdown>
+                  <ItemHeader>Assign To</ItemHeader>
+                  {filteredUsers.map(user => (
+                    <UserItem
+                      key={user.id}
+                      onClick={() => setSelectedUser(user)}
+                    >
+                      <Avatar
+                        width={'32px'}
+                        height={'32px'}
+                        image={user.avatar}
+                      />
+                      <UserItemName>{user.fullName}</UserItemName>
+                    </UserItem>
+                  ))}
+                </UsersDropdown>
               </Dropdown.Root>
               <Dropdown.Root>
                 <TriggerDropdown>
                   <RiPriceTag3Fill
                     style={{width: '24px', height: '32px', color: 'white'}}
                   />
-                  <TriggerLabel>Label</TriggerLabel>
+                  <Trigger value={0} placeholder="Label" />
                 </TriggerDropdown>
               </Dropdown.Root>
             </DropdownContainer>
