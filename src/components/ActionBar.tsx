@@ -1,7 +1,8 @@
-import React, {useState} from 'react'
+/* eslint-disable no-console */
+import React, {useRef, useState} from 'react'
 import styled from 'styled-components'
 import {Link, useMatch} from 'react-router-dom'
-import {gql, useQuery} from '@apollo/client'
+import {gql, useQuery, useMutation} from '@apollo/client'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
 import {
@@ -23,8 +24,9 @@ interface User {
   fullName: string
 }
 interface Trigger {
-  value: null | number | string | undefined | User
+  value: number | string | undefined | User | string[]
 }
+
 //Principal Container
 const ActionbarContainer = styled.div`
   display: flex;
@@ -86,8 +88,11 @@ const StyledOverlay = styled(Dialog.Overlay)`
   bottom: 0;
   left: 0;
 `
+interface TaskNameInputProps {
+  ref: any
+}
 
-const TaskNameInput = styled.input`
+const TaskNameInput = styled.input<TaskNameInputProps>`
   background: transparent;
   height: 32px;
   color: #94979a;
@@ -227,7 +232,6 @@ const UserItem = styled(Dropdown.Item)`
     background: #94979a;
   }
 `
-
 const UserItemName = styled.span`
   font-style: normal;
   font-weight: 600;
@@ -236,6 +240,22 @@ const UserItemName = styled.span`
   align-items: center;
   letter-spacing: 0.75px;
   color: #ffffff;
+`
+//TagDropdown
+
+const TagDropdown = styled(Dropdown.Content)`
+  display: flex;
+  margin-top: 12px;
+  margin-left: 40px;
+  width: 232px;
+  flex-direction: column;
+  gap: 24px;
+  border: 1px solid #94979a;
+  padding-bottom: 8px;
+  background: #393d41;
+  box-sizing: border-box;
+  border-radius: 8px;
+  z-index: 1;
 `
 
 //Modal Buttons
@@ -268,16 +288,74 @@ const CreateButton = styled.button`
   border-radius: 8px;
 `
 
+//SELECT
+const TagCheckbox = styled(Dropdown.Item)`
+  color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  gap: 11px;
+  align-items: center;
+  border: none;
+  margin-left: 24px;
+  :focus {
+    outline: none;
+  }
+`
+const TagLabel = styled.span`
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.75px;
+  color: #ffffff;
+`
+
+//Tag method
+let selectedTags: string[] = []
+const handleCheck = (tagCheck: boolean, value: string) => {
+  if (!tagCheck) {
+    selectedTags.push(value)
+  } else {
+    const idx = selectedTags.indexOf(value)
+    selectedTags.splice(idx, 1)
+  }
+}
+interface TagProps {
+  id: number
+  value: string
+
+  onClick?: () => void
+}
+const CheckboxIndex = ({value}: TagProps) => {
+  const [tagCheck, setTagCheck] = useState(false)
+
+  const handleClick = () => {
+    setTagCheck(!tagCheck)
+    handleCheck(tagCheck, value)
+  }
+  return (
+    <TagCheckbox>
+      <input type="checkbox" defaultValue={value} onClick={handleClick} />
+
+      <TagLabel>{value}</TagLabel>
+    </TagCheckbox>
+  )
+}
+
 const ActionBar = () => {
   const match = useMatch(location.pathname)
   const [estimatedPoints, setEstimatedPoints] = useState(-1)
-  const [selectedUser, setSelectedUser] = useState<User>({
+  const [openModal, setOpenModal] = useState(false)
+  const [openDropdown, setOpenDropdown] = useState(false)
+  const userInitialState = {
     __typename: '',
     id: '',
     avatar: '',
     fullName: '',
-  })
-  const [tags, setTags] = useState([])
+  }
+
+  const [selectedUser, setSelectedUser] = useState<User>(userInitialState)
+
   let filteredUsers: User[] | any[] = []
 
   // Points Data
@@ -289,6 +367,20 @@ const ActionBar = () => {
     {id: 5, value: 8},
   ]
 
+  const openDropdownMenu = () => {
+    setOpenDropdown(!openDropdown)
+  }
+
+  const openDialog = () => {
+    setOpenModal(!openModal)
+  }
+
+  const clearFields = () => {
+    setOpenModal(!openModal)
+    setEstimatedPoints(-1)
+    setSelectedUser(userInitialState)
+    selectedTags = []
+  }
   // Users Data
   const GET_USERS = gql`
     query getUsers {
@@ -302,13 +394,49 @@ const ActionBar = () => {
     }
   `
   const {loading, error, data} = useQuery(GET_USERS)
-  if (data) {
+  if (data && !loading) {
     filteredUsers = [
       ...new Set(data?.tasks.map((task: {owner: User}) => task.owner)),
     ]
   }
   if (error) throw new Error(`Error! ${error.message}`)
 
+  //Create Task
+  const CREATE_TASK = gql`
+    mutation createTask($name: String!) {
+      createTask(
+        input: {
+          dueDate: "2019-12-03T09:54:33Z"
+          name: $name
+          pointEstimate: ONE
+          status: BACKLOG
+          tags: [IOS]
+        }
+      ) {
+        id
+      }
+    }
+  `
+  const [createTask, {data: data1, loading: loading1, error: error1}] =
+    useMutation(CREATE_TASK)
+
+  console.log(data1)
+  //Tags Data
+  const tagData = [
+    {id: 1, value: 'ANDROID'},
+    {id: 2, value: 'IOS'},
+    {id: 3, value: 'NODE_JS'},
+    {id: 4, value: 'RAILS'},
+    {id: 5, value: 'REACT'},
+  ]
+
+  //Task Data
+  let taskname: {value: any}
+  const handleSubmit = (e: {preventDefault: () => void}) => {
+    e.preventDefault()
+
+    createTask({variables: {name: taskname.value}})
+  }
   return (
     <ActionbarContainer>
       <SwitchContainer>
@@ -339,16 +467,20 @@ const ActionBar = () => {
         </Link>
       </SwitchContainer>
       <form>
-        <DialogContainer>
-          <Dialog.Trigger asChild>
+        <DialogContainer open={openModal}>
+          <Dialog.Trigger asChild onClick={openDialog}>
             <Button>
               <RiAddLine style={{height: '24px', width: '24px'}} />
             </Button>
           </Dialog.Trigger>
-          <StyledOverlay />
+          <StyledOverlay onClick={clearFields} />
           <DialogContent>
             <Dialog.Title style={{margin: 0}}>
-              <TaskNameInput placeholder="Task Tittle" />
+              <TaskNameInput
+                placeholder="Task Tittle"
+                id="taskname"
+                ref={(value: any) => (taskname = value)}
+              />
             </Dialog.Title>
             <DropdownContainer>
               <Dropdown.Root>
@@ -357,13 +489,13 @@ const ActionBar = () => {
                     style={{width: '32px', height: '24px', color: 'white'}}
                   />
                   <Trigger
-                    value={estimatedPoints !== -1 ? estimatedPoints : undefined}
+                    value={estimatedPoints !== -1 ? estimatedPoints : ''}
                     disabled
                     placeholder="Estimate"
                     onChange={() => setEstimatedPoints(estimatedPoints)}
                   />
                   {estimatedPoints !== -1 && (
-                    <EstimatedPointsItemLabel style={{marginLeft: '-80px'}}>
+                    <EstimatedPointsItemLabel style={{marginLeft: '-8rem'}}>
                       Points
                     </EstimatedPointsItemLabel>
                   )}
@@ -414,21 +546,41 @@ const ActionBar = () => {
                   ))}
                 </UsersDropdown>
               </Dropdown.Root>
-              <Dropdown.Root>
-                <TriggerDropdown>
+              <Dropdown.Root open={openDropdown}>
+                <TriggerDropdown onClick={openDropdownMenu}>
                   <RiPriceTag3Fill
                     style={{width: '24px', height: '32px', color: 'white'}}
                   />
-                  <Trigger value={0} placeholder="Label" />
+                  <Trigger value={selectedTags} placeholder="Label" disabled />
                 </TriggerDropdown>
+                <TagDropdown>
+                  <ItemHeader onClick={() => setOpenDropdown(false)}>
+                    Tag Title
+                  </ItemHeader>
+                  <Dropdown.Group
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '8px',
+                    }}
+                  >
+                    {tagData.map(tag => (
+                      <CheckboxIndex
+                        id={tag.id}
+                        key={tag.id}
+                        value={tag.value}
+                      />
+                    ))}
+                  </Dropdown.Group>
+                </TagDropdown>
               </Dropdown.Root>
             </DropdownContainer>
             <ModalButtonsContainer>
               <Dialog.Close asChild>
-                <CancelButton>Cancel</CancelButton>
+                <CancelButton onClick={clearFields}>Cancel</CancelButton>
               </Dialog.Close>
               <Dialog.Close asChild>
-                <CreateButton type="submit">Create</CreateButton>
+                <CreateButton onClick={handleSubmit}>Create</CreateButton>
               </Dialog.Close>
             </ModalButtonsContainer>
           </DialogContent>
