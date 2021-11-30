@@ -212,7 +212,7 @@ export const UsersDropdown = styled(Dropdown.Content)`
 export const UserItem = styled(Dropdown.Item)`
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 16px;
   align-items: center;
   padding: 4px 16px;
   cursor: pointer;
@@ -222,6 +222,7 @@ export const UserItem = styled(Dropdown.Item)`
 `
 export const UserItemName = styled.span`
   font-style: normal;
+  max-width: 120px;
   font-weight: 600;
   font-size: 15px;
   line-height: 24px;

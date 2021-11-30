@@ -91,6 +91,7 @@ const Dashboard = () => {
     },
     {},
   )
+  console.log(typeof tasksByStatus)
   if (loading || loading1) return <Spinner />
   if (error) {
     toast.error('An error occur while fetching the data!', {
@@ -103,7 +104,7 @@ const Dashboard = () => {
       draggable: true,
       progress: undefined,
     })
-    tasksByStatus = []
+    tasksByStatus = {}
   } else if (error1) {
     toast.error('An error occur during the delete request!', {
       theme: 'dark',
@@ -152,7 +153,9 @@ const Dashboard = () => {
   return (
     <>
       <Grid>
-        {tasksByStatus.length > 0 ? (
+        {!data ? (
+          <div>There are not tasks to display</div>
+        ) : (
           Object.keys(tasksByStatus).map((key, idx) => (
             <GridColum key={idx}>
               <ColumHeaderContainer>
@@ -177,8 +180,6 @@ const Dashboard = () => {
               ))}
             </GridColum>
           ))
-        ) : (
-          <div>There are not tasks to display</div>
         )}
       </Grid>
       <ToastContainer

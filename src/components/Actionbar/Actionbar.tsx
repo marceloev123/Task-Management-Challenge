@@ -335,7 +335,10 @@ const Actionbar = () => {
                         <Avatar
                           width={'32px'}
                           height={'32px'}
-                          image={user.avatar}
+                          image={
+                            user.avatar ||
+                            'https://avatars.dicebear.com/api/initials/mv.svg'
+                          }
                         />
                         <UserItemName>{user.fullName}</UserItemName>
                       </UserItem>
