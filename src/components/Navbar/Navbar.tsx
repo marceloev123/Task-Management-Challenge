@@ -1,51 +1,14 @@
 import React, {useState} from 'react'
-import styled from 'styled-components'
 import {BsSearch} from 'react-icons/bs'
 import {RiNotification3Line} from 'react-icons/ri'
 import {IoMdCloseCircleOutline} from 'react-icons/io'
-import Avatar from '../components/Avatar'
-const NavContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  height: 64px;
-  flex-basis: 1108px;
-  border-radius: 16px;
-  background-color: #2c2f33;
-  align-items: center;
-  margin-top: 32px;
-  margin-right: 36px;
-  justify-content: space-between;
-`
-
-const UserActions = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 24px;
-  margin-left: 28px;
-`
-
-const NavSearchContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  height: 24px;
-`
-
-const NavInputSearch = styled.input`
-  color: #94979a;
-  width: 100%;
-  min-width: 4rem;
-  font-size: 15px;
-  line-height: 24px;
-  font-style: normal;
-  font-weight: normal;
-  background-color: transparent;
-  border: none;
-  :focus {
-    outline: none;
-  }
-`
+import Avatar from '../Avatar'
+import {
+  NavContainer,
+  NavSearchContainer,
+  NavInputSearch,
+  UserActions,
+} from './NavbarComponents'
 
 const Navbar = () => {
   const [searchWords, setSearchWords] = useState('')
