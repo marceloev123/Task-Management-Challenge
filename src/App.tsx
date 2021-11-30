@@ -20,6 +20,7 @@ const Content = styled.div`
   position: absolute;
   width: calc(100% - 296px);
   left: 296px;
+
   @media (max-width: 1898px) {
     width: calc(100% - 168px);
     left: 168px;

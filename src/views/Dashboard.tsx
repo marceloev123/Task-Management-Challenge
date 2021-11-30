@@ -15,6 +15,7 @@ const Grid = styled.div`
   flex-direction: row;
   flex-basis: 1108px;
   margin-top: 32px;
+  margin-bottom: 32px;
   margin-right: 36px;
   justify-content: space-between;
   gap: 32px;
