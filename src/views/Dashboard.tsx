@@ -1,9 +1,14 @@
+/* eslint-disable no-console */
 import React from 'react'
 import styled from 'styled-components'
-import {gql, useQuery} from '@apollo/client'
+import {useMutation, useQuery} from '@apollo/client'
 import {RiMoreFill} from 'react-icons/ri'
+import {ToastContainer, toast} from 'react-toastify'
+import {GET_TASKS} from '../graphql/queries/queries'
+import {DELETE_TASK} from '../graphql/mutations/mutations'
+import 'react-toastify/dist/ReactToastify.css'
 import Spinner from '../components/Spinner/Spinner'
-import TaskCard from '../components/TaskCard'
+import TaskCard from '../components/TaskCard/TaskCard'
 
 const Grid = styled.div`
   display: flex;
@@ -65,27 +70,11 @@ interface TaskProps {
 }
 
 const Dashboard = () => {
-  //Fetch the data
-  const GET_STATUS = gql`
-    query getTasks {
-      tasks(input: {}) {
-        id
-        createdAt
-        dueDate
-        name
-        owner {
-          id
-          avatar
-          fullName
-        }
-        pointEstimate
-        position
-        status
-        tags
-      }
-    }
-  `
-  const {loading, error, data} = useQuery(GET_STATUS)
+  const {loading, error, data} = useQuery(GET_TASKS)
+  const [deleteTask, {data: data1, loading: loading1, error: error1}] =
+    useMutation(DELETE_TASK, {
+      refetchQueries: [GET_TASKS, 'GetTasks'],
+    })
 
   // Group tasks by Status
   const tasksByStatus = data?.tasks.reduce(
@@ -99,31 +88,72 @@ const Dashboard = () => {
     },
     {},
   )
-  if (loading) return <Spinner />
+  if (loading || loading1) return <Spinner />
   if (error) throw new Error(`Error! ${error.message}`)
+
+  //Delete Task
+  const deleteHandler = async (taskId: string) => {
+    try {
+      await deleteTask({
+        variables: {
+          id: taskId,
+        },
+      })
+    } catch (error) {
+      throw new Error(`Error: ${error}`)
+    } finally {
+      toast.success('Task deleted succesfully!', {
+        theme: 'dark',
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+  }
   return (
-    <Grid>
-      {Object.keys(tasksByStatus).map((key, idx) => (
-        <GridColum key={idx}>
-          <ColumHeaderContainer>
-            <ColumHeaderText>
-              {key} ({tasksByStatus[key].length})
-            </ColumHeaderText>
-            <RiMoreFill
-              style={{
-                color: '#94979A',
-                width: '24px',
-                height: '24px',
-                marginLeft: '11px',
-              }}
-            />
-          </ColumHeaderContainer>
-          {tasksByStatus[key].map((task: TaskProps) => (
-            <TaskCard key={task.id} task={task} />
-          ))}
-        </GridColum>
-      ))}
-    </Grid>
+    <>
+      <Grid>
+        {Object.keys(tasksByStatus).map((key, idx) => (
+          <GridColum key={idx}>
+            <ColumHeaderContainer>
+              <ColumHeaderText>
+                {key} ({tasksByStatus[key].length})
+              </ColumHeaderText>
+              <RiMoreFill
+                style={{
+                  color: '#94979A',
+                  width: '24px',
+                  height: '24px',
+                  marginLeft: '11px',
+                }}
+              />
+            </ColumHeaderContainer>
+            {tasksByStatus[key].map((task: TaskProps) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                deleteTask={() => deleteHandler(task.id)}
+              />
+            ))}
+          </GridColum>
+        ))}
+      </Grid>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </>
   )
 }
 

@@ -2,9 +2,9 @@ import React from 'react'
 import {Route, Routes} from 'react-router-dom'
 import styled from 'styled-components'
 import {GlobalStyle} from './styles/GlobalStyle'
-import ActionBar from './components/ActionBar'
-import Navbar from './components/Navbar'
-import Sidebar from './components/Sidebar'
+import Actionbar from './components/Actionbar/Actionbar'
+import Navbar from './components/Navbar/Navbar'
+import Sidebar from './components/Sidebar/Sidebar'
 import Dashboard from './views/Dashboard'
 import MyTasks from './views/MyTasks'
 import UserProfile from './views/UserProfile'
@@ -33,7 +33,7 @@ function App() {
       <Sidebar />
       <Content>
         <Navbar />
-        <ActionBar />
+        <Actionbar />
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/my-tasks" element={<MyTasks />} />
