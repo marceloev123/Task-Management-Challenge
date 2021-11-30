@@ -93,4 +93,14 @@ A little advance of the table 😞
 https://user-images.githubusercontent.com/64241651/143666409-bbb78919-e6d2-4897-b110-0802df239787.mp4
 
 
+## Create Mutation on action
+https://user-images.githubusercontent.com/64241651/144138974-a04bbe78-a636-44c5-a912-10b217ee5edb.mp4
 
+The app allows the user create new tasks indicating their Estimated points, the person responsible and the tags of the kind of applications, when the request is done a succesfull message it's shown 
+
+
+
+## Delete Mutation on action
+https://user-images.githubusercontent.com/64241651/144139920-06875b50-e00f-47f4-8fbc-6bd1b7a7dec4.mp4
+
+The app allows the user delete the tasks selecting the `Delete` option through a pop-up ,when the request is done a succesfull message it's shown 
