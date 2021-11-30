@@ -72,13 +72,15 @@ interface TaskProps {
 
 const Dashboard = () => {
   const {loading, error, data} = useQuery(GET_TASKS)
-  const [deleteTask, {data: data1, loading: loading1, error: error1}] =
-    useMutation(DELETE_TASK, {
+  const [deleteTask, {loading: loading1, error: error1}] = useMutation(
+    DELETE_TASK,
+    {
       refetchQueries: [GET_TASKS, 'GetTasks'],
-    })
+    },
+  )
 
   // Group tasks by Status
-  const tasksByStatus = data?.tasks.reduce(
+  let tasksByStatus = data?.tasks.reduce(
     (previousTask: {[key: string]: TaskProps[]}, currentTask: TaskProps) => {
       const key = currentTask.status
       if (!previousTask[key]) {
@@ -90,7 +92,30 @@ const Dashboard = () => {
     {},
   )
   if (loading || loading1) return <Spinner />
-  if (error) throw new Error(`Error! ${error.message}`)
+  if (error) {
+    toast.error('An error occur while fetching the data!', {
+      theme: 'dark',
+      position: 'bottom-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
+    tasksByStatus = []
+  } else if (error1) {
+    toast.error('An error occur during the delete request!', {
+      theme: 'dark',
+      position: 'bottom-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
+  }
 
   //Delete Task
   const deleteHandler = async (taskId: string) => {
@@ -101,7 +126,16 @@ const Dashboard = () => {
         },
       })
     } catch (error) {
-      throw new Error(`Error: ${error}`)
+      toast.error('Error while deleting task!', {
+        theme: 'dark',
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
     } finally {
       toast.success('Task deleted succesfully!', {
         theme: 'dark',
@@ -118,30 +152,34 @@ const Dashboard = () => {
   return (
     <>
       <Grid>
-        {Object.keys(tasksByStatus).map((key, idx) => (
-          <GridColum key={idx}>
-            <ColumHeaderContainer>
-              <ColumHeaderText>
-                {key} ({tasksByStatus[key].length})
-              </ColumHeaderText>
-              <RiMoreFill
-                style={{
-                  color: '#94979A',
-                  width: '24px',
-                  height: '24px',
-                  marginLeft: '11px',
-                }}
-              />
-            </ColumHeaderContainer>
-            {tasksByStatus[key].map((task: TaskProps) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                deleteTask={() => deleteHandler(task.id)}
-              />
-            ))}
-          </GridColum>
-        ))}
+        {tasksByStatus.length > 0 ? (
+          Object.keys(tasksByStatus).map((key, idx) => (
+            <GridColum key={idx}>
+              <ColumHeaderContainer>
+                <ColumHeaderText>
+                  {key} ({tasksByStatus[key].length})
+                </ColumHeaderText>
+                <RiMoreFill
+                  style={{
+                    color: '#94979A',
+                    width: '24px',
+                    height: '24px',
+                    marginLeft: '11px',
+                  }}
+                />
+              </ColumHeaderContainer>
+              {tasksByStatus[key].map((task: TaskProps) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  deleteTask={() => deleteHandler(task.id)}
+                />
+              ))}
+            </GridColum>
+          ))
+        ) : (
+          <div>There are not tasks to display</div>
+        )}
       </Grid>
       <ToastContainer
         position="bottom-right"

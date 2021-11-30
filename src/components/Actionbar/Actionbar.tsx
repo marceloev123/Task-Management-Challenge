@@ -112,9 +112,27 @@ const Actionbar = () => {
     ]
   }
   if (error) {
-    throw new Error(`Error! ${error.message}`)
+    toast.error(`Error: ${error}`, {
+      theme: 'dark',
+      position: 'bottom-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
   } else if (error1) {
-    throw new Error(`Error! ${error1.message}`)
+    toast.error(`Error: ${error1}`, {
+      theme: 'dark',
+      position: 'bottom-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
   }
 
   const tasknameRef = useRef<HTMLInputElement>(null)
@@ -147,7 +165,16 @@ const Actionbar = () => {
           },
         })
       } catch (e) {
-        throw new Error(`Error:${e}`)
+        toast.error('Error on create task', {
+          theme: 'dark',
+          position: 'bottom-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
       } finally {
         clearFields()
         toast.success('Task created succesfully!', {
