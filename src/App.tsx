@@ -18,7 +18,6 @@ const AppContainer = styled.div`
 `
 const Content = styled.div`
   position: absolute;
-  overflow: auto;
   min-height: 100%;
   width: calc(100% - 296px);
   left: 296px;

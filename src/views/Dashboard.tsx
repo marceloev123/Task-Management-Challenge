@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React from 'react'
 import styled from 'styled-components'
 import {useMutation, useQuery} from '@apollo/client'
@@ -12,21 +11,37 @@ import TaskCard from '../components/TaskCard/TaskCard'
 
 const Grid = styled.div`
   display: flex;
+  display: flex;
   flex-direction: row;
-  flex-basis: 1108px;
+  flex-flow: row wrap;
+  justify-content: center;
   margin-top: 32px;
   margin-bottom: 32px;
   margin-right: 36px;
-  justify-content: space-between;
   gap: 32px;
+  @media only screen and (min-width: 964px) {
+    justify-content: space-between;
+  }
+  @media only screen and (min-width: 1370px) {
+    justify-content: space-between;
+  }
 `
 
 const GridColum = styled.div`
   display: flex;
   flex-direction: column;
+  flex-basis: 68%;
   padding: 0;
   align-items: center;
   gap: 24px;
+  @media only screen and (min-width: 964px) {
+    display: flex;
+    flex-basis: 44%;
+  }
+  @media only screen and (min-width: 1370px) {
+    display: flex;
+    flex-basis: 20%;
+  }
 `
 
 const ColumHeaderContainer = styled.div`
@@ -35,7 +50,6 @@ const ColumHeaderContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 340px;
   height: 32px;
 `
 
