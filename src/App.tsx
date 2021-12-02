@@ -18,9 +18,22 @@ const AppContainer = styled.div`
 `
 const Content = styled.div`
   position: absolute;
+  overflow: auto;
+  min-height: 100%;
   width: calc(100% - 296px);
   left: 296px;
 
+  @media (max-width: 1898px) {
+    width: calc(100% - 168px);
+    left: 168px;
+  }
+`
+const ContentView = styled.div`
+  background: #222528;
+  z-index: 999;
+  position: fixed;
+  width: calc(100% - 296px);
+  left: 296px;
   @media (max-width: 1898px) {
     width: calc(100% - 168px);
     left: 168px;
@@ -33,13 +46,17 @@ function App() {
       <GlobalStyle />
       <Sidebar />
       <Content>
-        <Navbar />
-        <Actionbar />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/my-tasks" element={<MyTasks />} />
-          <Route path="/profile" element={<UserProfile />} />
-        </Routes>
+        <ContentView>
+          <Navbar />
+          <Actionbar />
+        </ContentView>
+        <div style={{marginTop: '208px'}}>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/my-tasks" element={<MyTasks />} />
+            <Route path="/profile" element={<UserProfile />} />
+          </Routes>
+        </div>
       </Content>
     </AppContainer>
   )

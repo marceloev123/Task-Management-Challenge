@@ -91,7 +91,6 @@ const Dashboard = () => {
     },
     {},
   )
-  console.log(typeof tasksByStatus)
   if (loading || loading1) return <Spinner />
   if (error) {
     toast.error('An error occur while fetching the data!', {
@@ -126,8 +125,7 @@ const Dashboard = () => {
           id: taskId,
         },
       })
-    } catch (error) {
-      toast.error('Error while deleting task!', {
+      toast.success('Task deleted succesfully!', {
         theme: 'dark',
         position: 'bottom-right',
         autoClose: 5000,
@@ -137,8 +135,8 @@ const Dashboard = () => {
         draggable: true,
         progress: undefined,
       })
-    } finally {
-      toast.success('Task deleted succesfully!', {
+    } catch (error) {
+      toast.error('Error while deleting task!', {
         theme: 'dark',
         position: 'bottom-right',
         autoClose: 5000,

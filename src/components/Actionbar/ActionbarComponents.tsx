@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import * as Dialog from '@radix-ui/react-dialog'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
 
 //Interfaces
@@ -10,8 +9,8 @@ interface User {
   avatar: string
   fullName: string
 }
-interface Trigger {
-  value: number | string | undefined | User | string[]
+interface TriggerProps {
+  value?: number | string | undefined | User | string[]
 }
 //Principal Container
 export const ActionbarContainer = styled.div`
@@ -21,6 +20,7 @@ export const ActionbarContainer = styled.div`
   flex-basis: 1108px;
   align-items: center;
   margin-top: 32px;
+  margin-bottom: 32px;
   margin-right: 36px;
   justify-content: space-between;
 `
@@ -46,33 +46,6 @@ export const Button = styled.button`
   justify-content: center;
 `
 
-//Dialog
-export const DialogContainer = styled(Dialog.Root)`
-  padding: 16px;
-`
-export const DialogContent = styled(Dialog.Content)`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  width: 500px;
-  padding: 16px;
-  background-color: #393d41;
-  border-radius: 8px;
-  box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px hsl(206 22% 7% / 20%) 0px
-    10px 20px -15px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -156%);
-`
-export const StyledOverlay = styled(Dialog.Overlay)`
-  background: rgba(0, 0, 0, 0.15);
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-`
 export const TaskNameInput = styled.input`
   background: transparent;
   height: 32px;
@@ -122,7 +95,7 @@ export const EstimatedPointsDropdown = styled(Dropdown.Content)`
   background: #393d41;
   box-sizing: border-box;
   border-radius: 8px;
-  z-index: 1;
+  z-index: 100;
   box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
     0px 10px 20px -15px rgba(22, 23, 24, 0.2);
 `
@@ -133,6 +106,7 @@ export const TriggerDropdown = styled(Dropdown.Trigger)`
   align-items: center;
   width: 100%;
   max-height: 32px;
+  min-width: 124px;
   gap: 8px;
   padding: 0 12px;
   background: rgba(148, 151, 154, 0.1);
@@ -142,7 +116,7 @@ export const TriggerDropdown = styled(Dropdown.Trigger)`
   border-style: none;
 `
 
-export const Trigger = styled.input<Trigger>`
+export const Trigger = styled.input<TriggerProps>`
   font-weight: 600;
   font-size: 15px;
   line-height: 24px;
@@ -155,6 +129,7 @@ export const Trigger = styled.input<Trigger>`
     color: #ffffff;
   }
 `
+
 export const ItemHeader = styled.span`
   display: flex;
   flex-direction: row;
@@ -205,7 +180,7 @@ export const UsersDropdown = styled(Dropdown.Content)`
   background: #393d41;
   box-sizing: border-box;
   border-radius: 8px;
-  z-index: 1;
+  z-index: 100;
   box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
     0px 10px 20px -15px rgba(22, 23, 24, 0.2);
 `
@@ -244,7 +219,7 @@ export const TagDropdown = styled(Dropdown.Content)`
   background: #393d41;
   box-sizing: border-box;
   border-radius: 8px;
-  z-index: 1;
+  z-index: 100;
 `
 
 //Modal Buttons
@@ -297,4 +272,12 @@ export const TagLabel = styled.span`
   line-height: 24px;
   letter-spacing: 0.75px;
   color: #ffffff;
+`
+export const ErrorMessages = styled.p`
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.75px;
+  color: #da584b;
 `

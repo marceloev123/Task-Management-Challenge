@@ -1,7 +1,10 @@
-import React, {useRef, useState} from 'react'
+/* eslint-disable no-console */
+import React, {useState, useEffect} from 'react'
 import {Link, useMatch} from 'react-router-dom'
 import {useQuery, useMutation} from '@apollo/client'
-import * as Dialog from '@radix-ui/react-dialog'
+import {useForm} from 'react-hook-form'
+import {yupResolver} from '@hookform/resolvers/yup'
+import * as yup from 'yup'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
 import {ToastContainer, toast} from 'react-toastify'
 import {
@@ -12,25 +15,25 @@ import {
   RiUser3Fill,
   RiPriceTag3Fill,
 } from 'react-icons/ri'
+
 import {GET_TASKS, GET_USERS} from '../../graphql/queries/queries'
 import {CREATE_TASK} from '../../graphql/mutations/mutations'
 import {PointEstimate, TaskTag} from '../../graphql/schemas'
 import 'react-toastify/dist/ReactToastify.css'
 import Avatar from '../Avatar'
+import Modal from '../Modal/Modal'
 import {
   ActionbarContainer,
   Button,
   CancelButton,
   CreateButton,
-  DialogContainer,
-  DialogContent,
   DropdownContainer,
+  ErrorMessages,
   EstimatedPointsDropdown,
   EstimatedPointsItem,
   EstimatedPointsItemLabel,
   ItemHeader,
   ModalButtonsContainer,
-  StyledOverlay,
   SwitchContainer,
   TagCheckbox,
   TagDropdown,
@@ -83,7 +86,28 @@ const CheckboxIndex = ({value}: TagProps) => {
   )
 }
 
+//Form validation
+const schema = yup
+  .object({
+    taskTitle: yup.string().required(),
+    pointsEstimated: yup.string().required(),
+    tagLabels: yup.array().min(1).required(),
+  })
+  .required()
+
 const Actionbar = () => {
+  const {
+    register,
+    getValues,
+    handleSubmit,
+    setValue,
+    reset,
+    clearErrors,
+    formState: {errors},
+  } = useForm({
+    resolver: yupResolver(schema),
+  })
+
   const match = useMatch(location.pathname)
   const [estimatedPoints, setEstimatedPoints] = useState('')
   const [openModal, setOpenModal] = useState(false)
@@ -96,7 +120,6 @@ const Actionbar = () => {
   }
 
   const [selectedUser, setSelectedUser] = useState<User>(userInitialState)
-
   // Fetching users
   let filteredUsers: User[] | any[] = []
   const {loading, error, data} = useQuery(GET_USERS)
@@ -135,59 +158,47 @@ const Actionbar = () => {
     })
   }
 
-  const tasknameRef = useRef<HTMLInputElement>(null)
-  const estimatedPointsRef = useRef<HTMLInputElement>(null)
-  const tagsLabelsRef = useRef<HTMLInputElement>(null)
+  async function createTaskSubmit() {
+    //Fetch data from form
 
-  const handleSubmit = async (e: {preventDefault: () => void}) => {
-    e.preventDefault()
-    //Validate the form
-    if (
-      tasknameRef.current !== null &&
-      estimatedPointsRef.current !== null &&
-      tagsLabelsRef.current !== null
-    ) {
-      const tasknameValue = tasknameRef.current.value
-      const estimatedPointsValue = estimatedPointsRef.current.value
-      if (estimatedPointsRef.current.value === '') {
-        alert('Estimated points are required')
-      }
-      if (tagsLabelsRef.current.value.length === 0) {
-        alert('Tags labels are required')
-      }
-      // Make the request
-      try {
-        await createTask({
-          variables: {
-            name: tasknameValue,
-            pointEstimate: estimatedPointsValue,
-            tags: selectedTags,
-          },
-        })
-      } catch (e) {
-        toast.error('Error on create task', {
-          theme: 'dark',
-          position: 'bottom-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-      } finally {
-        clearFields()
-        toast.success('Task created succesfully!', {
-          theme: 'dark',
-          position: 'bottom-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
-      }
+    const formDataValues = getValues([
+      'taskTitle',
+      'pointsEstimated',
+      'tagLabels',
+    ])
+
+    // Make the request
+    try {
+      await createTask({
+        variables: {
+          name: formDataValues[0],
+          pointEstimate: formDataValues[1],
+          tags: formDataValues[2],
+        },
+      })
+      toast.success('Task created succesfully!', {
+        theme: 'dark',
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } catch (e) {
+      toast.error('Error on create task', {
+        theme: 'dark',
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } finally {
+      clearFields()
     }
   }
 
@@ -205,16 +216,19 @@ const Actionbar = () => {
     setOpenDropdown(!openDropdown)
   }
 
-  const openDialog = () => {
-    setOpenModal(!openModal)
-  }
-
   const clearFields = () => {
+    clearErrors()
     setOpenModal(!openModal)
     setEstimatedPoints('')
     setSelectedUser(userInitialState)
     selectedTags = []
+    reset()
   }
+
+  useEffect(() => {
+    register('pointsEstimated', {required: true})
+    register('tagLabels', {required: true})
+  }, [register])
 
   return (
     <>
@@ -248,153 +262,178 @@ const Actionbar = () => {
             />
           </Link>
         </SwitchContainer>
-
-        <DialogContainer open={openModal}>
-          <Dialog.Trigger asChild onClick={openDialog}>
-            <Button type="button">
-              <RiAddLine style={{height: '24px', width: '24px'}} />
-            </Button>
-          </Dialog.Trigger>
-          <StyledOverlay onClick={clearFields} />
-          <DialogContent>
+        <>
+          <Modal show={openModal} onClick={clearFields}>
             <form
-              onSubmit={e => handleSubmit(e)}
-              id="createTaskForm"
+              onSubmit={handleSubmit(createTaskSubmit)}
               style={{display: 'flex', flexDirection: 'column', gap: '24px'}}
             >
-              <Dialog.Title style={{margin: 0}}>
-                <TaskNameInput
-                  placeholder="Task Tittle"
-                  id="taskname"
-                  type="text"
-                  ref={tasknameRef}
-                  form="createTaskForm"
-                  required
-                />
-              </Dialog.Title>
-              <DropdownContainer>
-                <Dropdown.Root>
-                  <TriggerDropdown>
-                    <RiIncreaseDecreaseFill
-                      style={{width: '32px', height: '24px', color: 'white'}}
-                    />
-                    <Trigger
-                      value={estimatedPoints}
-                      form="createTaskForm"
-                      disabled
-                      placeholder="Estimate"
-                      onChange={() => setEstimatedPoints(estimatedPoints)}
-                      ref={estimatedPointsRef}
-                      required
-                    />
-                  </TriggerDropdown>
-                  <EstimatedPointsDropdown>
-                    <ItemHeader>Estimate</ItemHeader>
-                    {(
-                      Object.keys(PointEstimate) as Array<
-                        keyof typeof PointEstimate
-                      >
-                    ).map((key, idx) => (
-                      <EstimatedPointsItem
-                        key={idx}
-                        onClick={() => setEstimatedPoints(key)}
-                      >
+              <TaskNameInput
+                placeholder="Task Title"
+                type="text"
+                {...register('taskTitle')}
+              />
+
+              {errors.taskTitle && (
+                <ErrorMessages> *{errors.taskTitle.message}</ErrorMessages>
+              )}
+              <>
+                <DropdownContainer>
+                  <Dropdown.Root>
+                    <div>
+                      <TriggerDropdown>
                         <RiIncreaseDecreaseFill
                           style={{
                             width: '32px',
-                            height: '26px',
+                            height: '24px',
                             color: 'white',
                           }}
                         />
-                        <EstimatedPointsItemLabel>
-                          {estimatedPointsData[key]} Points
-                        </EstimatedPointsItemLabel>
-                      </EstimatedPointsItem>
-                    ))}
-                  </EstimatedPointsDropdown>
-                </Dropdown.Root>
-                <Dropdown.Root>
-                  <TriggerDropdown>
-                    <RiUser3Fill
-                      style={{width: '32px', height: '32px', color: 'white'}}
-                    />
-                    <Trigger
-                      value={selectedUser.fullName}
-                      disabled
-                      placeholder="Assignee"
-                      onChange={() => setSelectedUser(selectedUser)}
-                    />
-                  </TriggerDropdown>
-                  <UsersDropdown>
-                    <ItemHeader>Assign To</ItemHeader>
-                    {filteredUsers.map(user => (
-                      <UserItem
-                        key={user.id}
-                        onClick={() => setSelectedUser(user)}
-                      >
-                        <Avatar
-                          width={'32px'}
-                          height={'32px'}
-                          image={
-                            user.avatar ||
-                            'https://avatars.dicebear.com/api/initials/mv.svg'
-                          }
+                        <Trigger
+                          disabled
+                          placeholder="Estimate"
+                          value={estimatedPoints}
+                          {...setValue('pointsEstimated', estimatedPoints)}
+                          onChange={() => {
+                            setValue('pointsEstimated', estimatedPoints)
+                          }}
                         />
-                        <UserItemName>{user.fullName}</UserItemName>
-                      </UserItem>
-                    ))}
-                  </UsersDropdown>
-                </Dropdown.Root>
-                <Dropdown.Root open={openDropdown}>
-                  <TriggerDropdown onClick={openDropdownMenu}>
-                    <RiPriceTag3Fill
-                      style={{width: '24px', height: '32px', color: 'white'}}
-                    />
-                    <Trigger
-                      value={selectedTags}
-                      placeholder="Label"
-                      disabled
-                      ref={tagsLabelsRef}
-                    />
-                  </TriggerDropdown>
-                  <TagDropdown>
-                    <ItemHeader onClick={() => setOpenDropdown(false)}>
-                      Tag Title
-                    </ItemHeader>
-                    <Dropdown.Group
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '8px',
-                      }}
-                    >
-                      {(
-                        Object.keys(TaskTag) as Array<keyof typeof TaskTag>
-                      ).map((key, idx) => (
-                        <CheckboxIndex
-                          id={idx}
-                          key={idx}
-                          value={TaskTag[key]}
-                        />
-                      ))}
-                    </Dropdown.Group>
-                  </TagDropdown>
-                </Dropdown.Root>
-              </DropdownContainer>
-              <ModalButtonsContainer>
-                <Dialog.Close asChild>
-                  <CancelButton type="button" onClick={clearFields}>
-                    Cancel
-                  </CancelButton>
-                </Dialog.Close>
+                      </TriggerDropdown>
+                      {errors.pointsEstimated && (
+                        <ErrorMessages>
+                          *{errors.pointsEstimated.message}
+                        </ErrorMessages>
+                      )}
+                    </div>
 
-                <CreateButton type="submit" form="createTaskForm">
-                  Create
-                </CreateButton>
+                    <EstimatedPointsDropdown>
+                      <ItemHeader>Estimate</ItemHeader>
+                      {(
+                        Object.keys(PointEstimate) as Array<
+                          keyof typeof PointEstimate
+                        >
+                      ).map((key, idx) => (
+                        <EstimatedPointsItem
+                          key={idx}
+                          onClick={() => setEstimatedPoints(key)}
+                        >
+                          <RiIncreaseDecreaseFill
+                            style={{
+                              width: '32px',
+                              height: '26px',
+                              color: 'white',
+                            }}
+                          />
+                          <EstimatedPointsItemLabel>
+                            {estimatedPointsData[key]} Points
+                          </EstimatedPointsItemLabel>
+                        </EstimatedPointsItem>
+                      ))}
+                    </EstimatedPointsDropdown>
+                  </Dropdown.Root>
+
+                  <Dropdown.Root>
+                    <div>
+                      <TriggerDropdown>
+                        <RiUser3Fill
+                          style={{
+                            width: '32px',
+                            height: '32px',
+                            color: 'white',
+                          }}
+                        />
+                        <Trigger
+                          value={selectedUser.fullName}
+                          disabled
+                          placeholder="Assignee"
+                          onChange={() => setSelectedUser(selectedUser)}
+                        />
+                      </TriggerDropdown>
+                    </div>
+
+                    <UsersDropdown>
+                      <ItemHeader>Assign To</ItemHeader>
+                      {filteredUsers.map(user => (
+                        <UserItem
+                          key={user.id}
+                          onClick={() => setSelectedUser(user)}
+                        >
+                          <Avatar
+                            width={'32px'}
+                            height={'32px'}
+                            image={
+                              user.avatar ||
+                              'https://avatars.dicebear.com/api/initials/mv.svg'
+                            }
+                          />
+                          <UserItemName>{user.fullName}</UserItemName>
+                        </UserItem>
+                      ))}
+                    </UsersDropdown>
+                  </Dropdown.Root>
+                  <Dropdown.Root open={openDropdown}>
+                    <div>
+                      <TriggerDropdown onClick={openDropdownMenu}>
+                        <RiPriceTag3Fill
+                          style={{
+                            width: '24px',
+                            height: '32px',
+                            color: 'white',
+                          }}
+                        />
+                        <Trigger
+                          placeholder="Label"
+                          disabled
+                          value={selectedTags}
+                          {...setValue('tagLabels', selectedTags)}
+                          onChange={() => {
+                            setValue('tagLabels', selectedTags)
+                          }}
+                        />
+                      </TriggerDropdown>
+                      {errors.tagLabels && (
+                        <ErrorMessages>
+                          *{errors.tagLabels?.message}
+                        </ErrorMessages>
+                      )}
+                    </div>
+
+                    <TagDropdown>
+                      <ItemHeader onClick={() => setOpenDropdown(false)}>
+                        Tag Title
+                      </ItemHeader>
+                      <Dropdown.Group
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '8px',
+                        }}
+                      >
+                        {(
+                          Object.keys(TaskTag) as Array<keyof typeof TaskTag>
+                        ).map((key, idx) => (
+                          <CheckboxIndex
+                            id={idx}
+                            key={idx}
+                            value={TaskTag[key]}
+                          />
+                        ))}
+                      </Dropdown.Group>
+                    </TagDropdown>
+                  </Dropdown.Root>
+                </DropdownContainer>
+              </>
+              <ModalButtonsContainer>
+                <CancelButton onClick={clearFields}>Cancel</CancelButton>
+
+                <CreateButton type="submit">Create</CreateButton>
               </ModalButtonsContainer>
             </form>
-          </DialogContent>
-        </DialogContainer>
+          </Modal>
+          <Button onClick={() => setOpenModal(!openModal)}>
+            <RiAddLine style={{height: '24px', width: '24px'}} />
+          </Button>
+        </>
       </ActionbarContainer>
       <ToastContainer
         position="bottom-right"

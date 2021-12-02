@@ -7,7 +7,7 @@ body {
   width: 100%;
   margin: 0;
   padding: 0;
-  background-color: #222528;
+  background: #222528;
   font-family: 
     'SF Pro Display Regular';
   -webkit-font-smoothing: antialiased;
