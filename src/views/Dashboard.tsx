@@ -7,6 +7,7 @@ import {GET_TASKS} from '../graphql/queries/queries'
 import 'react-toastify/dist/ReactToastify.css'
 import Spinner from '../components/Spinner/Spinner'
 import TaskCard from '../components/TaskCard/TaskCard'
+import {TaskTag} from '../graphql/schemas'
 
 const Grid = styled.div`
   flex: 1;
@@ -71,12 +72,13 @@ interface TaskProps {
   pointEstimate: string
   position: string
   status: string
-  tags: string[]
+  tags: Array<TaskTag>
 }
 
 const Dashboard = () => {
   // Group tasks by Status
   const {loading, error, data} = useQuery(GET_TASKS)
+
   let tasksByStatus = data?.tasks.reduce(
     (previousTask: {[key: string]: TaskProps[]}, currentTask: TaskProps) => {
       const key = currentTask.status

@@ -7,6 +7,7 @@ import {
   RiChat3Line,
 } from 'react-icons/ri'
 import {RiMoreFill} from 'react-icons/ri'
+import {TaskTag} from '../../graphql/schemas'
 import {
   assignBackground,
   assignLabelColor,
@@ -57,7 +58,7 @@ interface TaskProps {
     pointEstimate: string
     position: string
     status: string
-    tags: string[]
+    tags: Array<TaskTag>
   }
 }
 

@@ -50,7 +50,7 @@ const Actionbar = () => {
           <ModalCreate
             show={openModal}
             onClick={() => setOpenModal(!openModal)}
-          ></ModalCreate>
+          />
           <Button onClick={() => setOpenModal(!openModal)}>
             <RiAddLine style={{height: '24px', width: '24px'}} />
           </Button>

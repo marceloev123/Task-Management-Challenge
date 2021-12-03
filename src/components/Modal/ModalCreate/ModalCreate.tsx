@@ -1,11 +1,11 @@
-/* eslint-disable no-console */
-import React, {useEffect, useState} from 'react'
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {useQuery, useMutation} from '@apollo/client'
 import {toast} from 'react-toastify'
 import {
   RiIncreaseDecreaseFill,
   RiUser3Fill,
   RiPriceTag3Fill,
+  RiCloseCircleLine,
 } from 'react-icons/ri'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
 import {useForm} from 'react-hook-form'
@@ -17,7 +17,7 @@ import {CREATE_TASK} from '../../../graphql/mutations/mutations'
 import {
   ErrorMessages,
   DropdownContainer,
-  Trigger,
+  DropdownInput,
   TriggerDropdown,
   EstimatedPointsDropdown,
   ItemHeader,
@@ -25,7 +25,7 @@ import {
   EstimatedPointsItemLabel,
   UsersDropdown,
   UserItem,
-  UserItemName,
+  UserName,
   TagDropdown,
   ModalButtonsContainer,
   CancelButton,
@@ -50,6 +50,8 @@ interface FormdataProps {
 interface TagProps {
   id: number
   value: TaskTag
+  selectedTags: Array<TaskTag>
+  setSelectedTags: Dispatch<SetStateAction<TaskTag[]>>
   onClick?: () => void
 }
 
@@ -60,28 +62,30 @@ interface User {
   fullName: string
 }
 
-//Tag method
-let selectedTags: Array<TaskTag> = []
-const handleCheck = (tagCheck: boolean, value: TaskTag) => {
-  if (!tagCheck) {
-    selectedTags.push(value)
-    selectedTags = [...new Set(selectedTags)]
-  } else {
-    const idx = selectedTags.indexOf(value)
-    selectedTags.splice(idx, 1)
+const Checkbox = ({value, selectedTags, setSelectedTags}: TagProps) => {
+  const [tagCheck, setTagCheck] = useState(selectedTags.includes(value))
+  const handleCheck = (tagCheck: boolean, value: TaskTag) => {
+    if (!tagCheck) {
+      setSelectedTags(prev => {
+        const tagList = [...prev, value]
+        return [...new Set(tagList)]
+      })
+    } else {
+      setSelectedTags(prev => {
+        const tagList = [...prev]
+        const idx = tagList.indexOf(value)
+        tagList.splice(idx, 1)
+        return [...tagList]
+      })
+    }
   }
-}
-
-const CheckboxIndex = ({value}: TagProps) => {
-  const [tagCheck, setTagCheck] = useState(false)
-
   const handleClick = () => {
     setTagCheck(!tagCheck)
     handleCheck(tagCheck, value)
   }
   return (
     <TagCheckbox>
-      <input type="checkbox" defaultValue={value} onClick={handleClick} />
+      <input type="checkbox" checked={tagCheck} onClick={handleClick} />
       <TagLabel>{value}</TagLabel>
     </TagCheckbox>
   )
@@ -106,10 +110,16 @@ const schema = yup
   .required()
 
 //MODAL
-
 const ModalCreate = ({show, onClick}: ModalProps) => {
-  const [estimatedPoints, setEstimatedPoints] = useState('')
   const [openDropdown, setOpenDropdown] = useState(false)
+  const [selectedTags, setSelectedTags] = useState<Array<TaskTag>>([])
+  const userInitialState = {
+    __typename: '',
+    id: '',
+    avatar: '',
+    fullName: '',
+  }
+  const [selectedUser, setSelectedUser] = useState<User>(userInitialState)
   const {
     register,
     handleSubmit,
@@ -119,21 +129,14 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
   } = useForm({
     resolver: yupResolver(schema),
   })
-  const userInitialState = {
-    __typename: '',
-    id: '',
-    avatar: '',
-    fullName: '',
-  }
-
-  const [selectedUser, setSelectedUser] = useState<User>(userInitialState)
 
   //Have to improve
   let filteredUsers: User[] | any[] = []
   const {loading, error, data} = useQuery(GET_USERS)
-  //Create Task
+
+  //Create Task Mutation
   const [createTask, {error: error1}] = useMutation(CREATE_TASK, {
-    refetchQueries: [GET_TASKS, 'GetTasks'],
+    refetchQueries: [GET_TASKS],
   })
 
   if (data && !loading) {
@@ -142,7 +145,7 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
     ]
   }
   if (error) {
-    toast.error(`Error: ${error}`, {
+    toast.error(`Error on Fetching Users:  ${error}`, {
       theme: 'dark',
       position: 'bottom-right',
       autoClose: 5000,
@@ -152,8 +155,9 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
       draggable: true,
       progress: undefined,
     })
-  } else if (error1) {
-    toast.error(`Error: ${error1}`, {
+  }
+  if (error1) {
+    toast.error(`Error on Create Task: ${error1}`, {
       theme: 'dark',
       position: 'bottom-right',
       autoClose: 5000,
@@ -165,25 +169,23 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
     })
   }
 
-  //Modals aux functions
+  //DropdownMenu open Function
   const openDropdownMenu = () => {
     setOpenDropdown(!openDropdown)
   }
 
+  //DropdownMenu clearFields Function
   const clearFields = () => {
-    setEstimatedPoints('')
     setSelectedUser(userInitialState)
-    selectedTags = []
+    setSelectedTags([])
     reset()
     onClick()
   }
 
+  //CREATE TASK SUBMIT
   async function createTaskSubmit(formData: FormdataProps) {
-    //Fetch data from form
-
     // Make the request
     try {
-      console.log(formData)
       await createTask({
         variables: {
           name: formData.taskTitle,
@@ -260,10 +262,10 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                         color: 'white',
                       }}
                     />
-                    <Trigger
+                    <DropdownInput
                       disabled
                       placeholder="Estimate"
-                      value={estimatedPoints}
+                      {...register('pointsEstimated')}
                     />
                   </TriggerDropdown>
                   {errors.pointsEstimated && (
@@ -274,7 +276,9 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                 </div>
 
                 <EstimatedPointsDropdown>
-                  <ItemHeader>Estimate</ItemHeader>
+                  <ItemHeader style={{marginLeft: '16px', marginTop: '8px'}}>
+                    Estimate
+                  </ItemHeader>
                   {(
                     Object.keys(PointEstimate) as Array<
                       keyof typeof PointEstimate
@@ -283,7 +287,6 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                     <EstimatedPointsItem
                       key={idx}
                       onClick={() => {
-                        setEstimatedPoints(key)
                         setValue('pointsEstimated', key)
                       }}
                     >
@@ -312,7 +315,7 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                         color: 'white',
                       }}
                     />
-                    <Trigger
+                    <DropdownInput
                       value={selectedUser.fullName}
                       disabled
                       placeholder="Assignee"
@@ -322,7 +325,9 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                 </div>
 
                 <UsersDropdown>
-                  <ItemHeader>Assign To</ItemHeader>
+                  <ItemHeader style={{marginLeft: '16px', marginTop: '8px'}}>
+                    Assign To
+                  </ItemHeader>
                   {filteredUsers.map(user => (
                     <UserItem
                       key={user.id}
@@ -336,7 +341,7 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                           'https://avatars.dicebear.com/api/initials/mv.svg'
                         }
                       />
-                      <UserItemName>{user.fullName}</UserItemName>
+                      <UserName>{user.fullName}</UserName>
                     </UserItem>
                   ))}
                 </UsersDropdown>
@@ -351,7 +356,7 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                         color: 'white',
                       }}
                     />
-                    <Trigger
+                    <DropdownInput
                       placeholder="Label"
                       disabled
                       value={selectedTags}
@@ -363,9 +368,27 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                 </div>
 
                 <TagDropdown>
-                  <ItemHeader onClick={() => setOpenDropdown(false)}>
-                    Tag Title
-                  </ItemHeader>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      paddingLeft: '16px',
+                      paddingTop: '8px',
+                      paddingRight: '8px',
+                    }}
+                  >
+                    <ItemHeader>Tag Title</ItemHeader>
+                    <RiCloseCircleLine
+                      style={{
+                        width: '32px',
+                        height: '32px',
+                        color: '#94979a',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => setOpenDropdown(false)}
+                    />
+                  </div>
                   <Dropdown.Group
                     style={{
                       display: 'flex',
@@ -375,10 +398,12 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                   >
                     {(Object.keys(TaskTag) as Array<keyof typeof TaskTag>).map(
                       (key, idx) => (
-                        <CheckboxIndex
+                        <Checkbox
                           id={idx}
                           key={idx}
                           value={TaskTag[key]}
+                          setSelectedTags={setSelectedTags}
+                          selectedTags={selectedTags}
                         />
                       ),
                     )}
