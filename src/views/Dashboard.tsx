@@ -1,26 +1,37 @@
 import React from 'react'
 import styled from 'styled-components'
-import {gql, useQuery} from '@apollo/client'
+import {useQuery} from '@apollo/client'
 import {RiMoreFill} from 'react-icons/ri'
+import {toast, ToastContainer} from 'react-toastify'
+import {GET_TASKS} from '../graphql/queries/queries'
+import 'react-toastify/dist/ReactToastify.css'
 import Spinner from '../components/Spinner/Spinner'
-import TaskCard from '../components/TaskCard'
+import TaskCard from '../components/TaskCard/TaskCard'
+import {TaskTag} from '../graphql/schemas'
 
 const Grid = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: row;
-  flex-basis: 1108px;
-  margin-top: 32px;
-  margin-right: 36px;
   justify-content: space-between;
+  padding-bottom: 32px;
+  margin-bottom: 24px;
+  margin-right: 36px;
   gap: 32px;
+  height: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
 `
 
 const GridColum = styled.div`
   display: flex;
+  height: 100%;
   flex-direction: column;
-  padding: 0;
-  align-items: center;
   gap: 24px;
+  margin: 0 0.8rem;
+  padding-right: 0.8rem;
+  min-width: 384px;
+  overflow-y: auto;
 `
 
 const ColumHeaderContainer = styled.div`
@@ -29,7 +40,6 @@ const ColumHeaderContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 340px;
   height: 32px;
 `
 
@@ -41,7 +51,9 @@ const ColumHeaderText = styled.div`
   color: white;
   letter-spacing: 0.75px;
 `
+
 interface User {
+  __typename: string
   id: string
   avatar: string
   email: string
@@ -60,34 +72,14 @@ interface TaskProps {
   pointEstimate: string
   position: string
   status: string
-  tags: string[]
+  tags: Array<TaskTag>
 }
 
 const Dashboard = () => {
-  //Fetch the data
-  const GET_STATUS = gql`
-    query getTasks {
-      tasks(input: {}) {
-        id
-        createdAt
-        dueDate
-        name
-        owner {
-          id
-          avatar
-          fullName
-        }
-        pointEstimate
-        position
-        status
-        tags
-      }
-    }
-  `
-  const {loading, error, data} = useQuery(GET_STATUS)
-
   // Group tasks by Status
-  const tasksByStatus = data?.tasks.reduce(
+  const {loading, error, data} = useQuery(GET_TASKS)
+
+  let tasksByStatus = data?.tasks.reduce(
     (previousTask: {[key: string]: TaskProps[]}, currentTask: TaskProps) => {
       const key = currentTask.status
       if (!previousTask[key]) {
@@ -99,30 +91,52 @@ const Dashboard = () => {
     {},
   )
   if (loading) return <Spinner />
-  if (error) throw new Error(`Error! ${error.message}`)
+  if (error) {
+    toast.error('An error occur while fetching the data!', {
+      theme: 'dark',
+      position: 'bottom-right',
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    })
+    tasksByStatus = {}
+  }
+
   return (
-    <Grid>
-      {Object.keys(tasksByStatus).map((key, idx) => (
-        <GridColum key={idx}>
-          <ColumHeaderContainer>
-            <ColumHeaderText>
-              {key} ({tasksByStatus[key].length})
-            </ColumHeaderText>
-            <RiMoreFill
-              style={{
-                color: '#94979A',
-                width: '24px',
-                height: '24px',
-                marginLeft: '11px',
-              }}
-            />
-          </ColumHeaderContainer>
-          {tasksByStatus[key].map((task: TaskProps) => (
-            <TaskCard key={task.id} task={task} />
-          ))}
-        </GridColum>
-      ))}
-    </Grid>
+    <>
+      <Grid>
+        {!data ? (
+          <div>There are not tasks to display</div>
+        ) : (
+          Object.keys(tasksByStatus).map((key, idx) => (
+            <GridColum key={idx}>
+              <ColumHeaderContainer>
+                <ColumHeaderText>
+                  {key} ({tasksByStatus[key].length})
+                </ColumHeaderText>
+                <RiMoreFill
+                  style={{
+                    color: '#94979A',
+                    width: '24px',
+                    height: '24px',
+                    marginLeft: '11px',
+                  }}
+                />
+              </ColumHeaderContainer>
+              {tasksByStatus[key].reverse().map((task: TaskProps) => (
+                <TaskCard key={task.id} task={task} />
+              ))}
+            </GridColum>
+          ))
+        )}
+      </Grid>
+      <>
+        <ToastContainer />
+      </>
+    </>
   )
 }
 

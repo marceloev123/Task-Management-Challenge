@@ -104,3 +104,13 @@ The app allows the user create new tasks indicating their Estimated points, the 
 https://user-images.githubusercontent.com/64241651/144139920-06875b50-e00f-47f4-8fbc-6bd1b7a7dec4.mp4
 
 The app allows the user delete the tasks selecting the `Delete` option through a pop-up ,when the request is done a succesfull message it's shown 
+
+
+## Total App refactor
+
+
+https://user-images.githubusercontent.com/64241651/144554302-9af716c2-1216-498a-a6e3-2db949ccf07a.mp4
+
+Here, the app was completed refactored and was updated with the styling guides recomendations
+=======
+

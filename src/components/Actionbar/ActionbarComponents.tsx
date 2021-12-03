@@ -1,0 +1,35 @@
+import styled from 'styled-components'
+
+//Principal Container
+export const ActionbarContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 48px;
+  flex-basis: 1108px;
+  align-items: center;
+  margin-top: 32px;
+  margin-bottom: 32px;
+  margin-right: 36px;
+  justify-content: space-between;
+`
+
+export const SwitchContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+`
+//Principal Creation Button
+export const Button = styled.button`
+  height: 40px;
+  width: 40px;
+  background-color: #da584b;
+  cursor: pointer;
+  border-radius: 8px;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`

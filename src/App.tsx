@@ -2,9 +2,9 @@ import React from 'react'
 import {Route, Routes} from 'react-router-dom'
 import styled from 'styled-components'
 import {GlobalStyle} from './styles/GlobalStyle'
-import ActionBar from './components/ActionBar'
-import Navbar from './components/Navbar'
-import Sidebar from './components/Sidebar'
+import Actionbar from './components/Actionbar/Actionbar'
+import Navbar from './components/Navbar/Navbar'
+import Sidebar from './components/Sidebar/Sidebar'
 import Dashboard from './views/Dashboard'
 import MyTasks from './views/MyTasks'
 import UserProfile from './views/UserProfile'
@@ -12,18 +12,24 @@ import UserProfile from './views/UserProfile'
 const AppContainer = styled.div`
   display: flex;
   flex-direction: row;
-  flex-grow: 1;
-  height: 100%;
   width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 `
 const Content = styled.div`
-  position: absolute;
-  width: calc(100% - 296px);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+`
+const ContentView = styled.div`
+  background: #222528;
+  z-index: 999;
+  position: static;
   left: 296px;
-  @media (max-width: 1898px) {
-    width: calc(100% - 168px);
-    left: 168px;
-  }
+  width: 100%;
 `
 
 function App() {
@@ -32,13 +38,24 @@ function App() {
       <GlobalStyle />
       <Sidebar />
       <Content>
-        <Navbar />
-        <ActionBar />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/my-tasks" element={<MyTasks />} />
-          <Route path="/profile" element={<UserProfile />} />
-        </Routes>
+        <ContentView>
+          <Navbar />
+          <Actionbar />
+        </ContentView>
+        <div
+          style={{
+            display: 'flex',
+            flex: '1',
+            overflow: 'hidden',
+            flexDirection: 'column',
+          }}
+        >
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/my-tasks" element={<MyTasks />} />
+            <Route path="/profile" element={<UserProfile />} />
+          </Routes>
+        </div>
       </Content>
     </AppContainer>
   )
