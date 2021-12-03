@@ -16,8 +16,8 @@ const Navbar = () => {
     <NavContainer>
       <BsSearch
         style={{
-          minHeight: '24px',
-          minWidth: '24px',
+          minHeight: '16px',
+          minWidth: '16px',
           marginLeft: '26px',
           marginRight: '25.69px',
           color: '#94979A',
@@ -44,8 +44,8 @@ const Navbar = () => {
       <UserActions>
         <RiNotification3Line
           style={{
-            height: '24px',
-            width: '24px',
+            height: '20px',
+            width: '20px',
             marginRight: '26px',
             color: '#94979A',
           }}

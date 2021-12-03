@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, {useState} from 'react'
 import {Link, useMatch} from 'react-router-dom'
 import {RiAddLine, RiFunctionLine, RiMenuLine} from 'react-icons/ri'
@@ -21,8 +20,8 @@ const Actionbar = () => {
           <Link to="/my-tasks">
             <RiMenuLine
               style={{
-                height: '24px',
-                width: '24px',
+                height: '16px',
+                width: '16px',
                 color: match?.pathname === '/my-tasks' ? '#da584b' : '#94979A',
                 border:
                   match?.pathname === '/my-tasks'
@@ -36,8 +35,8 @@ const Actionbar = () => {
           <Link to="/">
             <RiFunctionLine
               style={{
-                height: '24px',
-                width: '24px',
+                height: '16px',
+                width: '16px',
                 color: match?.pathname === '/' ? '#da584b' : '#94979A',
                 border: match?.pathname === '/' ? '1px solid #da584b' : 'none',
                 borderRadius: '8px',
@@ -52,7 +51,7 @@ const Actionbar = () => {
             onClick={() => setOpenModal(!openModal)}
           />
           <Button onClick={() => setOpenModal(!openModal)}>
-            <RiAddLine style={{height: '24px', width: '24px'}} />
+            <RiAddLine style={{height: '20px', width: '20px'}} />
           </Button>
         </>
       </ActionbarContainer>

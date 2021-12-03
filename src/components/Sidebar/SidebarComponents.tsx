@@ -11,7 +11,7 @@ interface SidebarItem {
   match: unknown
 }
 export const Container = styled.div`
-  width: 232px;
+  width: 180px;
   margin: 32px;
   border-radius: 24px;
   background-color: #2c2f33;
@@ -26,8 +26,8 @@ export const Container = styled.div`
   }
 `
 export const Logo = styled.img`
-  height: 36px;
-  width: 39.62px;
+  height: 32px;
+  width: 32px;
   margin: 14px auto 46px auto;
 `
 export const SidebarMenu = styled.ul`
@@ -41,7 +41,7 @@ export const SidebarMenu = styled.ul`
 `
 
 export const SidebarItem = styled.li<SidebarItem>`
-  height: 56px;
+  height: 40px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -56,8 +56,8 @@ export const SidebarItem = styled.li<SidebarItem>`
 `
 
 export const SidebarItemName = styled.span`
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 14px;
+  line-height: 22px;
   font-style: normal;
   font-weight: 600;
   font-family: 'SF Pro Display Regular';
@@ -73,12 +73,13 @@ export const SidebarItemName = styled.span`
 export const SidebarLink = styled(NavLink)<SidebarLinkProps>`
   text-decoration: none;
   display: flex;
+  align-items: center;
   ${props =>
     props.match &&
     css`
       &:after {
         width: 4px;
-        height: 72px;
+        height: 60px;
         border-radius: 0 7px 7px 0;
         background-color: #da584b;
         content: '';

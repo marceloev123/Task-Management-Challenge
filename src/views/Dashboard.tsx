@@ -16,7 +16,7 @@ const Grid = styled.div`
   justify-content: space-between;
   padding-bottom: 32px;
   margin-bottom: 24px;
-  margin-right: 36px;
+  margin-right: 32px;
   gap: 32px;
   height: 100%;
   overflow-y: hidden;
@@ -28,9 +28,8 @@ const GridColum = styled.div`
   height: 100%;
   flex-direction: column;
   gap: 24px;
-  margin: 0 0.8rem;
   padding-right: 0.8rem;
-  min-width: 384px;
+  min-width: 340px;
   overflow-y: auto;
 `
 
@@ -40,13 +39,12 @@ const ColumHeaderContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  height: 32px;
 `
 
 const ColumHeaderText = styled.div`
   font-style: normal;
   font-weight: 600;
-  font-size: 18px;
+  font-size: 15px;
   line-height: 32px;
   color: white;
   letter-spacing: 0.75px;

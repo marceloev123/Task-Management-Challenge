@@ -5,8 +5,9 @@ const TableContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 32px;
-  margin-right: 36px;
+  margin-right: 32px;
   flex-basis: 1108px;
+  padding-right: 0.8rem;
   align-items: center;
   gap: 16px;
 `

@@ -26,7 +26,7 @@ export const DialogContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  width: 500px;
+  max-width: 542px;
   padding: 16px;
   z-index: 999;
   background-color: #393d41;
@@ -36,6 +36,7 @@ export const DialogContainer = styled.div`
   position: fixed;
   top: 16%;
   left: 40%;
+  transform: translateX(-40%);
   transition: all 0.3s ease-out;
 `
 export const TaskNameInput = styled.input`
@@ -75,8 +76,37 @@ export const ModalButtonsContainer = styled.div`
   height: 40px;
   gap: 16px;
 `
-//Estimated Points Dropdown
-export const EstimatedPointsDropdown = styled(Dropdown.Content)`
+//Modal Buttons
+
+export const CancelButton = styled.button`
+  border: none;
+  background: transparent;
+  width: 62px;
+  height: 40px;
+  color: white;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.75px;
+  cursor: pointer;
+`
+export const CreateButton = styled.button`
+  border: none;
+  background: #da584b;
+  width: 62px;
+  height: 40px;
+  color: white;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.75px;
+  cursor: pointer;
+  border-radius: 8px;
+`
+//Generic Dropdown
+export const DropdownContent = styled(Dropdown.Content)`
   display: flex;
   margin-top: 12px;
   width: 132px;
@@ -136,7 +166,7 @@ export const ItemHeader = styled.span`
     border: none;
   }
 `
-export const EstimatedPointsItem = styled(Dropdown.Item)`
+export const ReusableDropdownItem = styled(Dropdown.Item)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -148,7 +178,7 @@ export const EstimatedPointsItem = styled(Dropdown.Item)`
     background: #94979a;
   }
 `
-export const EstimatedPointsItemLabel = styled.span`
+export const ItemLabel = styled.span`
   font-style: normal;
   font-weight: normal;
   font-size: 15px;
@@ -160,6 +190,7 @@ export const EstimatedPointsItemLabel = styled.span`
 //UserDropdown
 export const UsersDropdown = styled(Dropdown.Content)`
   display: flex;
+  gap: 8px;
   margin-top: 12px;
   margin-left: 56px;
   width: 240px;
@@ -211,37 +242,7 @@ export const TagDropdown = styled(Dropdown.Content)`
   z-index: 100;
 `
 
-//Modal Buttons
-
-export const CancelButton = styled.button`
-  border: none;
-  background: transparent;
-  width: 62px;
-  height: 40px;
-  color: white;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 15px;
-  line-height: 24px;
-  letter-spacing: 0.75px;
-  cursor: pointer;
-`
-export const CreateButton = styled.button`
-  border: none;
-  background: #da584b;
-  width: 62px;
-  height: 40px;
-  color: white;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 15px;
-  line-height: 24px;
-  letter-spacing: 0.75px;
-  cursor: pointer;
-  border-radius: 8px;
-`
-
-//SELECT
+//Checkbox
 export const TagCheckbox = styled(Dropdown.Item)`
   color: #ffffff;
   display: flex;
@@ -262,6 +263,7 @@ export const TagLabel = styled.span`
   letter-spacing: 0.75px;
   color: #ffffff;
 `
+
 export const ErrorMessages = styled.p`
   font-style: normal;
   font-weight: normal;

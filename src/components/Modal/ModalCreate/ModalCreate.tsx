@@ -11,18 +11,17 @@ import * as Dropdown from '@radix-ui/react-dropdown-menu'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import {PointEstimate, TaskTag} from '../../../graphql/schemas'
+import {PointEstimate, Status, TaskTag} from '../../../graphql/schemas'
 import {GET_TASKS, GET_USERS} from '../../../graphql/queries/queries'
 import {CREATE_TASK} from '../../../graphql/mutations/mutations'
 import {
-  ErrorMessages,
   DropdownContainer,
   DropdownInput,
   TriggerDropdown,
-  EstimatedPointsDropdown,
+  DropdownContent,
   ItemHeader,
-  EstimatedPointsItem,
-  EstimatedPointsItemLabel,
+  ReusableDropdownItem,
+  ItemLabel,
   UsersDropdown,
   UserItem,
   UserName,
@@ -32,6 +31,7 @@ import {
   CreateButton,
   TagCheckbox,
   TagLabel,
+  ErrorMessages,
 } from '../ModalComponents'
 import Avatar from '../../Avatar'
 import {DialogContainer, StyledOverlay, TaskNameInput} from '../ModalComponents'
@@ -46,6 +46,7 @@ interface FormdataProps {
   taskTitle: string
   pointsEstimated: string
   tagLabels: string[]
+  status: string
 }
 interface TagProps {
   id: number
@@ -106,6 +107,7 @@ const schema = yup
     taskTitle: yup.string().required(),
     pointsEstimated: yup.string().required(),
     tagLabels: yup.array().min(1).required(),
+    status: yup.string().required(),
   })
   .required()
 
@@ -191,6 +193,7 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
           name: formData.taskTitle,
           pointEstimate: formData.pointsEstimated,
           tags: formData.tagLabels,
+          status: formData.status,
         },
       })
       toast.success('Task created succesfully!', {
@@ -275,7 +278,7 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                   )}
                 </div>
 
-                <EstimatedPointsDropdown>
+                <DropdownContent>
                   <ItemHeader style={{marginLeft: '16px', marginTop: '8px'}}>
                     Estimate
                   </ItemHeader>
@@ -284,7 +287,7 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                       keyof typeof PointEstimate
                     >
                   ).map((key, idx) => (
-                    <EstimatedPointsItem
+                    <ReusableDropdownItem
                       key={idx}
                       onClick={() => {
                         setValue('pointsEstimated', key)
@@ -297,12 +300,10 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                           color: 'white',
                         }}
                       />
-                      <EstimatedPointsItemLabel>
-                        {estimatedPointsData[key]} Points
-                      </EstimatedPointsItemLabel>
-                    </EstimatedPointsItem>
+                      <ItemLabel>{estimatedPointsData[key]} Points</ItemLabel>
+                    </ReusableDropdownItem>
                   ))}
-                </EstimatedPointsDropdown>
+                </DropdownContent>
               </Dropdown.Root>
 
               <Dropdown.Root>
@@ -409,6 +410,45 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                     )}
                   </Dropdown.Group>
                 </TagDropdown>
+              </Dropdown.Root>
+              <Dropdown.Root>
+                <div>
+                  <TriggerDropdown>
+                    <RiIncreaseDecreaseFill
+                      style={{
+                        width: '32px',
+                        height: '24px',
+                        color: 'white',
+                      }}
+                    />
+                    <DropdownInput
+                      disabled
+                      placeholder="Status"
+                      {...register('status')}
+                    />
+                  </TriggerDropdown>
+                  {errors.status && (
+                    <ErrorMessages>*{errors.status.message}</ErrorMessages>
+                  )}
+                </div>
+
+                <DropdownContent>
+                  <ItemHeader style={{marginLeft: '16px', marginTop: '8px'}}>
+                    Status
+                  </ItemHeader>
+                  {(Object.keys(Status) as Array<keyof typeof Status>).map(
+                    (key, idx) => (
+                      <ReusableDropdownItem
+                        key={idx}
+                        onClick={() => {
+                          setValue('status', key)
+                        }}
+                      >
+                        <ItemLabel>{Status[key]}</ItemLabel>
+                      </ReusableDropdownItem>
+                    ),
+                  )}
+                </DropdownContent>
               </Dropdown.Root>
             </DropdownContainer>
           </>

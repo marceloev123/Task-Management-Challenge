@@ -4,9 +4,10 @@ export const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px 24px;
+  padding: 20px;
   gap: 16px;
   max-height: 200px;
+  max-width: 368px;
   background: #2c2f33;
   border-radius: 8px;
 `
@@ -22,17 +23,16 @@ export const ProjectInfo = styled.div`
 export const TaskName = styled.span`
   font-style: normal;
   font-weight: 600;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 32px;
   display: flex;
-  width: 284px;
   align-items: center;
   letter-spacing: 0.75px;
   color: #ffffff;
 `
 export const TimeInfo = styled.div`
   display: flex;
-  max-height: 32px;
+  max-height: 24px;
   width: 100%;
   flex-basis: 100%;
   justify-content: space-between;
@@ -81,7 +81,6 @@ export const ForkContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 40px;
   color: white;
 `
 export const ForkAmount = styled.span`
@@ -97,7 +96,6 @@ export const CommentsContainer = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 40px;
   color: white;
 `
 export const CommentAmount = styled.span`
