@@ -132,7 +132,6 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
     register,
     handleSubmit,
     setValue,
-    reset,
     formState: {errors},
   } = useForm({
     resolver: yupResolver(schema),
@@ -194,10 +193,8 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
     setOpenDropdown(!openDropdown)
   }
 
-  const clearFields = () => {
+  const closeModal = () => {
     setSelectedUser(userInitialState)
-    setSelectedTags([])
-    reset()
     onClick()
   }
 
@@ -236,7 +233,7 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
         progress: undefined,
       })
     } finally {
-      clearFields()
+      closeModal()
     }
   }
 
@@ -466,7 +463,7 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
             </DropdownContainer>
           </>
           <ModalButtonsContainer>
-            <CancelButton onClick={clearFields}>Cancel</CancelButton>
+            <CancelButton onClick={closeModal}>Cancel</CancelButton>
 
             <CreateButton type="submit">Update</CreateButton>
           </ModalButtonsContainer>
