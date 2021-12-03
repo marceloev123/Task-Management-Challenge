@@ -22,7 +22,7 @@ const ModalEditDelete = ({
   openUpdateModal,
 }: ModalEditDeleteProps) => {
   const [deleteTask, {error}] = useMutation(DELETE_TASK, {
-    refetchQueries: [GET_TASKS, 'GetTasks'],
+    refetchQueries: [GET_TASKS],
   })
   if (error) {
     toast.error('An error occur during the delete request!', {
