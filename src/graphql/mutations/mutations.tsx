@@ -33,9 +33,9 @@ export const UPDATE_TASK = gql`
     updateTask(
       input: {
         id: $id
-        dueDate: "2019-12-03T09:54:33Z"
+        dueDate: $dueDate
         name: $name
-        position: 3
+        position: $position
         pointEstimate: $pointEstimate
         status: $status
         tags: $tags
