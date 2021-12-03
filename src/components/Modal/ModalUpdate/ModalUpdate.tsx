@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {useQuery, useMutation} from '@apollo/client'
 import {toast} from 'react-toastify'
@@ -12,7 +11,7 @@ import * as Dropdown from '@radix-ui/react-dropdown-menu'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import {PointEstimate, TaskTag} from '../../../graphql/schemas'
+import {PointEstimate, Status, TaskTag} from '../../../graphql/schemas'
 import {GET_TASKS, GET_USERS} from '../../../graphql/queries/queries'
 import {UPDATE_TASK} from '../../../graphql/mutations/mutations'
 import {
@@ -20,10 +19,10 @@ import {
   DropdownContainer,
   DropdownInput,
   TriggerDropdown,
-  EstimatedPointsDropdown,
+  DropdownContent,
   ItemHeader,
-  EstimatedPointsItem,
-  EstimatedPointsItemLabel,
+  ReusableDropdownItem,
+  ItemLabel,
   UsersDropdown,
   UserItem,
   UserName,
@@ -43,6 +42,7 @@ interface FormdataProps {
   taskTitle: string
   pointsEstimated: string
   tagLabels: string[]
+  status: string
 }
 interface TagProps {
   id: number
@@ -76,7 +76,6 @@ interface ModalProps {
 }
 
 const Checkbox = ({value, selectedTags, setSelectedTags}: TagProps) => {
-  console.log(selectedTags)
   const [tagCheck, setTagCheck] = useState(selectedTags.includes(value))
   const handleCheck = (tagCheck: boolean, value: TaskTag) => {
     if (!tagCheck) {
@@ -120,6 +119,7 @@ const schema = yup
     taskTitle: yup.string().required(),
     pointsEstimated: yup.string().required(),
     tagLabels: yup.array().min(1).required(),
+    status: yup.string().required(),
   })
   .required()
 
@@ -140,6 +140,7 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
       taskTitle: task?.name,
       pointsEstimated: task?.pointEstimate,
       tagLabels: task?.tags,
+      status: task?.status,
     },
   })
   const userInitialState = {
@@ -201,9 +202,6 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
   }
 
   async function updateTaskSubmit(formData: FormdataProps) {
-    // Make the request
-    console.log(formData)
-
     try {
       await updateTask({
         variables: {
@@ -212,7 +210,7 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
           name: formData.taskTitle,
           position: task.position,
           pointEstimate: formData.pointsEstimated,
-          status: task.status,
+          status: formData.status,
           tags: formData.tagLabels,
         },
       })
@@ -293,7 +291,7 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
                   )}
                 </div>
 
-                <EstimatedPointsDropdown>
+                <DropdownContent>
                   <ItemHeader style={{marginLeft: '16px', marginTop: '8px'}}>
                     Estimate
                   </ItemHeader>
@@ -302,7 +300,7 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
                       keyof typeof PointEstimate
                     >
                   ).map((key, idx) => (
-                    <EstimatedPointsItem
+                    <ReusableDropdownItem
                       key={idx}
                       onClick={() => {
                         setValue('pointsEstimated', key)
@@ -315,12 +313,10 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
                           color: 'white',
                         }}
                       />
-                      <EstimatedPointsItemLabel>
-                        {estimatedPointsData[key]} Points
-                      </EstimatedPointsItemLabel>
-                    </EstimatedPointsItem>
+                      <ItemLabel>{estimatedPointsData[key]} Points</ItemLabel>
+                    </ReusableDropdownItem>
                   ))}
-                </EstimatedPointsDropdown>
+                </DropdownContent>
               </Dropdown.Root>
 
               <Dropdown.Root>
@@ -427,6 +423,45 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
                     )}
                   </Dropdown.Group>
                 </TagDropdown>
+              </Dropdown.Root>
+              <Dropdown.Root>
+                <div>
+                  <TriggerDropdown>
+                    <RiIncreaseDecreaseFill
+                      style={{
+                        width: '32px',
+                        height: '24px',
+                        color: 'white',
+                      }}
+                    />
+                    <DropdownInput
+                      disabled
+                      placeholder="Status"
+                      {...register('status')}
+                    />
+                  </TriggerDropdown>
+                  {errors.status && (
+                    <ErrorMessages>*{errors.status.message}</ErrorMessages>
+                  )}
+                </div>
+
+                <DropdownContent>
+                  <ItemHeader style={{marginLeft: '16px', marginTop: '8px'}}>
+                    Status
+                  </ItemHeader>
+                  {(Object.keys(Status) as Array<keyof typeof Status>).map(
+                    (key, idx) => (
+                      <ReusableDropdownItem
+                        key={idx}
+                        onClick={() => {
+                          setValue('status', key)
+                        }}
+                      >
+                        <ItemLabel>{Status[key]}</ItemLabel>
+                      </ReusableDropdownItem>
+                    ),
+                  )}
+                </DropdownContent>
               </Dropdown.Root>
             </DropdownContainer>
           </>

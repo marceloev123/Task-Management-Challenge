@@ -10,7 +10,6 @@ const LabelContainer = styled.div<LabelContainerProps>`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  height: 32px;
   background: ${props => props.background};
   border-radius: 4px;
   padding: 4px 16px;

@@ -3,13 +3,14 @@ import styled from 'styled-components'
 export const NavContainer = styled.div`
   display: flex;
   flex-direction: row;
-  height: 64px;
+  height: 56px;
   flex-basis: 1108px;
+  padding-right: 0.8rem;
   border-radius: 16px;
   background-color: #2c2f33;
   align-items: center;
   margin-top: 32px;
-  margin-right: 36px;
+  margin-right: 32px;
   justify-content: space-between;
 `
 
