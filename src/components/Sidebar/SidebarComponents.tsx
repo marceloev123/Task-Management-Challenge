@@ -11,20 +11,15 @@ interface SidebarItem {
   match: unknown
 }
 export const Container = styled.div`
-  height: calc(100vh - 64px);
   width: 232px;
   margin: 32px;
   border-radius: 24px;
   background-color: #2c2f33;
   display: flex;
   flex-direction: column;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1;
   transition: all 0.5s ease 0s;
   -webkit-transition: all 0.5s ease 0s;
-
+  position: static;
   @media (max-width: 1898px) {
     width: 104px;
     transition: all 0.5 ease;

@@ -4,16 +4,16 @@ export const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px;
+  padding: 16px 24px;
   gap: 16px;
-  width: 340px;
-  height: 200px;
+  max-height: 200px;
   background: #2c2f33;
   border-radius: 8px;
 `
 
 export const ProjectInfo = styled.div`
   display: flex;
+  position: relative;
   max-height: 32px;
   min-width: 100%;
   justify-content: space-between;
@@ -60,7 +60,7 @@ export const TagsContainer = styled.div`
 export const Reactions = styled.div`
   display: flex;
   flex-direction: row;
-  width: 316px;
+  min-width: 100%;
   height: 100%;
   justify-content: space-between;
   align-items: center;
@@ -110,12 +110,13 @@ export const CommentAmount = styled.span`
 
 export const MutateModal = styled.div`
   display: flex;
-  position: absolute;
   width: 132px;
+  position: absolute;
   flex-direction: column;
   gap: 10px;
-  margin-left: 242px;
-  padding: 8px 4px;
+  top: 2px;
+  right: 32px;
+  padding: 8px;
   border: 1px solid #94979a;
   background: #393d41;
   box-sizing: border-box;

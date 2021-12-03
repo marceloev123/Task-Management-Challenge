@@ -8,10 +8,36 @@ export const CREATE_TASK = gql`
   ) {
     createTask(
       input: {
-        dueDate: "2019-12-03T09:54:33Z"
+        dueDate: "2021-11-25T19:18:00.097Z"
         name: $name
         pointEstimate: $pointEstimate
-        status: BACKLOG
+        status: IN_PROGRESS
+        tags: $tags
+      }
+    ) {
+      id
+    }
+  }
+`
+
+export const UPDATE_TASK = gql`
+  mutation updateTask(
+    $dueDate: DateTime
+    $id: String!
+    $name: String
+    $pointEstimate: PointEstimate
+    $position: Float
+    $status: Status
+    $tags: [TaskTag!]
+  ) {
+    updateTask(
+      input: {
+        id: $id
+        dueDate: "2019-12-03T09:54:33Z"
+        name: $name
+        position: 3
+        pointEstimate: $pointEstimate
+        status: $status
         tags: $tags
       }
     ) {

@@ -32,3 +32,12 @@ export const GET_USERS = gql`
     }
   }
 `
+//Get task by Id
+// In  a real production environment, I think there should be an option to select a task by the id to retrieve the data in real time and avoid updating conflicts with other team members updates
+// export const GET_TASK_BY_ID = gql`
+//   query getTaskById($id: ID!) {
+//     tasks(input: {id: $id}) {
+//       id
+//     }
+//   }
+// `

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, {useState} from 'react'
 import {
   RiAlarmLine,
@@ -5,7 +6,7 @@ import {
   RiNodeTree,
   RiChat3Line,
 } from 'react-icons/ri'
-import {RiMoreFill, RiPencilLine, RiDeleteBin6Line} from 'react-icons/ri'
+import {RiMoreFill} from 'react-icons/ri'
 import {
   assignBackground,
   assignLabelColor,
@@ -14,6 +15,8 @@ import {
 import Avatar from '../Avatar'
 import Label from '../Label'
 import LabelIcon from '../LabelIcon'
+import ModalEditDelete from '../Modal/ModalEditDelete/ModalEditDelete'
+import ModalUpdate from '../Modal/ModalUpdate/ModalUpdate'
 import {
   ProjectInfo,
   TaskName,
@@ -26,9 +29,6 @@ import {
   ForkAmount,
   CommentsContainer,
   CommentAmount,
-  MutateModal,
-  MutateOption,
-  MutateOptionLabel,
   CardContainer,
 } from './TaskCardComponents'
 
@@ -37,6 +37,7 @@ import {
 const text2num = require('text2num')
 
 interface User {
+  __typename: string
   id: string
   avatar: string
   email: string
@@ -58,11 +59,12 @@ interface TaskProps {
     status: string
     tags: string[]
   }
-  deleteTask: () => Promise<void>
 }
 
-const TaskCard = ({task, deleteTask}: TaskProps) => {
-  const [openModal, setOpenModal] = useState(false)
+const TaskCard = ({task}: TaskProps) => {
+  const [editDeleteModalIsOpen, setOpenDeleteModalIsOpen] = useState(false)
+  const [updateModalIsOpen, setOpenUpdateModalIsOpen] = useState(false)
+
   return (
     <CardContainer>
       <ProjectInfo>
@@ -75,25 +77,23 @@ const TaskCard = ({task, deleteTask}: TaskProps) => {
             marginLeft: '11px',
             cursor: 'pointer',
           }}
-          onClick={() => setOpenModal(!openModal)}
+          onClick={() => setOpenDeleteModalIsOpen(!editDeleteModalIsOpen)}
         />
-        {openModal && (
-          <MutateModal onClick={() => setOpenModal(false)}>
-            <MutateOption>
-              <RiPencilLine
-                style={{height: '24px', width: '24px', marginRight: '9.75px'}}
-              />
-              <MutateOptionLabel>Edit</MutateOptionLabel>
-            </MutateOption>
-            <MutateOption>
-              <RiDeleteBin6Line
-                style={{height: '24px', width: '24px', marginRight: '9.75px'}}
-              />
-              <MutateOptionLabel onClick={deleteTask}>Delete</MutateOptionLabel>
-            </MutateOption>
-          </MutateModal>
+        {editDeleteModalIsOpen && (
+          <ModalEditDelete
+            id={task.id}
+            onClick={() => setOpenDeleteModalIsOpen(false)}
+            openUpdateModal={() => setOpenUpdateModalIsOpen(true)}
+          />
         )}
+
+        <ModalUpdate
+          task={task}
+          show={updateModalIsOpen}
+          onClick={() => setOpenUpdateModalIsOpen(false)}
+        />
       </ProjectInfo>
+
       <TimeInfo>
         <Points>{text2num(task?.pointEstimate.toLowerCase())} Pts</Points>
         <LabelIcon

@@ -12,31 +12,24 @@ import UserProfile from './views/UserProfile'
 const AppContainer = styled.div`
   display: flex;
   flex-direction: row;
-  flex-grow: 1;
-  height: 100%;
   width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 `
 const Content = styled.div`
-  position: absolute;
-  min-height: 100%;
-  width: calc(100% - 296px);
-  left: 296px;
-
-  @media (max-width: 1898px) {
-    width: calc(100% - 168px);
-    left: 168px;
-  }
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 `
 const ContentView = styled.div`
   background: #222528;
   z-index: 999;
-  position: fixed;
-  width: calc(100% - 296px);
+  position: static;
   left: 296px;
-  @media (max-width: 1898px) {
-    width: calc(100% - 168px);
-    left: 168px;
-  }
+  width: 100%;
 `
 
 function App() {
@@ -49,7 +42,14 @@ function App() {
           <Navbar />
           <Actionbar />
         </ContentView>
-        <div style={{marginTop: '208px'}}>
+        <div
+          style={{
+            display: 'flex',
+            flex: '1',
+            overflow: 'hidden',
+            flexDirection: 'column',
+          }}
+        >
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/my-tasks" element={<MyTasks />} />
