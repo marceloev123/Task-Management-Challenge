@@ -8,7 +8,7 @@ export const ActionbarContainer = styled.div`
   flex-basis: 1108px;
   align-items: center;
   margin-top: 32px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   margin-right: 32px;
   justify-content: space-between;
 `
