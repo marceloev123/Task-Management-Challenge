@@ -110,7 +110,7 @@ const Dashboard = () => {
           <div>There are not tasks to display</div>
         ) : (
           Object.keys(tasksByStatus).map((key, idx) => (
-            <GridColum key={idx}>
+            <div>
               <ColumHeaderContainer>
                 <ColumHeaderText>
                   {key} ({tasksByStatus[key].length})
@@ -124,10 +124,12 @@ const Dashboard = () => {
                   }}
                 />
               </ColumHeaderContainer>
-              {tasksByStatus[key].reverse().map((task: TaskProps) => (
-                <TaskCard key={task.id} task={task} />
-              ))}
-            </GridColum>
+              <GridColum key={idx}>
+                {tasksByStatus[key].reverse().map((task: TaskProps) => (
+                  <TaskCard key={task.id} task={task} />
+                ))}
+              </GridColum>
+            </div>
           ))
         )}
       </Grid>

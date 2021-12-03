@@ -6,7 +6,6 @@ export const ActionbarContainer = styled.div`
   flex-direction: row;
   height: 48px;
   flex-basis: 1108px;
-  padding-right: 0.8rem;
   align-items: center;
   margin-top: 32px;
   margin-bottom: 32px;

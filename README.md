@@ -107,10 +107,11 @@ The app allows the user delete the tasks selecting the `Delete` option through a
 
 
 ## Total App refactor
-
-
 https://user-images.githubusercontent.com/64241651/144554302-9af716c2-1216-498a-a6e3-2db949ccf07a.mp4
 
 Here, the app was completed refactored and was updated with the styling guides recomendations
-=======
+
+## Update Mutation in Action Final Stage
+https://user-images.githubusercontent.com/64241651/144677998-1ab1ca49-997e-4dbe-8cdd-2656d7fb0bac.mp4
+
 

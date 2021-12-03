@@ -5,7 +5,6 @@ export const NavContainer = styled.div`
   flex-direction: row;
   height: 56px;
   flex-basis: 1108px;
-  padding-right: 0.8rem;
   border-radius: 16px;
   background-color: #2c2f33;
   align-items: center;
