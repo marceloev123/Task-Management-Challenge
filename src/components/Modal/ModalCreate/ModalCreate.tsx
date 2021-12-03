@@ -453,7 +453,9 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
             </DropdownContainer>
           </>
           <ModalButtonsContainer>
-            <CancelButton onClick={clearFields}>Cancel</CancelButton>
+            <CancelButton type="button" onClick={clearFields}>
+              Cancel
+            </CancelButton>
 
             <CreateButton type="submit">Create</CreateButton>
           </ModalButtonsContainer>
