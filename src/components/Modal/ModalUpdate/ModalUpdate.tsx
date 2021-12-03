@@ -131,6 +131,7 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
   const {
     register,
     handleSubmit,
+    reset,
     setValue,
     formState: {errors},
   } = useForm({
@@ -194,6 +195,7 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
   }
 
   const closeModal = () => {
+    reset()
     setSelectedUser(userInitialState)
     onClick()
   }
@@ -463,7 +465,9 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
             </DropdownContainer>
           </>
           <ModalButtonsContainer>
-            <CancelButton onClick={closeModal}>Cancel</CancelButton>
+            <CancelButton type="button" onClick={closeModal}>
+              Cancel
+            </CancelButton>
 
             <CreateButton type="submit">Update</CreateButton>
           </ModalButtonsContainer>
