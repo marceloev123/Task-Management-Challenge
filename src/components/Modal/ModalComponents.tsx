@@ -108,7 +108,7 @@ export const TriggerDropdown = styled(Dropdown.Trigger)`
   border-style: none;
 `
 
-export const Trigger = styled.input<TriggerProps>`
+export const DropdownInput = styled.input<TriggerProps>`
   font-weight: 600;
   font-size: 15px;
   line-height: 24px;
@@ -125,8 +125,6 @@ export const Trigger = styled.input<TriggerProps>`
 export const ItemHeader = styled.span`
   display: flex;
   flex-direction: row;
-  margin-left: 16px;
-  margin-top: 8px;
   font-style: normal;
   font-weight: 600;
   font-size: 20px;
@@ -166,7 +164,6 @@ export const UsersDropdown = styled(Dropdown.Content)`
   margin-left: 56px;
   width: 240px;
   flex-direction: column;
-  gap: 24px;
   border: 1px solid #94979a;
   padding-bottom: 8px;
   background: #393d41;
@@ -187,7 +184,7 @@ export const UserItem = styled(Dropdown.Item)`
     background: #94979a;
   }
 `
-export const UserItemName = styled.span`
+export const UserName = styled.span`
   font-style: normal;
   max-width: 120px;
   font-weight: 600;
@@ -202,8 +199,8 @@ export const UserItemName = styled.span`
 export const TagDropdown = styled(Dropdown.Content)`
   display: flex;
   margin-top: 12px;
-  margin-left: 40px;
-  width: 232px;
+  margin-left: 32px;
+  width: 216px;
   flex-direction: column;
   gap: 24px;
   border: 1px solid #94979a;
