@@ -33,8 +33,6 @@ import {
 } from './TaskCardComponents'
 
 //This library help us to conver the points words to numbers
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const text2num = require('text2num')
 
 interface User {
   __typename: string
@@ -61,9 +59,25 @@ interface TaskProps {
   }
 }
 
+interface EstimatedPoints {
+  [key: string]: number
+  ZERO: number
+  ONE: number
+  TWO: number
+  FOUR: number
+  EIGHT: number
+}
+
 const TaskCard = ({task}: TaskProps) => {
   const [editDeleteModalIsOpen, setOpenDeleteModalIsOpen] = useState(false)
   const [updateModalIsOpen, setOpenUpdateModalIsOpen] = useState(false)
+  const estimatedPointsValue: EstimatedPoints = {
+    ZERO: 0,
+    ONE: 1,
+    TWO: 2,
+    FOUR: 4,
+    EIGHT: 8,
+  }
 
   return (
     <CardContainer>
@@ -95,7 +109,7 @@ const TaskCard = ({task}: TaskProps) => {
       </ProjectInfo>
 
       <TimeInfo>
-        <Points>{text2num(task?.pointEstimate.toLowerCase())} Pts</Points>
+        <Points>{estimatedPointsValue[task?.pointEstimate]} Pts</Points>
         <LabelIcon
           background="rgba(148, 151, 154, 0.1)"
           color="#FFF"
