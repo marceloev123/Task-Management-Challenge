@@ -51,7 +51,7 @@ interface TaskProps {
     dueDate: string
     id: string
     name: string
-    owner: User
+    assignee: User
     pointEstimate: string
     position: string
     status: string
@@ -151,7 +151,7 @@ const TaskCard = ({task}: TaskProps) => {
           height="32px"
           width="32px"
           image={
-            task?.owner?.avatar ||
+            task?.assignee?.avatar ||
             'https://avatars.dicebear.com/api/initials/mv.svg'
           }
         />

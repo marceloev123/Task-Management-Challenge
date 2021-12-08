@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {useQuery, useMutation} from '@apollo/client'
 import {toast} from 'react-toastify'
@@ -143,7 +144,11 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
 
   if (data && !loading) {
     filteredUsers = [
-      ...new Set(data?.tasks.map((task: {owner: User}) => task.owner)),
+      ...new Set(
+        data?.tasks
+          .filter((task: {assignee: User}) => task.assignee)
+          .map((task: {assignee: User}) => task.assignee),
+      ),
     ]
   }
   if (error) {
@@ -339,7 +344,7 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                         width={'32px'}
                         height={'32px'}
                         image={
-                          user.avatar ||
+                          user?.avatar ||
                           'https://avatars.dicebear.com/api/initials/mv.svg'
                         }
                       />

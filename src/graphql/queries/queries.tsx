@@ -8,7 +8,7 @@ export const GET_TASKS = gql`
       createdAt
       dueDate
       name
-      owner {
+      assignee {
         id
         avatar
         fullName
@@ -24,7 +24,7 @@ export const GET_TASKS = gql`
 export const GET_USERS = gql`
   query getUsers {
     tasks(input: {}) {
-      owner {
+      assignee {
         id
         avatar
         fullName
@@ -41,3 +41,28 @@ export const GET_USERS = gql`
 //     }
 //   }
 // `
+
+//Get task by Name
+export const GET_TASK_NAME = gql`
+  query getTaskByName($name: String!) {
+    tasks(input: {name: $name}) {
+      id
+      createdAt
+      dueDate
+      name
+      assignee {
+        id
+        avatar
+        fullName
+        type
+        createdAt
+        updatedAt
+        email
+      }
+      pointEstimate
+      position
+      status
+      tags
+    }
+  }
+`

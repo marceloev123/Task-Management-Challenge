@@ -66,7 +66,7 @@ interface TaskProps {
   dueDate: string
   id: string
   name: string
-  owner: User
+  assignee: User
   pointEstimate: string
   position: string
   status: string

@@ -63,7 +63,7 @@ interface TaskProps {
   dueDate: string
   id: string
   name: string
-  owner: User
+  assignee: User
   pointEstimate: string
   position: string
   status: string
@@ -162,7 +162,11 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
 
   if (data && !loading) {
     filteredUsers = [
-      ...new Set(data?.tasks.map((task: {owner: User}) => task.owner)),
+      ...new Set(
+        data?.tasks
+          .filter((task: {assignee: User}) => task.assignee)
+          .map((task: {assignee: User}) => task.assignee),
+      ),
     ]
   }
   if (error) {

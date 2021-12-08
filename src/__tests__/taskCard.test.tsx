@@ -1,14 +1,17 @@
 import * as React from 'react'
 import {render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import {ApolloProvider} from '@apollo/client'
+import {MockedProvider} from '@apollo/client/testing'
 import TaskCard from '../components/TaskCard/TaskCard'
-import {client} from '../utils/authContext'
 import {TaskTag} from '../graphql/schemas'
 
+//Temporary type solution
 const Wrapper = ({children}: any) => (
-  <ApolloProvider client={client}>{children}</ApolloProvider>
+  <div>
+    <MockedProvider>{children}</MockedProvider>
+  </div>
 )
+
 interface User {
   __typename: string
   id: string
@@ -25,7 +28,7 @@ interface TaskProps {
   dueDate: string
   id: string
   name: string
-  owner: User
+  assignee: User
   pointEstimate: string
   position: string
   status: string
@@ -47,7 +50,7 @@ const taskTest: TaskProps = {
   dueDate: '2021-11-25T19:18:00.097Z',
   id: '2013c3d2-2c5a-46ff-9b4b-636339ab7e94',
   name: 'Test 1',
-  owner: taskOwner,
+  assignee: taskOwner,
   pointEstimate: 'ONE',
   position: '1',
   status: 'BACKLOG',
