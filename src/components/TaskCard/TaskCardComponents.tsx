@@ -124,12 +124,14 @@ export const MutateModal = styled.div`
     0px 10px 20px -15px rgba(22, 23, 24, 0.2);
 `
 
-export const MutateOption = styled.div`
+export const MutateOption = styled.button`
   display: flex;
   flex-direction: row;
   width: 100%;
   align-items: center;
   cursor: pointer;
+  background: #393d41;
+  border: none;
   justify-content: space-space-between;
   height: 32px;
   border-radius: 4px;
@@ -139,7 +141,7 @@ export const MutateOption = styled.div`
     background: #94979a;
   }
 `
-export const MutateOptionLabel = styled.label`
+export const MutateOptionLabel = styled.span`
   font-style: normal;
   font-weight: 600;
   font-size: 15px;

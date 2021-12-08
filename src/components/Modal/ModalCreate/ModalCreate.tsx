@@ -238,6 +238,7 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
         style={{
           transform: show ? 'translateY(0)' : 'translateY(-100vh)',
           opacity: show ? '1' : '0',
+          transition: 'all 0.3s ease-out',
         }}
       >
         <form

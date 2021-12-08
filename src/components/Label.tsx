@@ -15,7 +15,7 @@ const LabelContainer = styled.div<LabelContainerProps>`
   padding: 4px 16px;
   color: ${props => props.color};
 `
-const LabelText = styled.label`
+const LabelText = styled.span`
   font-style: normal;
   font-weight: 600;
   font-size: 15px;

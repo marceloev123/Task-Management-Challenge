@@ -36,8 +36,6 @@ export const DialogContainer = styled.div`
   position: fixed;
   top: 16%;
   left: 40%;
-  transform: translateX(-40%);
-  transition: all 0.3s ease-out;
 `
 export const TaskNameInput = styled.input`
   background: transparent;
