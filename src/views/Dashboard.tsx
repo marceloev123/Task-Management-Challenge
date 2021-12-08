@@ -110,7 +110,7 @@ const Dashboard = () => {
           <div>There are not tasks to display</div>
         ) : (
           Object.keys(tasksByStatus).map((key, idx) => (
-            <div>
+            <div key={key}>
               <ColumHeaderContainer>
                 <ColumHeaderText>
                   {key} ({tasksByStatus[key].length})

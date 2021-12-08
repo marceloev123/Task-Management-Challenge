@@ -241,14 +241,14 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
 
   useEffect(() => {
     setValue('tagLabels', selectedTags)
-  }, [selectedTags, task])
+  }, [selectedTags, task, show])
 
   return (
     <>
       {show ? <StyledOverlay onClick={onClick} /> : null}
       <DialogContainer
         style={{
-          transform: show ? 'translateY(0)' : 'translateY(-100vh)',
+          transform: show ? 'translateY(0) ' : 'translateY(-100vh)',
           opacity: show ? '1' : '0',
         }}
       >

@@ -83,16 +83,29 @@ const TaskCard = ({task}: TaskProps) => {
     <CardContainer>
       <ProjectInfo>
         <TaskName>{task?.name}</TaskName>
-        <RiMoreFill
+        <button
           style={{
-            color: '#94979A',
-            width: '24px',
-            height: '24px',
-            marginLeft: '11px',
+            background: 'transparent',
+            border: 'none',
+            padding: '0',
+            lineHeight: '24px',
             cursor: 'pointer',
+            fontSize: '0',
           }}
           onClick={() => setOpenDeleteModalIsOpen(!editDeleteModalIsOpen)}
-        />
+        >
+          <RiMoreFill
+            style={{
+              color: '#94979A',
+              width: '24px',
+              height: '24px',
+              marginLeft: '11px',
+              cursor: 'pointer',
+            }}
+          />
+          more options
+        </button>
+
         {editDeleteModalIsOpen && (
           <ModalEditDelete
             id={task.id}
@@ -101,11 +114,13 @@ const TaskCard = ({task}: TaskProps) => {
           />
         )}
 
-        <ModalUpdate
-          task={task}
-          show={updateModalIsOpen}
-          onClick={() => setOpenUpdateModalIsOpen(false)}
-        />
+        {updateModalIsOpen && (
+          <ModalUpdate
+            task={task}
+            show={updateModalIsOpen}
+            onClick={() => setOpenUpdateModalIsOpen(false)}
+          />
+        )}
       </ProjectInfo>
 
       <TimeInfo>

@@ -16,7 +16,7 @@ const LabelContainer = styled.div<LabelContainerProps>`
   padding-left: 4px;
   padding-right: 4px;
 `
-const LabelText = styled.label`
+const LabelText = styled.span`
   font-style: normal;
   font-weight: 600;
   font-size: 15px;
