@@ -4,29 +4,54 @@ import userEvent from '@testing-library/user-event'
 import {ApolloProvider} from '@apollo/client'
 import TaskCard from '../components/TaskCard/TaskCard'
 import {client} from '../utils/authContext'
+import {TaskTag} from '../graphql/schemas'
 
-const Wrapper = ({children}) => (
+const Wrapper = ({children}: any) => (
   <ApolloProvider client={client}>{children}</ApolloProvider>
 )
-const taskTest = {
+interface User {
+  __typename: string
+  id: string
+  avatar: string
+  email: string
+  fullName: string
+  type: string
+  createdAt: string
+  updatedAt: string
+}
+
+interface TaskProps {
+  createdAt: string
+  dueDate: string
+  id: string
+  name: string
+  owner: User
+  pointEstimate: string
+  position: string
+  status: string
+  tags: Array<TaskTag>
+}
+
+const taskOwner: User = {
+  __typename: 'User',
+  id: '0bab1944-7543-48a8-8d28-8ad7196509ea',
+  avatar: 'null',
+  email: 'marcelovaldivia@ravn.co',
+  fullName: 'Marcelo Ernesto Valdivia Vizcarra',
+  type: 'CANDIDATE"',
+  createdAt: '2021-11-23T22:34:13.847Z',
+  updatedAt: '2021-11-23T22:34:13.848Z',
+}
+const taskTest: TaskProps = {
   createdAt: '2021-12-03T22:51:12.114Z',
   dueDate: '2021-11-25T19:18:00.097Z',
   id: '2013c3d2-2c5a-46ff-9b4b-636339ab7e94',
   name: 'Test 1',
-  owner: {
-    _typename: 'User',
-    id: '0bab1944-7543-48a8-8d28-8ad7196509ea',
-    avatar: null,
-    email: 'marcelovaldivia@ravn.co',
-    fullName: 'Marcelo Ernesto Valdivia Vizcarra',
-    type: 'CANDIDATE"',
-    createdAt: '2021-11-23T22:34:13.847Z',
-    updatedAt: '2021-11-23T22:34:13.848Z',
-  },
+  owner: taskOwner,
   pointEstimate: 'ONE',
-  position: 1,
+  position: '1',
   status: 'BACKLOG',
-  tags: ['REACT', 'RAILS'],
+  tags: [TaskTag.React, TaskTag.Rails],
 }
 
 test('task card should render with correct information', () => {

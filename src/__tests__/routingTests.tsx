@@ -6,7 +6,7 @@ import {ApolloProvider} from '@apollo/client'
 import {client} from '../utils/authContext'
 import App from '../App'
 
-const Wrapper = ({children}) => (
+const Wrapper = ({children}: any) => (
   <ApolloProvider client={client}>
     <MemoryRouter>{children}</MemoryRouter>
   </ApolloProvider>
