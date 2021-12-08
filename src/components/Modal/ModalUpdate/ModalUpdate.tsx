@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {useQuery, useMutation} from '@apollo/client'
 import {toast} from 'react-toastify'
@@ -98,7 +99,7 @@ const Checkbox = ({value, selectedTags, setSelectedTags}: TagProps) => {
   }
   return (
     <TagCheckbox>
-      <input type="checkbox" checked={tagCheck} onClick={handleClick} />
+      <input type="checkbox" defaultChecked={tagCheck} onClick={handleClick} />
       <TagLabel>{value}</TagLabel>
     </TagCheckbox>
   )
@@ -118,6 +119,7 @@ const schema = yup
   .object({
     taskTitle: yup.string().required(),
     pointsEstimated: yup.string().required(),
+    assigneeId: yup.string().required(),
     tagLabels: yup.array().min(1).required(),
     status: yup.string().required(),
   })
@@ -137,6 +139,7 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
+      assigneeId: task?.assignee?.fullName,
       taskTitle: task?.name,
       pointsEstimated: task?.pointEstimate,
       tagLabels: task?.tags,
@@ -200,7 +203,6 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
 
   const closeModal = () => {
     reset()
-    setSelectedUser(userInitialState)
     onClick()
   }
 
@@ -209,6 +211,7 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
       await updateTask({
         variables: {
           id: task.id,
+          assigneeId: selectedUser.id,
           dueDate: task.dueDate,
           name: formData.taskTitle,
           position: task.position,
@@ -333,12 +336,14 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
                       }}
                     />
                     <DropdownInput
-                      value={selectedUser.fullName}
                       disabled
                       placeholder="Assignee"
-                      onChange={() => setSelectedUser(selectedUser)}
+                      {...register('assigneeId')}
                     />
                   </TriggerDropdown>
+                  {errors.assigneeId && (
+                    <ErrorMessages>*{errors.assigneeId?.message}</ErrorMessages>
+                  )}
                 </div>
 
                 <UsersDropdown>
@@ -348,7 +353,10 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
                   {filteredUsers.map(user => (
                     <UserItem
                       key={user.id}
-                      onClick={() => setSelectedUser(user)}
+                      onClick={() => {
+                        setSelectedUser(user)
+                        setValue('assigneeId', user.fullName)
+                      }}
                     >
                       <Avatar
                         width={'32px'}

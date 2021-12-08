@@ -87,7 +87,12 @@ const Checkbox = ({value, selectedTags, setSelectedTags}: TagProps) => {
   }
   return (
     <TagCheckbox>
-      <input type="checkbox" checked={tagCheck} onClick={handleClick} />
+      <input
+        type="checkbox"
+        checked={tagCheck}
+        onClick={handleClick}
+        readOnly
+      />
       <TagLabel>{value}</TagLabel>
     </TagCheckbox>
   )
@@ -107,6 +112,7 @@ const schema = yup
   .object({
     taskTitle: yup.string().required(),
     pointsEstimated: yup.string().required(),
+    assigneeId: yup.string().required(),
     tagLabels: yup.array().min(1).required(),
     status: yup.string().required(),
   })
@@ -195,6 +201,7 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
     try {
       await createTask({
         variables: {
+          assigneeId: selectedUser.id,
           name: formData.taskTitle,
           pointEstimate: formData.pointsEstimated,
           tags: formData.tagLabels,
@@ -230,11 +237,13 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
   useEffect(() => {
     register('pointsEstimated', {required: true})
     register('tagLabels', {required: true})
+    register('assigneeId', {required: true})
   }, [register])
 
   useEffect(() => {
     setValue('tagLabels', selectedTags)
-  }, [selectedTags])
+    setValue('assigneeId', selectedUser.id)
+  }, [selectedTags, selectedUser])
 
   return (
     <>
@@ -326,9 +335,12 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                       value={selectedUser.fullName}
                       disabled
                       placeholder="Assignee"
-                      onChange={() => setSelectedUser(selectedUser)}
+                      onClick={() => setSelectedUser(selectedUser)}
                     />
                   </TriggerDropdown>
+                  {errors.assigneeId && (
+                    <ErrorMessages>*{errors.assigneeId?.message}</ErrorMessages>
+                  )}
                 </div>
 
                 <UsersDropdown>
