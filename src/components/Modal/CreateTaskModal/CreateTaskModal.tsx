@@ -21,7 +21,7 @@ import {
   TriggerDropdown,
   DropdownContent,
   ItemHeader,
-  ReusableDropdownItem,
+  DropdownItem,
   ItemLabel,
   UsersDropdown,
   UserItem,
@@ -119,7 +119,7 @@ const schema = yup
   .required()
 
 //MODAL
-const ModalCreate = ({show, onClick}: ModalProps) => {
+const CreateTaskModal = ({show, onClick}: ModalProps) => {
   const [openDropdown, setOpenDropdown] = useState(false)
   const [selectedTags, setSelectedTags] = useState<Array<TaskTag>>([])
   const userInitialState = {
@@ -141,10 +141,10 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
 
   //Have to improve
   let filteredUsers: User[] | any[] = []
-  const {loading, error, data} = useQuery(GET_USERS)
+  const {loading, error: getUsersError, data} = useQuery(GET_USERS)
 
   //Create Task Mutation
-  const [createTask, {error: error1}] = useMutation(CREATE_TASK, {
+  const [createTask, {error: createTaskError}] = useMutation(CREATE_TASK, {
     refetchQueries: [GET_TASKS],
   })
 
@@ -156,30 +156,6 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
           .map((task: {assignee: User}) => task.assignee),
       ),
     ]
-  }
-  if (error) {
-    toast.error(`Error on Fetching Users:  ${error}`, {
-      theme: 'dark',
-      position: 'bottom-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    })
-  }
-  if (error1) {
-    toast.error(`Error on Create Task: ${error1}`, {
-      theme: 'dark',
-      position: 'bottom-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    })
   }
 
   //DropdownMenu open Function
@@ -233,6 +209,33 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
       clearFields()
     }
   }
+
+  useEffect(() => {
+    if (getUsersError) {
+      toast.error(`Error on Fetching Users:  ${getUsersError}`, {
+        theme: 'dark',
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+    if (createTaskError) {
+      toast.error(`Error on Create Task: ${createTaskError}`, {
+        theme: 'dark',
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+  }, [])
 
   useEffect(() => {
     register('pointsEstimated', {required: true})
@@ -302,7 +305,7 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                       keyof typeof PointEstimate
                     >
                   ).map((key, idx) => (
-                    <ReusableDropdownItem
+                    <DropdownItem
                       key={idx}
                       onClick={() => {
                         setValue('pointsEstimated', key)
@@ -316,7 +319,7 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                         }}
                       />
                       <ItemLabel>{estimatedPointsData[key]} Points</ItemLabel>
-                    </ReusableDropdownItem>
+                    </DropdownItem>
                   ))}
                 </DropdownContent>
               </Dropdown.Root>
@@ -456,14 +459,14 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
                   </ItemHeader>
                   {(Object.keys(Status) as Array<keyof typeof Status>).map(
                     (key, idx) => (
-                      <ReusableDropdownItem
+                      <DropdownItem
                         key={idx}
                         onClick={() => {
                           setValue('status', key)
                         }}
                       >
                         <ItemLabel>{Status[key]}</ItemLabel>
-                      </ReusableDropdownItem>
+                      </DropdownItem>
                     ),
                   )}
                 </DropdownContent>
@@ -483,4 +486,4 @@ const ModalCreate = ({show, onClick}: ModalProps) => {
   )
 }
 
-export default ModalCreate
+export default CreateTaskModal
