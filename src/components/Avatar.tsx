@@ -1,13 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 
-interface AvatarComponentProps {
+interface AvatarProps {
   width: string
   height: string
   image: string | null
 }
 
-const Avatar = styled.div<AvatarComponentProps>`
+interface StyledAvatarProps {
+  width: string
+  height: string
+  image: string | null
+}
+
+const StyledAvatar = styled.div<StyledAvatarProps>`
   height: ${props => props.height};
   width: ${props => props.width};
   background: url(${props => props.image});
@@ -16,8 +22,8 @@ const Avatar = styled.div<AvatarComponentProps>`
   border-radius: 50%;
 `
 
-const AvatarComponent = ({width, height, image}: AvatarComponentProps) => {
-  return <Avatar width={width} height={height} image={image} />
-}
+const Avatar = ({width, height, image}: AvatarProps) => (
+  <StyledAvatar width={width} height={height} image={image} />
+)
 
-export default AvatarComponent
+export default Avatar
