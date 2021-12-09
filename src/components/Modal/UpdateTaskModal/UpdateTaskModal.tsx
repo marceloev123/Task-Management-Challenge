@@ -22,7 +22,7 @@ import {
   TriggerDropdown,
   DropdownContent,
   ItemHeader,
-  ReusableDropdownItem,
+  DropdownItem,
   ItemLabel,
   UsersDropdown,
   UserItem,
@@ -127,7 +127,7 @@ const schema = yup
 
 //MODAL
 
-const ModalUpdate = ({task, show, onClick}: ModalProps) => {
+const UpdateTaskModal = ({task, show, onClick}: ModalProps) => {
   const [openDropdown, setOpenDropdown] = useState(false)
   const [selectedTags, setSelectedTags] = useState<Array<TaskTag>>(task.tags)
   const {
@@ -157,9 +157,9 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
 
   //Have to improve
   let filteredUsers: User[] | any[] = []
-  const {loading, error, data} = useQuery(GET_USERS)
+  const {loading, error: getUsersError, data} = useQuery(GET_USERS)
   //Create Task
-  const [updateTask, {error: error1}] = useMutation(UPDATE_TASK, {
+  const [updateTask, {error: updateTaskError}] = useMutation(UPDATE_TASK, {
     refetchQueries: [GET_TASKS],
   })
 
@@ -171,29 +171,6 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
           .map((task: {assignee: User}) => task.assignee),
       ),
     ]
-  }
-  if (error) {
-    toast.error(`Error: ${error}`, {
-      theme: 'dark',
-      position: 'bottom-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    })
-  } else if (error1) {
-    toast.error(`Error: ${error1}`, {
-      theme: 'dark',
-      position: 'bottom-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    })
   }
 
   //Modals aux functions
@@ -245,6 +222,33 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
       closeModal()
     }
   }
+
+  useEffect(() => {
+    if (getUsersError) {
+      toast.error(`Error: ${getUsersError}`, {
+        theme: 'dark',
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+    if (updateTaskError) {
+      toast.error(`Error: ${updateTaskError}`, {
+        theme: 'dark',
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+  }, [])
 
   useEffect(() => {
     setValue('tagLabels', selectedTags)
@@ -306,7 +310,7 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
                       keyof typeof PointEstimate
                     >
                   ).map((key, idx) => (
-                    <ReusableDropdownItem
+                    <DropdownItem
                       key={idx}
                       onClick={() => {
                         setValue('pointsEstimated', key)
@@ -320,7 +324,7 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
                         }}
                       />
                       <ItemLabel>{estimatedPointsData[key]} Points</ItemLabel>
-                    </ReusableDropdownItem>
+                    </DropdownItem>
                   ))}
                 </DropdownContent>
               </Dropdown.Root>
@@ -462,14 +466,14 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
                   </ItemHeader>
                   {(Object.keys(Status) as Array<keyof typeof Status>).map(
                     (key, idx) => (
-                      <ReusableDropdownItem
+                      <DropdownItem
                         key={idx}
                         onClick={() => {
                           setValue('status', key)
                         }}
                       >
                         <ItemLabel>{Status[key]}</ItemLabel>
-                      </ReusableDropdownItem>
+                      </DropdownItem>
                     ),
                   )}
                 </DropdownContent>
@@ -489,4 +493,4 @@ const ModalUpdate = ({task, show, onClick}: ModalProps) => {
   )
 }
 
-export default ModalUpdate
+export default UpdateTaskModal
