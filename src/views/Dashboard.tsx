@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import {useQuery} from '@apollo/client'
@@ -89,8 +90,6 @@ const Dashboard = () => {
     {},
   )
 
-  if (loading) return <Spinner />
-
   useEffect(() => {
     if (getTasksError) {
       toast.error('An error occur while fetching the data!', {
@@ -105,7 +104,9 @@ const Dashboard = () => {
       })
       tasksByStatus = {}
     }
-  }, [])
+  }, [getTasksError])
+
+  if (loading) return <Spinner />
 
   return (
     <>
