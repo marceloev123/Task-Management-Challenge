@@ -14,27 +14,6 @@ const AccordionItem = styled(AccordionPrimitive.Item)`
   align-items: center;
 `
 
-// const TableHeaderItem = styled.div`
-//   height: 56px;
-//   display: flex;
-//   align-items: center;
-//   border-left: 1px solid#393d41;
-//   align-items: center;
-// `
-// const AccordionTriggerContainer = styled(AccordionPrimitive.Trigger)`
-//   display: flex;
-// `
-
-// const AccordionTrigger = React.forwardRef(
-//   ({children, ...props}, forwardedRef) => (
-//     <TableHeaderItem>
-//       <AccordionTriggerContainer {...props}>
-//         {children}
-//       </AccordionTriggerContainer>
-//     </TableHeaderItem>
-//   ),
-// )
-
 const Accordion = () => {
   return (
     <AccordionContainer type="single" defaultValue="item-1">
