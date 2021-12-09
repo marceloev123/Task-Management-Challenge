@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {useQuery, useMutation} from '@apollo/client'
 import {toast} from 'react-toastify'
@@ -12,11 +11,11 @@ import * as Dropdown from '@radix-ui/react-dropdown-menu'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 import * as yup from 'yup'
-import {PointEstimate, Status, TaskTag} from '../../../graphql/schemas'
-import {GET_TASKS, GET_USERS} from '../../../graphql/queries/queries'
-import {UPDATE_TASK} from '../../../graphql/mutations/mutations'
+import {PointEstimate, Status, TaskTag} from '../../graphql/schemas'
+import {GET_TASKS, GET_USERS} from '../../graphql/queries/queries'
+import {CREATE_TASK, UPDATE_TASK} from '../../graphql/mutations/mutations'
+import Avatar from '../Avatar'
 import {
-  ErrorMessages,
   DropdownContainer,
   DropdownInput,
   TriggerDropdown,
@@ -33,11 +32,27 @@ import {
   CreateButton,
   TagCheckbox,
   TagLabel,
-} from '../ModalComponents'
-import Avatar from '../../Avatar'
-import {DialogContainer, StyledOverlay, TaskNameInput} from '../ModalComponents'
+  ErrorMessages,
+} from './ModalComponents'
+import {DialogContainer, StyledOverlay, TaskNameInput} from './ModalComponents'
 
 //Interfaces
+interface TaskProps {
+  createdAt: string
+  dueDate: string
+  id: string
+  name: string
+  assignee: User
+  pointEstimate: string
+  position: string
+  status: string
+  tags: Array<TaskTag>
+}
+interface ModalProps {
+  task?: TaskProps
+  show: boolean
+  onClick: () => void
+}
 
 interface FormdataProps {
   taskTitle: string
@@ -52,28 +67,12 @@ interface TagProps {
   setSelectedTags: Dispatch<SetStateAction<TaskTag[]>>
   onClick?: () => void
 }
+
 interface User {
   __typename: string
   id: string
-  avatar: string | null
+  avatar: string
   fullName: string
-}
-
-interface TaskProps {
-  createdAt: string
-  dueDate: string
-  id: string
-  name: string
-  assignee: User
-  pointEstimate: string
-  position: string
-  status: string
-  tags: Array<TaskTag>
-}
-interface ModalProps {
-  task: TaskProps
-  show: boolean
-  onClick: () => void
 }
 
 const Checkbox = ({value, selectedTags, setSelectedTags}: TagProps) => {
@@ -99,7 +98,12 @@ const Checkbox = ({value, selectedTags, setSelectedTags}: TagProps) => {
   }
   return (
     <TagCheckbox>
-      <input type="checkbox" defaultChecked={tagCheck} onClick={handleClick} />
+      <input
+        type="checkbox"
+        checked={tagCheck}
+        onClick={handleClick}
+        readOnly
+      />
       <TagLabel>{value}</TagLabel>
     </TagCheckbox>
   )
@@ -125,34 +129,42 @@ const schema = yup
   })
   .required()
 
-//MODAL
-
-const UpdateTaskModal = ({task, show, onClick}: ModalProps) => {
+const TaskModal = ({task, show, onClick}: ModalProps) => {
   const [openDropdown, setOpenDropdown] = useState(false)
-  const [selectedTags, setSelectedTags] = useState<Array<TaskTag>>(task.tags)
+  const [selectedTags, setSelectedTags] = useState<Array<TaskTag>>([])
+  const userInitialState = {
+    __typename: '',
+    id: '',
+    avatar: '',
+    fullName: '',
+  }
+  const [selectedUser, setSelectedUser] = useState<User>(userInitialState)
   const {
     register,
     handleSubmit,
-    reset,
     setValue,
+    reset,
     formState: {errors},
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      assigneeId: task?.assignee?.fullName,
-      taskTitle: task?.name,
-      pointsEstimated: task?.pointEstimate,
-      tagLabels: task?.tags,
-      status: task?.status,
+      assigneeId: task?.assignee?.fullName || '',
+      taskTitle: task?.name || '',
+      pointsEstimated: task?.pointEstimate || '',
+      tagLabels: task?.tags || [],
+      status: task?.status || '',
     },
   })
-
-  const [selectedUser, setSelectedUser] = useState<User>(task.assignee)
 
   //Have to improve
   let filteredUsers: User[] | any[] = []
   const {loading, error: getUsersError, data} = useQuery(GET_USERS)
-  //Create Task
+  //Create Task Mutation
+  const [createTask, {error: createTaskError}] = useMutation(CREATE_TASK, {
+    refetchQueries: [GET_TASKS],
+  })
+
+  //Update Task Mutation
   const [updateTask, {error: updateTaskError}] = useMutation(UPDATE_TASK, {
     refetchQueries: [GET_TASKS],
   })
@@ -177,15 +189,64 @@ const UpdateTaskModal = ({task, show, onClick}: ModalProps) => {
     onClick()
   }
 
+  //DropdownMenu clearFields Function
+  const clearCreateTaskFields = () => {
+    setSelectedUser(userInitialState)
+    setSelectedTags([])
+    reset()
+    onClick()
+  }
+
+  //Create TaskSubmit
+  async function createTaskSubmit(formData: FormdataProps) {
+    // Make the request
+    try {
+      await createTask({
+        variables: {
+          assigneeId: selectedUser.id,
+          name: formData.taskTitle,
+          pointEstimate: formData.pointsEstimated,
+          tags: formData.tagLabels,
+          status: formData.status,
+        },
+      })
+      toast.success('Task created succesfully!', {
+        theme: 'dark',
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } catch (e) {
+      toast.error('Error on create task', {
+        theme: 'dark',
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    } finally {
+      clearCreateTaskFields()
+    }
+  }
+
+  //Update TaskSubmit
+
   async function updateTaskSubmit(formData: FormdataProps) {
     try {
       await updateTask({
         variables: {
-          id: task.id,
+          id: task?.id,
           assigneeId: selectedUser.id,
-          dueDate: task.dueDate,
+          dueDate: task?.dueDate,
           name: formData.taskTitle,
-          position: task.position,
+          position: task?.position,
           pointEstimate: formData.pointsEstimated,
           status: formData.status,
           tags: formData.tagLabels,
@@ -219,7 +280,19 @@ const UpdateTaskModal = ({task, show, onClick}: ModalProps) => {
 
   useEffect(() => {
     if (getUsersError) {
-      toast.error(`Error: ${getUsersError}`, {
+      toast.error(`Error on Fetching Users:  ${getUsersError}`, {
+        theme: 'dark',
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+    if (createTaskError) {
+      toast.error(`Error on Create Task: ${createTaskError}`, {
         theme: 'dark',
         position: 'bottom-right',
         autoClose: 5000,
@@ -245,20 +318,37 @@ const UpdateTaskModal = ({task, show, onClick}: ModalProps) => {
   }, [])
 
   useEffect(() => {
+    register('pointsEstimated', {required: true})
+    register('tagLabels', {required: true})
+    register('assigneeId', {required: true})
+  }, [register])
+
+  useEffect(() => {
     setValue('tagLabels', selectedTags)
-  }, [selectedTags, task, show])
+    setValue('assigneeId', selectedUser.fullName)
+  }, [selectedTags, selectedUser])
+
+  useEffect(() => {
+    if (task) {
+      setValue('tagLabels', task.tags)
+      setValue('assigneeId', task.assignee.fullName)
+      setSelectedUser(task.assignee)
+      setSelectedTags(task.tags)
+    }
+  }, [task])
 
   return (
     <>
       {show ? <StyledOverlay onClick={onClick} /> : null}
       <DialogContainer
         style={{
-          transform: show ? 'translateY(0) ' : 'translateY(-100vh)',
+          transform: show ? 'translateY(0)' : 'translateY(-100vh)',
           opacity: show ? '1' : '0',
+          transition: 'all 0.3s ease-out',
         }}
       >
         <form
-          onSubmit={handleSubmit(updateTaskSubmit)}
+          onSubmit={handleSubmit(task ? updateTaskSubmit : createTaskSubmit)}
           style={{display: 'flex', flexDirection: 'column', gap: '24px'}}
         >
           <TaskNameInput
@@ -382,7 +472,7 @@ const UpdateTaskModal = ({task, show, onClick}: ModalProps) => {
                     <DropdownInput
                       placeholder="Label"
                       disabled
-                      defaultValue={task.tags}
+                      defaultValue={task?.tags}
                       {...register('tagLabels')}
                     />
                   </TriggerDropdown>
@@ -479,7 +569,9 @@ const UpdateTaskModal = ({task, show, onClick}: ModalProps) => {
               Cancel
             </CancelButton>
 
-            <CreateButton type="submit">Update</CreateButton>
+            <CreateButton type="submit">
+              {task ? 'Update' : 'Create'}
+            </CreateButton>
           </ModalButtonsContainer>
         </form>
       </DialogContainer>
@@ -487,4 +579,4 @@ const UpdateTaskModal = ({task, show, onClick}: ModalProps) => {
   )
 }
 
-export default UpdateTaskModal
+export default TaskModal

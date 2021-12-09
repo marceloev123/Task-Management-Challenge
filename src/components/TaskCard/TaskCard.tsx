@@ -16,7 +16,7 @@ import Avatar from '../Avatar'
 import Label from '../Label'
 import LabelIcon from '../LabelIcon'
 import ModalEditDelete from '../Modal/ModalEditDelete/ModalEditDelete'
-import UpdateTaskModal from '../Modal/UpdateTaskModal/UpdateTaskModal'
+import TaskModal from '../Modal/TaskModal'
 import {
   ProjectInfo,
   TaskName,
@@ -114,13 +114,11 @@ const TaskCard = ({task}: TaskProps) => {
           />
         )}
 
-        {updateModalIsOpen && (
-          <UpdateTaskModal
-            task={task}
-            show={updateModalIsOpen}
-            onClick={() => setOpenUpdateModalIsOpen(false)}
-          />
-        )}
+        <TaskModal
+          task={task}
+          show={updateModalIsOpen}
+          onClick={() => setOpenUpdateModalIsOpen(false)}
+        />
       </ProjectInfo>
 
       <TimeInfo>

@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {Link, useMatch} from 'react-router-dom'
 import {RiAddLine, RiFunctionLine, RiMenuLine} from 'react-icons/ri'
 import 'react-toastify/dist/ReactToastify.css'
-import CreateTaskModal from '../Modal/CreateTaskModal/CreateTaskModal'
+import TaskModal from '../Modal/TaskModal'
 import {
   ActionbarContainer,
   Button,
@@ -43,10 +43,8 @@ const Actionbar = () => {
         </Link>
       </SwitchContainer>
 
-      <CreateTaskModal
-        show={openModal}
-        onClick={() => setOpenModal(!openModal)}
-      />
+      <TaskModal show={openModal} onClick={() => setOpenModal(!openModal)} />
+
       <Button onClick={() => setOpenModal(!openModal)}>
         <RiAddLine style={{height: '20px', width: '20px'}} />
       </Button>
