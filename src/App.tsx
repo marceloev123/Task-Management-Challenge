@@ -24,12 +24,19 @@ const Content = styled.div`
   height: 100%;
   overflow: hidden;
 `
-const ContentView = styled.div`
+const ContentBars = styled.div`
   background: #222528;
   z-index: 999;
   position: static;
   left: 296px;
   width: 100%;
+`
+
+const ContentMainView = styled.div`
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  flex-direction: column;
 `
 
 function App() {
@@ -38,24 +45,17 @@ function App() {
       <GlobalStyle />
       <Sidebar />
       <Content>
-        <ContentView>
+        <ContentBars>
           <Navbar />
           <Actionbar />
-        </ContentView>
-        <div
-          style={{
-            display: 'flex',
-            flex: '1',
-            overflow: 'hidden',
-            flexDirection: 'column',
-          }}
-        >
+        </ContentBars>
+        <ContentMainView>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/my-tasks" element={<MyTasks />} />
             <Route path="/profile" element={<UserProfile />} />
           </Routes>
-        </div>
+        </ContentMainView>
       </Content>
     </AppContainer>
   )
