@@ -164,7 +164,7 @@ export const ItemHeader = styled.span`
     border: none;
   }
 `
-export const ReusableDropdownItem = styled(Dropdown.Item)`
+export const DropdownItem = styled(Dropdown.Item)`
   display: flex;
   flex-direction: row;
   align-items: center;
