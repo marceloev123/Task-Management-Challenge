@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useMutation} from '@apollo/client'
 import {RiPencilLine, RiDeleteBin6Line} from 'react-icons/ri'
 import {toast} from 'react-toastify'
@@ -21,21 +21,10 @@ const ModalEditDelete = ({
   onClick,
   openUpdateModal,
 }: ModalEditDeleteProps) => {
-  const [deleteTask, {error}] = useMutation(DELETE_TASK, {
+  const [deleteTask, {error: deleteTaskError}] = useMutation(DELETE_TASK, {
     refetchQueries: [GET_TASKS],
   })
-  if (error) {
-    toast.error('An error occur during the delete request!', {
-      theme: 'dark',
-      position: 'bottom-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    })
-  }
+
   //Delete Task
   const deleteHandler = async (taskId: string) => {
     try {
@@ -67,6 +56,21 @@ const ModalEditDelete = ({
       })
     }
   }
+
+  useEffect(() => {
+    if (deleteTaskError) {
+      toast.error('An error occur during the delete request!', {
+        theme: 'dark',
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+    }
+  }, [])
   return (
     <MutateModal onClick={onClick}>
       <MutateOption onClick={openUpdateModal}>

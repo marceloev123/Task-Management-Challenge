@@ -27,12 +27,12 @@ const TaskCardTest = () => {
       tags: Array<TaskTag>
     }
   }
-  const {loading, error, data} = useQuery(GET_TASKS)
+  const {loading, error: getTasksError, data} = useQuery(GET_TASKS)
   if (loading) {
     return <p>Loading...</p>
   }
 
-  if (error) {
+  if (getTasksError) {
     return <p>Oh no!</p>
   }
   if (data) {

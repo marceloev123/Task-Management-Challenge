@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import {useQuery} from '@apollo/client'
 import {RiMoreFill} from 'react-icons/ri'
@@ -75,7 +75,7 @@ interface TaskProps {
 
 const Dashboard = () => {
   // Group tasks by Status
-  const {loading, error, data} = useQuery(GET_TASKS)
+  const {loading, error: getTasksError, data} = useQuery(GET_TASKS)
 
   let tasksByStatus = data?.tasks.reduce(
     (previousTask: {[key: string]: TaskProps[]}, currentTask: TaskProps) => {
@@ -88,26 +88,30 @@ const Dashboard = () => {
     },
     {},
   )
+
   if (loading) return <Spinner />
-  if (error) {
-    toast.error('An error occur while fetching the data!', {
-      theme: 'dark',
-      position: 'bottom-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    })
-    tasksByStatus = {}
-  }
+
+  useEffect(() => {
+    if (getTasksError) {
+      toast.error('An error occur while fetching the data!', {
+        theme: 'dark',
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
+      tasksByStatus = {}
+    }
+  }, [])
 
   return (
     <>
       <Grid>
         {!data ? (
-          <div>There are not tasks to display</div>
+          <div style={{color: 'white'}}>There are not tasks to display</div>
         ) : (
           Object.keys(tasksByStatus).map((key, idx) => (
             <div key={key}>
