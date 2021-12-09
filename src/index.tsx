@@ -12,12 +12,12 @@ import {setContext} from '@apollo/client/link/context'
 import './fonts/SF PRO DISPLAY/fonts.css'
 import App from './App'
 // import {AuthProvider} from './context/Authcontext'
+
 const httpLink = createHttpLink({
-  uri: 'https://syn-api-prod.herokuapp.com/graphql',
+  uri: process.env.REACT_APP_URI,
 })
 const authLink = setContext((_, {headers}) => {
-  const token =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwb3NpdGlvbklkIjoibmVyZGVyeSIsInByb2plY3RJZCI6ImEwOTlmYjA3LTZiMDUtNDc4Yy04N2JmLTc3YzczZTljZWNkZCIsImZ1bGxOYW1lIjoiTWFyY2VsbyBFcm5lc3RvIFZhbGRpdmlhIFZpemNhcnJhIiwiZW1haWwiOiJtYXJjZWxvdmFsZGl2aWFAcmF2bi5jbyIsImlhdCI6MTYzNzcwNjg1M30.iyg7KGckjxeK-VdPfrE1EQ67WXQTsqRLF9OfEWY4Vbs'
+  const token = process.env.REACT_APP_TOKEN
 
   return {
     headers: {
