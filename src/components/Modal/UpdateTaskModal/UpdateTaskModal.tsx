@@ -146,14 +146,8 @@ const UpdateTaskModal = ({task, show, onClick}: ModalProps) => {
       status: task?.status,
     },
   })
-  const userInitialState = {
-    __typename: '',
-    id: '',
-    avatar: '',
-    fullName: '',
-  }
 
-  const [selectedUser, setSelectedUser] = useState<User>(userInitialState)
+  const [selectedUser, setSelectedUser] = useState<User>(task.assignee)
 
   //Have to improve
   let filteredUsers: User[] | any[] = []
