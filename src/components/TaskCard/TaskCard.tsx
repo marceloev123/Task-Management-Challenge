@@ -113,7 +113,6 @@ const TaskCard = ({task}: TaskProps) => {
             openUpdateModal={() => setOpenUpdateModalIsOpen(true)}
           />
         )}
-
         <TaskModal
           task={task}
           show={updateModalIsOpen}

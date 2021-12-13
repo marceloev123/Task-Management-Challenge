@@ -26,7 +26,7 @@ export const DialogContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  max-width: 542px;
+  max-width: 632px;
   padding: 16px;
   z-index: 999;
   background-color: #393d41;

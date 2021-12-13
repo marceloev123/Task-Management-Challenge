@@ -6,6 +6,7 @@ import {
   RiUser3Fill,
   RiPriceTag3Fill,
   RiCloseCircleLine,
+  RiTaskFill,
 } from 'react-icons/ri'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
 import {useForm} from 'react-hook-form'
@@ -526,7 +527,7 @@ const TaskModal = ({task, show, onClick}: ModalProps) => {
               <Dropdown.Root>
                 <div>
                   <TriggerDropdown>
-                    <RiIncreaseDecreaseFill
+                    <RiTaskFill
                       style={{
                         width: '32px',
                         height: '24px',
