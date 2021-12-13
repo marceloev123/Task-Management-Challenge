@@ -42,7 +42,7 @@ const TaskCardTest = ({name}: TaskCardTestProps) => {
     return (
       <div>
         {data.tasks.map((task: RetrievedTaskProps) => (
-          <li key={task.id}>{task.name} Retrived Succesfull</li>
+          <li key={task.id}>{task.name} Retrived Successfull</li>
         ))}
       </div>
     )

@@ -10,17 +10,17 @@ import {
   MutateOptionLabel,
 } from '../../TaskCard/TaskCardComponents'
 
-interface ModalEditDeleteProps {
+interface MoreOptionsModalProps {
   id: string
   onClick: () => void
   openUpdateModal: () => void
 }
 
-const ModalEditDelete = ({
+const MoreOptionsModal = ({
   id,
   onClick,
   openUpdateModal,
-}: ModalEditDeleteProps) => {
+}: MoreOptionsModalProps) => {
   const [deleteTask, {error: deleteTaskError}] = useMutation(DELETE_TASK, {
     refetchQueries: [GET_TASKS],
   })
@@ -91,4 +91,4 @@ const ModalEditDelete = ({
   )
 }
 
-export default ModalEditDelete
+export default MoreOptionsModal

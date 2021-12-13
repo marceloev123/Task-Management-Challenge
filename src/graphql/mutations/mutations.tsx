@@ -55,6 +55,7 @@ export const DELETE_TASK = gql`
   mutation deleteTask($id: String!) {
     deleteTask(input: {id: $id}) {
       id
+      name
     }
   }
 `

@@ -15,7 +15,7 @@ import {
 import Avatar from '../Avatar'
 import Label from '../Label'
 import LabelIcon from '../LabelIcon'
-import ModalEditDelete from '../Modal/ModalEditDelete/ModalEditDelete'
+import MoreOptionsModal from '../Modal/MoreOptionsModal/MoreOptionsModal'
 import TaskModal from '../Modal/TaskModal'
 import {
   ProjectInfo,
@@ -107,7 +107,7 @@ const TaskCard = ({task}: TaskProps) => {
         </button>
 
         {editDeleteModalIsOpen && (
-          <ModalEditDelete
+          <MoreOptionsModal
             id={task.id}
             onClick={() => setOpenDeleteModalIsOpen(false)}
             openUpdateModal={() => setOpenUpdateModalIsOpen(true)}
