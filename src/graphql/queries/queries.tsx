@@ -43,7 +43,7 @@ export const GET_USERS = gql`
 // `
 
 //Get task by Name
-export const GET_TASK_NAME = gql`
+export const GET_TASK_BY_NAME = gql`
   query getTaskByName($name: String!) {
     tasks(input: {name: $name}) {
       id
@@ -54,10 +54,6 @@ export const GET_TASK_NAME = gql`
         id
         avatar
         fullName
-        type
-        createdAt
-        updatedAt
-        email
       }
       pointEstimate
       position
