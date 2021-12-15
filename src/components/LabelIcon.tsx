@@ -28,7 +28,7 @@ interface LabelProps {
   background: string
   color: string
   text: string
-  icon?: unknown
+  icon: unknown
 }
 
 const LabelIcon = ({background, color, text, icon}: LabelProps) => {

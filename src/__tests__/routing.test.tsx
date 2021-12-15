@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import * as React from 'react'
 import {render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -7,15 +6,15 @@ import {MockedProvider} from '@apollo/client/testing'
 
 import App from '../App'
 
-//Temporary type solution
-
-test('Routing should be workinkg', () => {
-  const Wrapper = ({children}: any) => (
+test('routing should be working', () => {
+  render(
     <MockedProvider>
-      <MemoryRouter initialEntries={['/']}>{children}</MemoryRouter>
-    </MockedProvider>
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>
+    </MockedProvider>,
   )
-  render(<App />, {wrapper: Wrapper})
+
   //First we get the links buttons on sidebar
   const myProfile = screen.getByRole('link', {name: /my profile/i})
   const myTasksLink = screen.getByRole('link', {name: /my task/i})

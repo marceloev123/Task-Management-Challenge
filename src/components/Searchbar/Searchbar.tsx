@@ -4,16 +4,16 @@ import {RiNotification3Line} from 'react-icons/ri'
 import {IoMdCloseCircleOutline} from 'react-icons/io'
 import Avatar from '../Avatar'
 import {
-  NavContainer,
-  NavSearchContainer,
-  NavInputSearch,
+  SearchbarContainer,
+  SearchInputContainer,
+  InputSearch,
   UserActions,
-} from './NavbarComponents'
+} from './SearchbarComponents'
 
 const Navbar = () => {
   const [searchWords, setSearchWords] = useState('')
   return (
-    <NavContainer>
+    <SearchbarContainer>
       <BsSearch
         style={{
           minHeight: '16px',
@@ -23,8 +23,8 @@ const Navbar = () => {
           color: '#94979A',
         }}
       />
-      <NavSearchContainer>
-        <NavInputSearch
+      <SearchInputContainer>
+        <InputSearch
           placeholder="Search"
           value={searchWords}
           onChange={e => setSearchWords(e.target.value)}
@@ -40,7 +40,7 @@ const Navbar = () => {
             onClick={() => setSearchWords('')}
           />
         )}
-      </NavSearchContainer>
+      </SearchInputContainer>
       <UserActions>
         <RiNotification3Line
           style={{
@@ -56,7 +56,7 @@ const Navbar = () => {
           width="32px"
         />
       </UserActions>
-    </NavContainer>
+    </SearchbarContainer>
   )
 }
 

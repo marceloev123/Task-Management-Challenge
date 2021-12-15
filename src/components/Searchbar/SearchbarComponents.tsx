@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const NavContainer = styled.div`
+export const SearchbarContainer = styled.div`
   display: flex;
   flex-direction: row;
   height: 56px;
@@ -21,14 +21,14 @@ export const UserActions = styled.div`
   margin-left: 28px;
 `
 
-export const NavSearchContainer = styled.div`
+export const SearchInputContainer = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 24px;
 `
 
-export const NavInputSearch = styled.input`
+export const InputSearch = styled.input`
   color: #94979a;
   width: 100%;
   min-width: 4rem;

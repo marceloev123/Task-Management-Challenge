@@ -1,8 +1,8 @@
 import {render, screen, waitFor} from '@testing-library/react'
 import {MockedProvider} from '@apollo/client/testing'
 import userEvent from '@testing-library/user-event'
-import {DELETE_TASK} from '../graphql/mutations/mutations'
-import DeleteTaskTest from '../components/TestComponents/DeleteTaskTest'
+import {DELETE_TASK} from '../../graphql/mutations/mutations'
+import DeleteTaskTest from '../../components/TestComponents/DeleteTaskTest'
 
 const deleTask = {
   deleteTask: {
@@ -20,7 +20,7 @@ const mocks = [
   },
 ]
 
-test('should delete a task', async () => {
+test('should deleteTask mutation works correctly', async () => {
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
       <DeleteTaskTest />

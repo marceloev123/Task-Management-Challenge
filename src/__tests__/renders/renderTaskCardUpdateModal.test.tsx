@@ -2,15 +2,8 @@ import * as React from 'react'
 import {render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import {MockedProvider} from '@apollo/client/testing'
-import TaskCard from '../components/TaskCard/TaskCard'
-import {TaskTag} from '../graphql/schemas'
-
-//Temporary type solution
-const Wrapper = ({children}: any) => (
-  <div>
-    <MockedProvider>{children}</MockedProvider>
-  </div>
-)
+import TaskCard from '../../components/TaskCard/TaskCard'
+import {TaskTag} from '../../graphql/schemas'
 
 interface User {
   __typename: string
@@ -57,8 +50,12 @@ const taskTest: TaskProps = {
   tags: [TaskTag.React, TaskTag.Rails],
 }
 
-test('task card should render with correct information', () => {
-  render(<TaskCard task={taskTest} />, {wrapper: Wrapper})
+test('should task card renders with correct information', () => {
+  render(
+    <MockedProvider>
+      <TaskCard task={taskTest} />
+    </MockedProvider>,
+  )
   const taskName = screen.getByText(/test 1/i)
   const pointEstimate = screen.getByText(/1 pts/i)
   const dueDate = screen.getByText(/25 november, 2021/i)
@@ -71,8 +68,12 @@ test('task card should render with correct information', () => {
   expect(tag2).toBeInTheDocument()
 })
 
-test('should Edit Delete Modal will render while onClick task more options button and removed if the button click twice', () => {
-  render(<TaskCard task={taskTest} />, {wrapper: Wrapper})
+test('should More Options modal renders while onClick task more options button and removed it from the DOM if the button click twice', () => {
+  render(
+    <MockedProvider>
+      <TaskCard task={taskTest} />
+    </MockedProvider>,
+  )
   const moreOptions = screen.getByRole('button', {
     name: /more options/i,
   })
@@ -81,14 +82,14 @@ test('should Edit Delete Modal will render while onClick task more options butto
   const deleteButton = screen.getByRole('button', {name: /delete/i})
   expect(editButton).toBeInTheDocument()
   expect(deleteButton).toBeInTheDocument()
-  userEvent.click(moreOptions)
-  // It works if we use conditional rendering
-  // expect(editButton).not.toBeInTheDocument()
-  // expect(deleteButton).not.toBeInTheDocument()
 })
 
-test('should Update Modal will render while onClick Edit option and removed when Cancel button was clicked ', () => {
-  render(<TaskCard task={taskTest} />, {wrapper: Wrapper})
+test('should Update Modal renders while onClick Edit option and removed it from the DOM when Cancel button was clicked ', () => {
+  render(
+    <MockedProvider>
+      <TaskCard task={taskTest} />
+    </MockedProvider>,
+  )
   const moreOptions = screen.getByRole('button', {
     name: /more options/i,
   })
@@ -99,6 +100,7 @@ test('should Update Modal will render while onClick Edit option and removed when
   const cancelButton = screen.getByRole('button', {name: /cancel/i})
   expect(updateButton).toBeInTheDocument()
   expect(cancelButton).toBeInTheDocument()
+  //Works on conditional rendering, but lost transition styles if we do that
   // userEvent.click(cancelButton)
   // expect(updateButton).not.toBeInTheDocument()
   // expect(cancelButton).not.toBeInTheDocument()

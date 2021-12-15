@@ -1,7 +1,7 @@
 import {render, screen, waitFor} from '@testing-library/react'
 import {MockedProvider} from '@apollo/client/testing'
-import {GET_TASK_BY_NAME} from '../graphql/queries/queries'
-import TaskCardTest from '../components/TestComponents/TaskCardTest'
+import {GET_TASK_BY_NAME} from '../../graphql/queries/queries'
+import TaskCardTest from '../../components/TestComponents/TaskCardTest'
 
 const mocks = [
   {
@@ -36,7 +36,7 @@ const mocks = [
   },
 ]
 
-test('should retrieve tasks', async () => {
+test('should getTaskByName query works correctly', async () => {
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
       <TaskCardTest name="Something with React and Rails" />

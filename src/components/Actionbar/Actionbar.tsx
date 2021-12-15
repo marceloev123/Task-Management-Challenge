@@ -47,6 +47,7 @@ const Actionbar = () => {
 
       <Button onClick={() => setOpenModal(!openModal)}>
         <RiAddLine style={{height: '20px', width: '20px'}} />
+        Add Task
       </Button>
     </ActionbarContainer>
   )

@@ -1,8 +1,8 @@
 import {render, screen, waitFor} from '@testing-library/react'
 import {MockedProvider} from '@apollo/client/testing'
 import userEvent from '@testing-library/user-event'
-import {UPDATE_TASK} from '../graphql/mutations/mutations'
-import UpdateTaskTest from '../components/TestComponents/UpdateTaskTest'
+import {UPDATE_TASK} from '../../graphql/mutations/mutations'
+import UpdateTaskTest from '../../components/TestComponents/UpdateTaskTest'
 
 const updateTask = {
   updateTask: {
@@ -29,7 +29,7 @@ const mocks = [
   },
 ]
 
-test('should update a task', async () => {
+test('should updateTask mutation works correctly', async () => {
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
       <UpdateTaskTest />

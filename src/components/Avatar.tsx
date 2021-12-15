@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 interface AvatarProps {
+  id?: string
   width: string
   height: string
   image: string | null
@@ -22,8 +23,8 @@ const StyledAvatar = styled.div<StyledAvatarProps>`
   border-radius: 50%;
 `
 
-const Avatar = ({width, height, image}: AvatarProps) => (
-  <StyledAvatar width={width} height={height} image={image} />
+const Avatar = ({id, width, height, image}: AvatarProps) => (
+  <StyledAvatar id={id} width={width} height={height} image={image} />
 )
 
 export default Avatar

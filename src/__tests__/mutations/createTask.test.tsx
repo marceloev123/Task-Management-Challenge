@@ -1,8 +1,8 @@
 import {render, screen, waitFor} from '@testing-library/react'
 import {MockedProvider} from '@apollo/client/testing'
 import userEvent from '@testing-library/user-event'
-import {CREATE_TASK} from '../graphql/mutations/mutations'
-import CreateTaskTest from '../components/TestComponents/CreateTaskTest'
+import {CREATE_TASK} from '../../graphql/mutations/mutations'
+import CreateTaskTest from '../../components/TestComponents/CreateTaskTest'
 
 const createTask = {
   createTask: {
@@ -26,7 +26,7 @@ const mocks = [
   },
 ]
 
-test('should create a task', async () => {
+test('should createTask mutation works correctly', async () => {
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
       <CreateTaskTest />
