@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import {useState} from 'react'
 import {BsSearch} from 'react-icons/bs'
 import {RiNotification3Line} from 'react-icons/ri'
 import {IoMdCloseCircleOutline} from 'react-icons/io'

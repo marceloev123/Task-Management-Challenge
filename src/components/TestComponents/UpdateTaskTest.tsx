@@ -1,4 +1,3 @@
-import React from 'react'
 import {useMutation} from '@apollo/client'
 import {UPDATE_TASK} from '../../graphql/mutations/mutations'
 

@@ -1,4 +1,3 @@
-import React from 'react'
 import {useQuery} from '@apollo/client'
 import {GET_TASKS} from '../../graphql/queries/queries'
 import {TaskTag} from '../../graphql/schemas'

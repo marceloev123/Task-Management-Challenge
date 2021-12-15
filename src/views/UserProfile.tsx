@@ -1,4 +1,3 @@
-import React from 'react'
 import styled, {css} from 'styled-components'
 import {gql, useQuery} from '@apollo/client'
 import Spinner from '../components/Spinner/Spinner'

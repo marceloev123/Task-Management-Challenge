@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import {useEffect} from 'react'
 import {useMutation} from '@apollo/client'
 import {RiPencilLine, RiDeleteBin6Line} from 'react-icons/ri'
 import {toast} from 'react-toastify'
