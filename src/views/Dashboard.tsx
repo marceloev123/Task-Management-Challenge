@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, {useEffect} from 'react'
 import styled from 'styled-components'
 import {useQuery} from '@apollo/client'

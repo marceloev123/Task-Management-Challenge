@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {useQuery, useMutation} from '@apollo/client'
 import {toast} from 'react-toastify'
@@ -180,7 +179,6 @@ const TaskModal = ({task, show, onClick}: ModalProps) => {
       ),
     ]
   }
-  console.log(typeof filteredUsers)
 
   //Modals aux functions
   const openDropdownMenu = () => {
