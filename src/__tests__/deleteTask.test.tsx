@@ -20,7 +20,7 @@ const mocks = [
   },
 ]
 
-test('should delete task', async () => {
+test('should delete a task', async () => {
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
       <DeleteTaskTest />
@@ -29,6 +29,6 @@ test('should delete task', async () => {
   const deleteButton = screen.getByRole('button', {name: 'Delete'})
   userEvent.click(deleteButton)
   await waitFor(() => new Promise(res => setTimeout(res, 0)))
-  const deleteMessage = screen.getByText(/deleted!/i)
-  expect(deleteMessage).toBeInTheDocument()
+  const deletedSuccessfulMessage = screen.getByText(/deleted!/i)
+  expect(deletedSuccessfulMessage).toBeInTheDocument()
 })

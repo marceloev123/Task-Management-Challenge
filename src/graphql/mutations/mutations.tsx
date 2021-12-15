@@ -18,7 +18,7 @@ export const CREATE_TASK = gql`
         tags: $tags
       }
     ) {
-      id
+      name
     }
   }
 `
@@ -46,7 +46,7 @@ export const UPDATE_TASK = gql`
         tags: $tags
       }
     ) {
-      id
+      name
     }
   }
 `
