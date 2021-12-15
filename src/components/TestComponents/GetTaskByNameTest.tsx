@@ -19,11 +19,11 @@ interface RetrievedTaskProps {
   status: string
   tags: Array<TaskTag>
 }
-interface TaskCardTestProps {
+interface GetTaskByNameTestProps {
   name: string
 }
 
-const TaskCardTest = ({name}: TaskCardTestProps) => {
+const GetTaskByNameTest = ({name}: GetTaskByNameTestProps) => {
   const {
     loading,
     error: getTaskByNameError,
@@ -51,4 +51,4 @@ const TaskCardTest = ({name}: TaskCardTestProps) => {
   return <div>{name}</div>
 }
 
-export default TaskCardTest
+export default GetTaskByNameTest

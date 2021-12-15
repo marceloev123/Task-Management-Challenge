@@ -1,7 +1,7 @@
 import {render, screen, waitFor} from '@testing-library/react'
 import {MockedProvider} from '@apollo/client/testing'
 import {GET_TASK_BY_NAME} from '../../graphql/queries/queries'
-import TaskCardTest from '../../components/TestComponents/TaskCardTest'
+import GetTaskByNameTest from '../../components/TestComponents/GetTaskByNameTest'
 
 const mocks = [
   {
@@ -39,10 +39,10 @@ const mocks = [
 test('should getTaskByName query works correctly', async () => {
   render(
     <MockedProvider mocks={mocks} addTypename={false}>
-      <TaskCardTest name="Something with React and Rails" />
+      <GetTaskByNameTest name="Something with React and Rails" />
     </MockedProvider>,
   )
-  await waitFor(() => new Promise(res => setTimeout(res, 10)))
+  await waitFor(() => new Promise(res => setTimeout(res, 0)))
   const taskList = screen.getByRole('listitem')
   expect(taskList).toHaveTextContent(
     'Something with React and Rails Retrived Successfull',
