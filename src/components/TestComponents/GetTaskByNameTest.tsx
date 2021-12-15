@@ -8,7 +8,7 @@ interface User {
   avatar: string
   fullName: string
 }
-interface RetrievedTaskProps {
+interface TaskProps {
   createdAt: string
   dueDate: string
   id: string
@@ -41,7 +41,7 @@ const GetTaskByNameTest = ({name}: GetTaskByNameTestProps) => {
   if (data) {
     return (
       <div>
-        {data.tasks.map((task: RetrievedTaskProps) => (
+        {data.tasks.map((task: TaskProps) => (
           <li key={task.id}>{task.name} Retrived Successfull</li>
         ))}
       </div>
