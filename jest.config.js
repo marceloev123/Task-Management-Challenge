@@ -15,6 +15,7 @@ module.exports = {
   setupFilesAfterEnv: [
     '@testing-library/react/cleanup-after-each',
     '@testing-library/jest-dom/extend-expect',
+    '<rootDir>/src/setuptests.ts',
   ],
 
   // Test spec file resolution pattern
