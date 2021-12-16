@@ -29,11 +29,5 @@ module.exports = {
         groups: ['builtin', 'external', 'parent', 'sibling', 'index'],
       },
     ],
-    'prettier/prettier': [
-      'error',
-      {
-        endOfLine: 'auto',
-      },
-    ],
   },
 }
