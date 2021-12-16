@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
+import {KeyboardDatePicker} from '@material-ui/pickers'
 
 //Interfaces
 
@@ -62,9 +63,11 @@ export const TaskNameInput = styled.input`
 export const DropdownContainer = styled.div`
   display: flex;
   display: row;
-  justify-content: space-between;
-  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  flex-basis: 100%;
   gap: 16px;
+  max-width: 720px;
 `
 export const ModalButtonsContainer = styled.div`
   display: flex;
@@ -126,7 +129,7 @@ export const TriggerDropdown = styled(Dropdown.Trigger)`
   align-items: center;
   width: 100%;
   min-height: 32px;
-  min-width: 124px;
+  max-width: 176px;
   gap: 8px;
   padding: 0 12px;
   background: rgba(148, 151, 154, 0.1);
@@ -134,6 +137,47 @@ export const TriggerDropdown = styled(Dropdown.Trigger)`
   cursor: pointer;
   appearance: none;
   border-style: none;
+`
+
+export const StyledDatePicker = styled(KeyboardDatePicker)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  background: rgba(148, 151, 154, 0.1);
+  max-width: 176px;
+  color: white;
+  border-radius: 4px;
+  .MuiOutlinedInput-adornedEnd {
+    padding: 0px;
+    color: white;
+  }
+  .MuiInputBase-root {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+
+  .MuiOutlinedInput-input {
+    min-height: 32px;
+    padding: 0px 12px;
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 24px;
+    letter-spacing: 0.75px;
+    color: #ffffff;
+    width: 100%;
+  }
+
+  .MuiOutlinedInput-notchedOutline {
+    border-color: none;
+    border-width: 0;
+    border-radius: 4px;
+  }
+  .MuiIconButton-root {
+    color: white;
+    padding: 0;
+    padding-left: 4px;
+  }
 `
 
 export const DropdownInput = styled.input<TriggerProps>`

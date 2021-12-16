@@ -6,6 +6,7 @@ import {
   InMemoryCache,
   ApolloProvider,
 } from '@apollo/client'
+
 import {setContext} from '@apollo/client/link/context'
 
 import './fonts/SF PRO DISPLAY/fonts.css'

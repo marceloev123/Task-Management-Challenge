@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {useQuery, useMutation} from '@apollo/client'
 import {toast} from 'react-toastify'
@@ -12,6 +13,8 @@ import * as Dropdown from '@radix-ui/react-dropdown-menu'
 import {useForm} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers/yup'
 import * as yup from 'yup'
+import {MuiPickersUtilsProvider} from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns'
 import {PointEstimate, Status, TaskTag} from '../../graphql/schemas'
 import {GET_TASKS, GET_USERS} from '../../graphql/queries/queries'
 import {CREATE_TASK, UPDATE_TASK} from '../../graphql/mutations/mutations'
@@ -34,9 +37,9 @@ import {
   TagCheckbox,
   TagLabel,
   ErrorMessages,
+  StyledDatePicker,
 } from './ModalComponents'
 import {DialogContainer, StyledOverlay, TaskNameInput} from './ModalComponents'
-
 //Interfaces
 interface TaskProps {
   createdAt: string
@@ -78,6 +81,7 @@ interface User {
 
 const Checkbox = ({value, selectedTags, setSelectedTags}: TagProps) => {
   const [tagCheck, setTagCheck] = useState(selectedTags.includes(value))
+
   const handleCheck = (tagCheck: boolean, value: TaskTag) => {
     if (!tagCheck) {
       setSelectedTags(prev => {
@@ -130,6 +134,8 @@ const schema = yup
   })
   .required()
 
+// Date Picker Stlying
+
 const TaskModal = ({task, show, onClick}: ModalProps) => {
   const [openDropdown, setOpenDropdown] = useState(false)
   const [selectedTags, setSelectedTags] = useState<Array<TaskTag>>([])
@@ -140,6 +146,10 @@ const TaskModal = ({task, show, onClick}: ModalProps) => {
     fullName: '',
   }
   const [selectedUser, setSelectedUser] = useState<User>(userInitialState)
+  const [selectedDate, handleDateChange] = useState<Date | null>(
+    task ? new Date(task.dueDate) : null,
+  )
+
   const {
     register,
     handleSubmit,
@@ -186,6 +196,12 @@ const TaskModal = ({task, show, onClick}: ModalProps) => {
   }
 
   const closeModal = () => {
+    if (task) {
+      setSelectedTags(task?.tags)
+    } else {
+      setSelectedTags([])
+      handleDateChange(null)
+    }
     reset()
     onClick()
   }
@@ -194,6 +210,7 @@ const TaskModal = ({task, show, onClick}: ModalProps) => {
   const clearCreateTaskFields = () => {
     setSelectedUser(userInitialState)
     setSelectedTags([])
+    handleDateChange(null)
     reset()
     onClick()
   }
@@ -201,6 +218,7 @@ const TaskModal = ({task, show, onClick}: ModalProps) => {
   //Create TaskSubmit
   async function createTaskSubmit(formData: FormdataProps) {
     // Make the request
+
     try {
       await createTask({
         variables: {
@@ -209,6 +227,7 @@ const TaskModal = ({task, show, onClick}: ModalProps) => {
           pointEstimate: formData.pointsEstimated,
           tags: formData.tagLabels,
           status: formData.status,
+          dueDate: selectedDate?.toISOString(),
         },
       })
       toast.success('Task created succesfully!', {
@@ -245,12 +264,12 @@ const TaskModal = ({task, show, onClick}: ModalProps) => {
         variables: {
           id: task?.id,
           assigneeId: selectedUser.id,
-          dueDate: task?.dueDate,
           name: formData.taskTitle,
           position: task?.position,
           pointEstimate: formData.pointsEstimated,
           status: formData.status,
           tags: formData.tagLabels,
+          dueDate: selectedDate?.toISOString(),
         },
       })
       toast.success('Task updated succesfully!', {
@@ -339,179 +358,183 @@ const TaskModal = ({task, show, onClick}: ModalProps) => {
   }, [task])
 
   return (
-    <>
-      {show ? <StyledOverlay onClick={onClick} /> : null}
-      <DialogContainer
-        style={{
-          transform: show ? 'translateY(0)' : 'translateY(-100vh)',
-          opacity: show ? '1' : '0',
-          transition: 'all 0.3s ease-out',
-        }}
-      >
-        <form
-          onSubmit={handleSubmit(task ? updateTaskSubmit : createTaskSubmit)}
-          style={{display: 'flex', flexDirection: 'column', gap: '24px'}}
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <>
+        {show ? <StyledOverlay onClick={onClick} /> : null}
+        <DialogContainer
+          style={{
+            transform: show ? 'translateY(0)' : 'translateY(-100vh)',
+            opacity: show ? '1' : '0',
+            transition: 'all 0.3s ease-out',
+          }}
         >
-          <TaskNameInput
-            placeholder="Task Title"
-            type="text"
-            {...register('taskTitle')}
-          />
+          <form
+            onSubmit={handleSubmit(task ? updateTaskSubmit : createTaskSubmit)}
+            style={{display: 'flex', flexDirection: 'column', gap: '24px'}}
+          >
+            <TaskNameInput
+              placeholder="Task Title"
+              type="text"
+              {...register('taskTitle')}
+            />
 
-          {errors.taskTitle && (
-            <ErrorMessages> *{errors.taskTitle.message}</ErrorMessages>
-          )}
-          <>
-            <DropdownContainer>
-              <Dropdown.Root>
-                <div>
-                  <TriggerDropdown>
-                    <RiIncreaseDecreaseFill
-                      style={{
-                        width: '32px',
-                        height: '24px',
-                        color: 'white',
-                      }}
-                    />
-                    <DropdownInput
-                      disabled
-                      placeholder="Estimate"
-                      {...register('pointsEstimated')}
-                    />
-                  </TriggerDropdown>
-                  {errors.pointsEstimated && (
-                    <ErrorMessages>
-                      *{errors.pointsEstimated.message}
-                    </ErrorMessages>
-                  )}
-                </div>
-
-                <DropdownContent>
-                  <ItemHeader style={{marginLeft: '16px', marginTop: '8px'}}>
-                    Estimate
-                  </ItemHeader>
-                  {(
-                    Object.keys(PointEstimate) as Array<
-                      keyof typeof PointEstimate
-                    >
-                  ).map((key, idx) => (
-                    <DropdownItem
-                      key={idx}
-                      onClick={() => {
-                        setValue('pointsEstimated', key)
-                      }}
-                    >
+            {errors.taskTitle && (
+              <ErrorMessages> *{errors.taskTitle.message}</ErrorMessages>
+            )}
+            <>
+              <DropdownContainer>
+                <Dropdown.Root>
+                  <div>
+                    <TriggerDropdown>
                       <RiIncreaseDecreaseFill
                         style={{
                           width: '32px',
-                          height: '26px',
+                          height: '24px',
                           color: 'white',
                         }}
                       />
-                      <ItemLabel>{estimatedPointsData[key]} Points</ItemLabel>
-                    </DropdownItem>
-                  ))}
-                </DropdownContent>
-              </Dropdown.Root>
-
-              <Dropdown.Root>
-                <div>
-                  <TriggerDropdown>
-                    <RiUser3Fill
-                      style={{
-                        width: '32px',
-                        height: '32px',
-                        color: 'white',
-                      }}
-                    />
-                    <DropdownInput
-                      disabled
-                      placeholder="Assignee"
-                      {...register('assigneeId')}
-                    />
-                  </TriggerDropdown>
-                  {errors.assigneeId && (
-                    <ErrorMessages>*{errors.assigneeId?.message}</ErrorMessages>
-                  )}
-                </div>
-
-                <UsersDropdown>
-                  <ItemHeader style={{marginLeft: '16px', marginTop: '8px'}}>
-                    Assign To
-                  </ItemHeader>
-                  {filteredUsers.map(user => (
-                    <UserItem
-                      key={user.id}
-                      onClick={() => {
-                        setSelectedUser(user)
-                        setValue('assigneeId', user.fullName)
-                      }}
-                    >
-                      <Avatar
-                        width={'32px'}
-                        height={'32px'}
-                        image={
-                          user.avatar ||
-                          'https://avatars.dicebear.com/api/initials/mv.svg'
-                        }
+                      <DropdownInput
+                        disabled
+                        placeholder="Estimate"
+                        {...register('pointsEstimated')}
                       />
-                      <UserName>{user.fullName}</UserName>
-                    </UserItem>
-                  ))}
-                </UsersDropdown>
-              </Dropdown.Root>
-              <Dropdown.Root open={openDropdown}>
-                <div>
-                  <TriggerDropdown onClick={openDropdownMenu}>
-                    <RiPriceTag3Fill
-                      style={{
-                        width: '24px',
-                        height: '32px',
-                        color: 'white',
-                      }}
-                    />
-                    <DropdownInput
-                      placeholder="Label"
-                      disabled
-                      defaultValue={task?.tags}
-                      {...register('tagLabels')}
-                    />
-                  </TriggerDropdown>
-                  {errors.tagLabels && <ErrorMessages>*Error </ErrorMessages>}
-                </div>
-
-                <TagDropdown>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      paddingLeft: '16px',
-                      paddingTop: '8px',
-                      paddingRight: '8px',
-                    }}
-                  >
-                    <ItemHeader>Tag Title</ItemHeader>
-                    <RiCloseCircleLine
-                      style={{
-                        width: '32px',
-                        height: '32px',
-                        color: '#94979a',
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => setOpenDropdown(false)}
-                    />
+                    </TriggerDropdown>
+                    {errors.pointsEstimated && (
+                      <ErrorMessages>
+                        *{errors.pointsEstimated.message}
+                      </ErrorMessages>
+                    )}
                   </div>
 
-                  <Dropdown.Group
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '8px',
-                    }}
-                  >
-                    {(Object.keys(TaskTag) as Array<keyof typeof TaskTag>).map(
-                      (key, idx) => (
+                  <DropdownContent>
+                    <ItemHeader style={{marginLeft: '16px', marginTop: '8px'}}>
+                      Estimate
+                    </ItemHeader>
+                    {(
+                      Object.keys(PointEstimate) as Array<
+                        keyof typeof PointEstimate
+                      >
+                    ).map((key, idx) => (
+                      <DropdownItem
+                        key={idx}
+                        onClick={() => {
+                          setValue('pointsEstimated', key)
+                        }}
+                      >
+                        <RiIncreaseDecreaseFill
+                          style={{
+                            width: '32px',
+                            height: '26px',
+                            color: 'white',
+                          }}
+                        />
+                        <ItemLabel>{estimatedPointsData[key]} Points</ItemLabel>
+                      </DropdownItem>
+                    ))}
+                  </DropdownContent>
+                </Dropdown.Root>
+
+                <Dropdown.Root>
+                  <div>
+                    <TriggerDropdown>
+                      <RiUser3Fill
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          color: 'white',
+                        }}
+                      />
+                      <DropdownInput
+                        disabled
+                        placeholder="Assignee"
+                        {...register('assigneeId')}
+                      />
+                    </TriggerDropdown>
+                    {errors.assigneeId && (
+                      <ErrorMessages>
+                        *{errors.assigneeId?.message}
+                      </ErrorMessages>
+                    )}
+                  </div>
+
+                  <UsersDropdown>
+                    <ItemHeader style={{marginLeft: '16px', marginTop: '8px'}}>
+                      Assign To
+                    </ItemHeader>
+                    {filteredUsers.map(user => (
+                      <UserItem
+                        key={user.id}
+                        onClick={() => {
+                          setSelectedUser(user)
+                          setValue('assigneeId', user.fullName)
+                        }}
+                      >
+                        <Avatar
+                          width={'32px'}
+                          height={'32px'}
+                          image={
+                            user.avatar ||
+                            'https://avatars.dicebear.com/api/initials/mv.svg'
+                          }
+                        />
+                        <UserName>{user.fullName}</UserName>
+                      </UserItem>
+                    ))}
+                  </UsersDropdown>
+                </Dropdown.Root>
+                <Dropdown.Root open={openDropdown}>
+                  <div>
+                    <TriggerDropdown onClick={openDropdownMenu}>
+                      <RiPriceTag3Fill
+                        style={{
+                          width: '24px',
+                          height: '32px',
+                          color: 'white',
+                        }}
+                      />
+                      <DropdownInput
+                        placeholder="Label"
+                        disabled
+                        defaultValue={task?.tags}
+                        {...register('tagLabels')}
+                      />
+                    </TriggerDropdown>
+                    {errors.tagLabels && <ErrorMessages>*Error </ErrorMessages>}
+                  </div>
+
+                  <TagDropdown>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        paddingLeft: '16px',
+                        paddingTop: '8px',
+                        paddingRight: '8px',
+                      }}
+                    >
+                      <ItemHeader>Tag Title</ItemHeader>
+                      <RiCloseCircleLine
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          color: '#94979a',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => setOpenDropdown(false)}
+                      />
+                    </div>
+
+                    <Dropdown.Group
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '8px',
+                      }}
+                    >
+                      {(
+                        Object.keys(TaskTag) as Array<keyof typeof TaskTag>
+                      ).map((key, idx) => (
                         <Checkbox
                           id={idx}
                           key={idx}
@@ -519,64 +542,75 @@ const TaskModal = ({task, show, onClick}: ModalProps) => {
                           setSelectedTags={setSelectedTags}
                           selectedTags={selectedTags}
                         />
+                      ))}
+                    </Dropdown.Group>
+                  </TagDropdown>
+                </Dropdown.Root>
+                <Dropdown.Root>
+                  <div>
+                    <TriggerDropdown>
+                      <RiTaskFill
+                        style={{
+                          width: '32px',
+                          height: '24px',
+                          color: 'white',
+                        }}
+                      />
+                      <DropdownInput
+                        disabled
+                        placeholder="Status"
+                        {...register('status')}
+                      />
+                    </TriggerDropdown>
+                    {errors.status && (
+                      <ErrorMessages>*{errors.status.message}</ErrorMessages>
+                    )}
+                  </div>
+
+                  <DropdownContent>
+                    <ItemHeader style={{marginLeft: '16px', marginTop: '8px'}}>
+                      Status
+                    </ItemHeader>
+                    {(Object.keys(Status) as Array<keyof typeof Status>).map(
+                      (key, idx) => (
+                        <DropdownItem
+                          key={idx}
+                          onClick={() => {
+                            setValue('status', key)
+                          }}
+                        >
+                          <ItemLabel>{Status[key]}</ItemLabel>
+                        </DropdownItem>
                       ),
                     )}
-                  </Dropdown.Group>
-                </TagDropdown>
-              </Dropdown.Root>
-              <Dropdown.Root>
-                <div>
-                  <TriggerDropdown>
-                    <RiTaskFill
-                      style={{
-                        width: '32px',
-                        height: '24px',
-                        color: 'white',
-                      }}
-                    />
-                    <DropdownInput
-                      disabled
-                      placeholder="Status"
-                      {...register('status')}
-                    />
-                  </TriggerDropdown>
-                  {errors.status && (
-                    <ErrorMessages>*{errors.status.message}</ErrorMessages>
-                  )}
-                </div>
+                  </DropdownContent>
+                </Dropdown.Root>
 
-                <DropdownContent>
-                  <ItemHeader style={{marginLeft: '16px', marginTop: '8px'}}>
-                    Status
-                  </ItemHeader>
-                  {(Object.keys(Status) as Array<keyof typeof Status>).map(
-                    (key, idx) => (
-                      <DropdownItem
-                        key={idx}
-                        onClick={() => {
-                          setValue('status', key)
-                        }}
-                      >
-                        <ItemLabel>{Status[key]}</ItemLabel>
-                      </DropdownItem>
-                    ),
-                  )}
-                </DropdownContent>
-              </Dropdown.Root>
-            </DropdownContainer>
-          </>
-          <ModalButtonsContainer>
-            <CancelButton type="button" onClick={closeModal}>
-              Cancel
-            </CancelButton>
+                <StyledDatePicker
+                  autoOk
+                  variant="inline"
+                  inputVariant="outlined"
+                  placeholder="Due Date"
+                  value={selectedDate}
+                  onChange={newDate => handleDateChange(newDate)}
+                  format="dd/MM/yyyy"
+                  required
+                />
+              </DropdownContainer>
+            </>
+            <ModalButtonsContainer>
+              <CancelButton type="button" onClick={closeModal}>
+                Cancel
+              </CancelButton>
 
-            <CreateButton type="submit">
-              {task ? 'Update' : 'Create'}
-            </CreateButton>
-          </ModalButtonsContainer>
-        </form>
-      </DialogContainer>
-    </>
+              <CreateButton type="submit">
+                {task ? 'Update' : 'Create'}
+              </CreateButton>
+            </ModalButtonsContainer>
+          </form>
+        </DialogContainer>
+      </>
+    </MuiPickersUtilsProvider>
   )
 }
 

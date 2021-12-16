@@ -7,10 +7,11 @@ export const CREATE_TASK = gql`
     $pointEstimate: PointEstimate!
     $tags: [TaskTag!]!
     $status: Status!
+    $dueDate: DateTime!
   ) {
     createTask(
       input: {
-        dueDate: "2021-11-25T19:18:00.097Z"
+        dueDate: $dueDate
         assigneeId: $assigneeId
         name: $name
         pointEstimate: $pointEstimate
