@@ -114,4 +114,6 @@ Here, the app was completed refactored and was updated with the styling guides r
 ## Update Mutation in Action Final Stage
 https://user-images.githubusercontent.com/64241651/144677998-1ab1ca49-997e-4dbe-8cdd-2656d7fb0bac.mp4
 
+## Finally with the refactored API, the app includes a Date Picker to define the task Due Date and an Assigne Select to determine who is the person responsible about that task
+https://user-images.githubusercontent.com/64241651/146435540-e4ea4605-e169-4ffb-828c-46ea38680b37.mp4
 
