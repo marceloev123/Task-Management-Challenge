@@ -117,3 +117,7 @@ https://user-images.githubusercontent.com/64241651/144677998-1ab1ca49-997e-4dbe-
 ## Finally with the refactored API, the app includes a Date Picker to define the task Due Date and an Assigne Select to determine who is the person responsible about that task
 https://user-images.githubusercontent.com/64241651/146435540-e4ea4605-e169-4ffb-828c-46ea38680b37.mp4
 
+## Another feature added is the dueDate Coloring and formating (yesterday, today, future formated date)
+https://user-images.githubusercontent.com/64241651/146451501-2ed289cb-4bed-48c2-b999-eb5220a3a4de.mp4
+
+
