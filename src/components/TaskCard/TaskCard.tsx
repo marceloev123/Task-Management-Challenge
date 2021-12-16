@@ -9,7 +9,9 @@ import {RiMoreFill} from 'react-icons/ri'
 import {TaskTag} from '../../graphql/schemas'
 import {
   assignBackground,
+  assignDueDateBackground,
   assignLabelColor,
+  assignDueDateLabelColor,
   formatData,
 } from '../../utils/functions'
 import Avatar from '../Avatar'
@@ -31,8 +33,6 @@ import {
   CommentAmount,
   CardContainer,
 } from './TaskCardComponents'
-
-//This library help us to conver the points words to numbers
 
 interface User {
   __typename: string
@@ -123,8 +123,8 @@ const TaskCard = ({task}: TaskProps) => {
       <TimeInfo>
         <Points>{estimatedPointsValue[task?.pointEstimate]} Pts</Points>
         <LabelIcon
-          background="rgba(148, 151, 154, 0.1)"
-          color="#FFF"
+          background={assignDueDateBackground(task?.dueDate)}
+          color={assignDueDateLabelColor(task?.dueDate)}
           text={formatData(task?.dueDate)}
           icon={
             <RiAlarmLine

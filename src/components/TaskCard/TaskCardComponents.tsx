@@ -28,7 +28,7 @@ export const TaskName = styled.span`
   display: flex;
   align-items: center;
   letter-spacing: 0.75px;
-  color: #ffffff;
+  color: white;
 `
 export const TimeInfo = styled.div`
   display: flex;
@@ -46,7 +46,7 @@ export const Points = styled.span`
   display: flex;
   align-items: center;
   letter-spacing: 0.75px;
-  color: #ffffff;
+  color: white;
 `
 export const TagsContainer = styled.div`
   display: flex;

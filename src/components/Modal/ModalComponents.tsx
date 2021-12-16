@@ -148,10 +148,12 @@ export const StyledDatePicker = styled(KeyboardDatePicker)`
   max-width: 176px;
   color: white;
   border-radius: 4px;
+
   .MuiOutlinedInput-adornedEnd {
     padding: 0px;
     color: white;
   }
+
   .MuiInputBase-root {
     display: flex;
     flex-direction: row-reverse;
@@ -164,18 +166,22 @@ export const StyledDatePicker = styled(KeyboardDatePicker)`
     font-size: 15px;
     line-height: 24px;
     letter-spacing: 0.75px;
-    color: #ffffff;
+    color: white;
     width: 100%;
   }
 
   .MuiOutlinedInput-notchedOutline {
     border-color: none;
-    border-width: 0;
+    border-width: 0px;
     border-radius: 4px;
+    ::placeholder,
+    ::-webkit-input-placeholder {
+      color: white;
+    }
   }
   .MuiIconButton-root {
     color: white;
-    padding: 0;
+    padding: 0px;
     padding-left: 4px;
   }
 `
@@ -187,10 +193,10 @@ export const DropdownInput = styled.input<TriggerProps>`
   letter-spacing: 0.75px;
   background-color: transparent;
   border: none;
-  color: #ffffff;
+  color: white;
   width: 100%;
   &::placeholder {
-    color: #ffffff;
+    color: white;
   }
 `
 
@@ -226,7 +232,7 @@ export const ItemLabel = styled.span`
   font-size: 15px;
   line-height: 24px;
   letter-spacing: 0.75px;
-  color: #ffffff;
+  color: white;
 `
 
 //UserDropdown
@@ -265,7 +271,7 @@ export const UserName = styled.span`
   line-height: 24px;
   align-items: center;
   letter-spacing: 0.75px;
-  color: #ffffff;
+  color: white;
 `
 //TagDropdown
 
@@ -286,7 +292,7 @@ export const TagDropdown = styled(Dropdown.Content)`
 
 //Checkbox
 export const TagCheckbox = styled(Dropdown.Item)`
-  color: #ffffff;
+  color: white;
   display: flex;
   flex-direction: row;
   gap: 11px;
@@ -303,7 +309,7 @@ export const TagLabel = styled.span`
   font-size: 15px;
   line-height: 24px;
   letter-spacing: 0.75px;
-  color: #ffffff;
+  color: white;
 `
 
 export const ErrorMessages = styled.p`

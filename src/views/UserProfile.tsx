@@ -10,7 +10,7 @@ const baseTextStyles = css`
   line-height: 24px;
   font-weight: 600;
   letter-spacing: 0.75px;
-  color: #ffffff;
+  color: white;
   justify-self: flex-end;
 `
 
