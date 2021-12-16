@@ -121,3 +121,12 @@ https://user-images.githubusercontent.com/64241651/146435540-e4ea4605-e169-4ffb-
 https://user-images.githubusercontent.com/64241651/146451501-2ed289cb-4bed-48c2-b999-eb5220a3a4de.mp4
 
 
+# Testing
+
+To execute the tests we need to execute the command `yarn test` on the terminal and then hit the letter `a`
+https://user-images.githubusercontent.com/64241651/146456758-f394e3fb-3c6c-48f1-b49a-550bbe729c62.mp4
+
+
+
+
+
