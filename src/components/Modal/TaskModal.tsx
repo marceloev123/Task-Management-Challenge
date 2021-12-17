@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {Dispatch, SetStateAction, useEffect, useState} from 'react'
 import {useQuery, useMutation} from '@apollo/client'
 import {toast} from 'react-toastify'
